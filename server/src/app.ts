@@ -5,6 +5,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import Controller from '@/utils/interfaces/controller.interface';
 import ErrorMiddleware from '@/middleware/error.middleware';
+import NotFoundMiddleware from '@/middleware/notFound.middleware';
 import helmet from 'helmet';
 
 class App {
@@ -19,6 +20,7 @@ class App {
         this.initializeMiddleware();
         this.initializeControllers(controllers);
         this.initializeErrorHandling();
+        this.initialize404Handling();
     }
 
     private initializeMiddleware(): void {
@@ -38,6 +40,10 @@ class App {
 
     private initializeErrorHandling(): void {
         this.express.use(ErrorMiddleware);
+    }
+
+    private initialize404Handling(): void {
+        this.express.use(NotFoundMiddleware);
     }
 
     private initializeDatabaseConnection(): void {
