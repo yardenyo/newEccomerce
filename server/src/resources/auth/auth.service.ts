@@ -38,17 +38,24 @@ class AuthService {
         }
     }
 
-    // public async login(email: string, password: string): Promise<User> {
-    //     try {
-    //         const user = await this.user.findOne({ email });
-    //         if (!user) throw new Error('User not found');
-    //         const isMatch = await user.comparePassword(password);
-    //         if (!isMatch) throw new Error('Incorrect password');
-    //         return user;
-    //     } catch (error) {
-    //         throw new Error(error.message);
-    //     }
-    // }
+    public async signin(email: string, password: string): Promise<User> {
+        try {
+            //check if all fields are provided
+            if (!email || !password) throw new Error();
+
+            //check if email exists
+            const user = await this.user.findOne({ email });
+            if (!user) throw new Error();
+
+            //check if password is correct
+            const isValidPassword = await user.isValidPassword(password);
+            if (!isValidPassword) throw new Error();
+
+            return user;
+        } catch (error) {
+            throw new Error('Error signing in');
+        }
+    }
 }
 
 export default AuthService;

@@ -20,11 +20,11 @@ class AuthController implements Controller {
             validationMiddleware(validate.signup),
             this.signup,
         );
-        // this.router.post(
-        //     `${this.path}/login`,
-        //     validationMiddleware(validate.login),
-        //     this.login,
-        // );
+        this.router.post(
+            `${this.path}/signin`,
+            validationMiddleware(validate.signin),
+            this.signin,
+        );
     }
 
     private signup = async (
@@ -47,19 +47,19 @@ class AuthController implements Controller {
         }
     };
 
-    // private login = async (
-    //     req: Request,
-    //     res: Response,
-    //     next: NextFunction,
-    // ): Promise<void> => {
-    //     try {
-    //         const { email, password } = req.body;
-    //         const user = await this.AuthService.login(email, password);
-    //         res.status(200).json({ user });
-    //     } catch (error: any) {
-    //         next(new HttpException(400, error.message));
-    //     }
-    // };
+    private signin = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { email, password } = req.body;
+            const user = await this.AuthService.signin(email, password);
+            res.status(200).json({ user });
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
 }
 
 export default AuthController;
