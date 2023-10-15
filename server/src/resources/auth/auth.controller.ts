@@ -4,6 +4,7 @@ import HttpException from '@/utils/exceptions/http.exception';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/auth/auth.validation';
 import AuthService from '@/resources/auth/auth.service';
+import { generateToken } from '@/utils/jwtToken';
 
 class AuthController implements Controller {
     public path = '/auth';
@@ -41,7 +42,15 @@ class AuthController implements Controller {
                 mobile,
                 password,
             );
-            res.status(201).json({ user });
+            res.status(201).json({
+                user: {
+                    id: user._id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    mobile: user.mobile,
+                },
+            });
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -55,7 +64,16 @@ class AuthController implements Controller {
         try {
             const { email, password } = req.body;
             const user = await this.AuthService.signin(email, password);
-            res.status(200).json({ user });
+            res.status(200).json({
+                user: {
+                    id: user._id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    mobile: user.mobile,
+                },
+                token: generateToken(user._id),
+            });
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
