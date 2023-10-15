@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import Controller from '@/utils/interfaces/controller.interface';
 import HttpException from '@/utils/exceptions/http.exception';
+import SuccessResponse from '@/utils/responses/success.response';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/user/user.validation';
 import UserService from '@/resources/user/user.service';
@@ -32,7 +33,7 @@ class UserController implements Controller {
     ): Promise<void> => {
         try {
             const users = await this.UserService.getAllUsers();
-            res.status(200).json(users);
+            res.json(new SuccessResponse('Users fetched successfully', users));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -46,7 +47,7 @@ class UserController implements Controller {
         try {
             const { id } = req.params;
             const user = await this.UserService.getUserById(id);
-            res.status(200).json(user);
+            res.json(new SuccessResponse('User fetched successfully', user));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -59,8 +60,8 @@ class UserController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
-            const user = await this.UserService.deleteUserById(id);
-            res.status(200).json(user);
+            await this.UserService.deleteUserById(id);
+            res.json(new SuccessResponse('User deleted successfully'));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -81,7 +82,7 @@ class UserController implements Controller {
                 email,
                 mobile,
             );
-            res.status(200).json(user);
+            res.json(new SuccessResponse('User updated successfully', user));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

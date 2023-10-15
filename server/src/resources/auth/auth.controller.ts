@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import Controller from '@/utils/interfaces/controller.interface';
 import HttpException from '@/utils/exceptions/http.exception';
+import SuccessResponse from '@/utils/responses/success.response';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/auth/auth.validation';
 import AuthService from '@/resources/auth/auth.service';
@@ -42,15 +43,15 @@ class AuthController implements Controller {
                 mobile,
                 password,
             );
-            res.status(201).json({
-                user: {
+            res.json(
+                new SuccessResponse('User created successfully', {
                     id: user._id,
                     firstName: user.firstName,
                     lastName: user.lastName,
                     email: user.email,
                     mobile: user.mobile,
-                },
-            });
+                }),
+            );
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -64,16 +65,16 @@ class AuthController implements Controller {
         try {
             const { email, password } = req.body;
             const user = await this.AuthService.signin(email, password);
-            res.status(200).json({
-                user: {
+            res.json(
+                new SuccessResponse('User signed in successfully', {
                     id: user._id,
                     firstName: user.firstName,
                     lastName: user.lastName,
                     email: user.email,
                     mobile: user.mobile,
-                },
-                token: generateToken(user._id),
-            });
+                    token: generateToken(user._id),
+                }),
+            );
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

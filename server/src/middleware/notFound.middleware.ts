@@ -6,10 +6,12 @@ function notFoundHandler(
     next: NextFunction,
 ) {
     const status = 404;
+    const success = false;
     const message = 'Not Found';
 
     response.status(status).send({
         status,
+        success,
         message,
     });
 }
