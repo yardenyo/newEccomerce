@@ -28,7 +28,11 @@ class ProductController implements Controller {
             validationMiddleware(validate.createProduct),
             this.createProduct,
         );
-        this.router.get(`${this.path}`, authMiddleware, this.getAllProducts);
+        this.router.post(
+            `${this.path}/getAll`,
+            authMiddleware,
+            this.getAllProducts,
+        );
         this.router.get(
             `${this.path}/:id`,
             authMiddleware,
@@ -74,9 +78,7 @@ class ProductController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const products = await this.ProductService.getAllProducts(
-                req.query,
-            );
+            const products = await this.ProductService.getAllProducts(req.body);
             res.json(new SuccessResponse('Products retrieved', products));
         } catch (error: any) {
             next(new HttpException(400, error.message));

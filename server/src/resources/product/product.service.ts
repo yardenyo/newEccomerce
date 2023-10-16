@@ -1,5 +1,7 @@
 import productModel from '@/resources/product/product.model';
 import Product from '@/resources/product/product.interface';
+import PostBody from '@/utils/interfaces/postbody.interface';
+import ConvertResponse from '@/utils/helpers/convertresponse.helper';
 import slugify from 'slugify';
 
 class ProductService {
@@ -17,9 +19,17 @@ class ProductService {
         }
     }
 
-    public async getAllProducts(query: any): Promise<Product[]> {
+    public async getAllProducts(body: PostBody): Promise<Product[]> {
         try {
-            const products = await this.product.find(query);
+            const { sort, skip, limit, searchFilter } =
+                await ConvertResponse(body);
+
+            const products = await this.product
+                .find(searchFilter)
+                .sort(sort)
+                .skip(skip)
+                .limit(limit);
+
             return products;
         } catch (error) {
             throw new Error('Error retrieving products');
