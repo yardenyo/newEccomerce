@@ -6,7 +6,10 @@ export default interface User extends Document {
     email: string;
     mobile: string;
     role: 'user' | 'admin';
+    isBlocked: boolean;
     password: string;
     createdAt: Date;
     updatedAt: Date;
+    refreshToken: string;
+    isValidPassword(password: string): Promise<boolean>;
 }

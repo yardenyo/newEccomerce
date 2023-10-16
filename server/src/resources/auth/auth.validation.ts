@@ -8,9 +8,9 @@ const signup = Joi.object({
     password: Joi.string().required(),
 });
 
-const login = Joi.object({
+const signin = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
 });
 
-export default { signup, login };
+export default { signup, signin };
