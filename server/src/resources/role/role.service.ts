@@ -4,9 +4,9 @@ import Role from '@/resources/role/role.interface';
 class RoleService {
     private role = roleModel;
 
-    public async getAllRoles(): Promise<Role[]> {
+    public async getAllRoles(query: any): Promise<Role[]> {
         try {
-            const roles = await this.role.find();
+            const roles = await this.role.find(query);
             return roles;
         } catch (error) {
             throw new Error('Error getting roles');

@@ -17,9 +17,9 @@ class ProductService {
         }
     }
 
-    public async getAllProducts(): Promise<Product[]> {
+    public async getAllProducts(query: any): Promise<Product[]> {
         try {
-            const products = await this.product.find();
+            const products = await this.product.find(query);
             return products;
         } catch (error) {
             throw new Error('Error retrieving products');
@@ -61,15 +61,6 @@ class ProductService {
             await this.product.deleteMany();
         } catch (error) {
             throw new Error('Error deleting products');
-        }
-    }
-
-    public async searchProducts(query: any): Promise<Product[]> {
-        try {
-            const products = await this.product.find(query);
-            return products;
-        } catch (error) {
-            throw new Error('Error searching products');
         }
     }
 }

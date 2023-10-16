@@ -76,7 +76,7 @@ class UserController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const users = await this.UserService.getAllUsers();
+            const users = await this.UserService.getAllUsers(req.query);
             res.json(new SuccessResponse('Users fetched successfully', users));
         } catch (error: any) {
             next(new HttpException(400, error.message));

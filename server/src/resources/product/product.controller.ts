@@ -28,11 +28,6 @@ class ProductController implements Controller {
             validationMiddleware(validate.createProduct),
             this.createProduct,
         );
-        this.router.get(
-            `${this.path}/search`,
-            authMiddleware,
-            this.searchProducts,
-        );
         this.router.get(`${this.path}`, authMiddleware, this.getAllProducts);
         this.router.get(
             `${this.path}/:id`,
@@ -79,7 +74,9 @@ class ProductController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const products = await this.ProductService.getAllProducts();
+            const products = await this.ProductService.getAllProducts(
+                req.query,
+            );
             res.json(new SuccessResponse('Products retrieved', products));
         } catch (error: any) {
             next(new HttpException(400, error.message));
@@ -143,21 +140,6 @@ class ProductController implements Controller {
         try {
             await this.ProductService.deleteAllProducts();
             res.json(new SuccessResponse('Products deleted'));
-        } catch (error: any) {
-            next(new HttpException(400, error.message));
-        }
-    };
-
-    private searchProducts = async (
-        req: Request,
-        res: Response,
-        next: NextFunction,
-    ): Promise<void> => {
-        try {
-            const products = await this.ProductService.searchProducts(
-                req.query,
-            );
-            res.json(new SuccessResponse('Products retrieved', products));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

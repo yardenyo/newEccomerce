@@ -64,7 +64,7 @@ class RoleController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const roles = await this.roleService.getAllRoles();
+            const roles = await this.roleService.getAllRoles(request.query);
             response.json(
                 new SuccessResponse('Successfully retrieved roles', roles),
             );

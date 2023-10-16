@@ -5,9 +5,9 @@ import User from '@/resources/user/user.interface';
 class UserService {
     private user = userModel;
 
-    public async getAllUsers(): Promise<User[]> {
+    public async getAllUsers(query: any): Promise<User[]> {
         try {
-            const users = await this.user.find();
+            const users = await this.user.find(query);
             return users;
         } catch (error) {
             throw new Error('Error getting users');
