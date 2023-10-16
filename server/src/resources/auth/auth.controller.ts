@@ -6,7 +6,7 @@ import HttpException from '@/utils/exceptions/http.exception';
 import Controller from '@/utils/interfaces/controller.interface';
 import { generateToken } from '@/utils/jwtToken';
 import { generateRefreshToken } from '@/utils/refreshToken';
-import SuccessResponse from '@/utils/responses/success.response';
+import SuccessResponse from '@/middleware/success.middleware';
 import { NextFunction, Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
 import Roles from '@/utils/enums/roles.enums';

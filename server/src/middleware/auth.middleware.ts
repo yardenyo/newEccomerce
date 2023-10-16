@@ -40,6 +40,24 @@ const authMiddleware = async (
     }
 };
 
+const creatorMiddleware = async (
+    req: NewRequest,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        const role = await roleModel.findById(req.user?.role);
+        if (
+            (req.user && role?.name === Roles.MODERATOR) ||
+            role?.name === Roles.ADMIN
+        )
+            next();
+        else throw new HttpException(401, 'Not Authorized');
+    } catch (error) {
+        next(error);
+    }
+};
+
 const adminMiddleware = async (
     req: NewRequest,
     res: Response,
@@ -54,4 +72,4 @@ const adminMiddleware = async (
     }
 };
 
-export { authMiddleware, adminMiddleware };
+export { authMiddleware, creatorMiddleware, adminMiddleware };
