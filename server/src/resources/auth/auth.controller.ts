@@ -1,5 +1,5 @@
 import validationMiddleware from '@/middleware/validation.middleware';
-import loginLimiter from '@/middleware/loginLimiter';
+import loginLimiter from '@/middleware/loginLimiter.middleware';
 import AuthService from '@/resources/auth/auth.service';
 import validate from '@/resources/auth/auth.validation';
 import HttpException from '@/utils/exceptions/http.exception';
