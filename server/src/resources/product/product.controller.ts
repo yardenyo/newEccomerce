@@ -116,7 +116,6 @@ class ProductController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
-            console.log('inside getProductById');
             validateDBId(id);
             const product = await this.ProductService.getProductById(id);
             res.json(new SuccessResponse('Product retrieved', product));
@@ -132,7 +131,6 @@ class ProductController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
-            console.log('inside updateProduct');
             validateDBId(id);
             const {
                 title,
@@ -174,7 +172,6 @@ class ProductController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
-            console.log('inside deleteProduct');
             validateDBId(id);
             await this.ProductService.deleteProductById(id);
             res.json(new SuccessResponse('Product deleted'));
@@ -202,7 +199,6 @@ class ProductController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            console.log(req.query);
             const products = await this.ProductService.searchProducts(
                 req.query,
             );
