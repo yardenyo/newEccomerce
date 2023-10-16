@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import Roles from '@/utils/enums/roles.enums';
 
 const updateUser = Joi.object({
     firstName: Joi.string(),
@@ -8,7 +9,9 @@ const updateUser = Joi.object({
 });
 
 const updateRole = Joi.object({
-    role: Joi.string().valid('user', 'admin').required(),
+    role: Joi.string()
+        .valid(...Object.values(Roles))
+        .required(),
 });
 
 export default { updateUser, updateRole };

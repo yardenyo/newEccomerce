@@ -1,9 +1,10 @@
 import userModel from '@/resources/user/user.model';
+import roleModel from '@/resources/role/role.model';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import HttpException from '@/utils/exceptions/http.exception';
 import User from '@/resources/user/user.interface';
-import { Roles } from '@/utils/enums';
+import Roles from '@/utils/enums/roles.enums';
 
 interface NewRequest extends Request {
     user?: User;
@@ -45,11 +46,9 @@ const adminMiddleware = async (
     next: NextFunction,
 ) => {
     try {
-        if (req.user && req.user.role === Roles.ADMIN) {
-            next();
-        } else {
-            throw new HttpException(401, 'Not Authorized');
-        }
+        const role = await roleModel.findById(req.user?.role);
+        if (req.user && role?.name === Roles.ADMIN) next();
+        else throw new HttpException(401, 'Not Authorized');
     } catch (error) {
         next(error);
     }
