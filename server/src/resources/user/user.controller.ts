@@ -5,6 +5,7 @@ import SuccessResponse from '@/utils/responses/success.response';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/user/user.validation';
 import UserService from '@/resources/user/user.service';
+import { authMiddleware, adminMiddleware } from '@/middleware/auth.middleware';
 
 class UserController implements Controller {
     public path = '/users';
@@ -16,11 +17,28 @@ class UserController implements Controller {
     }
 
     private initializeRoutes(): void {
-        this.router.get(`${this.path}`, this.getAllUsers);
-        this.router.get(`${this.path}/:id`, this.getUserById);
-        this.router.delete(`${this.path}/:id`, this.deleteUserById);
+        this.router.get(
+            `${this.path}`,
+            authMiddleware,
+            adminMiddleware,
+            this.getAllUsers,
+        );
+        this.router.get(
+            `${this.path}/:id`,
+            authMiddleware,
+            adminMiddleware,
+            this.getUserById,
+        );
+        this.router.delete(
+            `${this.path}/:id`,
+            authMiddleware,
+            adminMiddleware,
+            this.deleteUserById,
+        );
         this.router.put(
             `${this.path}/:id`,
+            authMiddleware,
+            adminMiddleware,
             validationMiddleware(validate.updateUser),
             this.updateUserById,
         );

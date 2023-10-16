@@ -32,6 +32,24 @@ const UserSchema = new Schema(
             enum: ['user', 'admin'],
             default: 'user',
         },
+        cart: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Product',
+            },
+        ],
+        address: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Address',
+            },
+        ],
+        wishlist: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Product',
+            },
+        ],
     },
     {
         timestamps: true,
