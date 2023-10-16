@@ -6,15 +6,9 @@ class AuthService {
     private user = userModel;
     private role = roleModel;
 
-    public async signup(
-        firstName: string,
-        lastName: string,
-        email: string,
-        mobile: string,
-        password: string,
-        role: string,
-    ): Promise<User> {
+    public async signup(body: User, role: string): Promise<User> {
         try {
+            const { firstName, lastName, email, mobile, password } = body;
             const emailExists = await this.user.findOne({ email });
             if (emailExists) throw new Error();
 
@@ -25,11 +19,7 @@ class AuthService {
             if (!roleExists) throw new Error();
 
             const user = await this.user.create({
-                firstName,
-                lastName,
-                email,
-                mobile,
-                password,
+                ...body,
                 role: roleExists._id,
             });
 

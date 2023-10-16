@@ -134,14 +134,7 @@ class UserController implements Controller {
         try {
             const { id } = req.params;
             await validateDBId(id);
-            const { firstName, lastName, email, mobile } = req.body;
-            const user = await this.UserService.updateUserById(
-                id,
-                firstName,
-                lastName,
-                email,
-                mobile,
-            );
+            const user = await this.UserService.updateUserById(id, req.body);
             res.json(new SuccessResponse('User updated successfully', user));
         } catch (error: any) {
             next(new HttpException(400, error.message));

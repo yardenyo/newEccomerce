@@ -24,14 +24,9 @@ class UserService {
         }
     }
 
-    public async updateUserById(
-        id: string,
-        firstName: string,
-        lastName: string,
-        email: string,
-        mobile: string,
-    ): Promise<User> {
+    public async updateUserById(id: string, body: User): Promise<User> {
         try {
+            const { firstName, lastName, email, mobile } = body;
             if (email) {
                 const emailExists = await this.user.findOne({ email });
                 if (emailExists) throw new Error();
@@ -42,16 +37,9 @@ class UserService {
                 if (mobileExists) throw new Error();
             }
 
-            const user = await this.user.findByIdAndUpdate(
-                id,
-                {
-                    ...(firstName && { firstName }),
-                    ...(lastName && { lastName }),
-                    ...(email && { email }),
-                    ...(mobile && { mobile }),
-                },
-                { new: true },
-            );
+            const user = await this.user.findByIdAndUpdate(id, body, {
+                new: true,
+            });
             if (!user) throw new Error();
             return user;
         } catch (error) {

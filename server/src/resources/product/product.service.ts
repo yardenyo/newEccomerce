@@ -5,31 +5,11 @@ import slugify from 'slugify';
 class ProductService {
     private product = productModel;
 
-    public async createProduct(
-        title: string,
-        description: string,
-        price: number,
-        // category: string,
-        // brand: string,
-        quantity: number,
-        sold: number,
-        images: string[],
-        color: string,
-        // ratings: { star: number; postedBy: string }[],
-    ): Promise<Product> {
+    public async createProduct(body: Product): Promise<Product> {
         try {
             const product = await this.product.create({
-                title,
-                slug: slugify(title, { lower: true }),
-                description,
-                price,
-                // category,
-                // brand,
-                quantity,
-                sold,
-                images,
-                color,
-                // ratings,
+                ...body,
+                slug: slugify(body.title, { lower: true }),
             });
             return product;
         } catch (error) {
@@ -56,38 +36,11 @@ class ProductService {
         }
     }
 
-    public async updateProduct(
-        id: string,
-        title: string,
-        slug: string,
-        description: string,
-        price: number,
-        // category: string,
-        // brand: string,
-        quantity: number,
-        sold: number,
-        images: string[],
-        color: string,
-        // ratings: { star: number; postedBy: string }[],
-    ): Promise<Product> {
+    public async updateProduct(id: string, body: Product): Promise<Product> {
         try {
-            const newProduct = await this.product.findByIdAndUpdate(
-                id,
-                {
-                    ...(title && { title }),
-                    ...(title && { slug: slugify(title, { lower: true }) }),
-                    ...(description && { description }),
-                    ...(price && { price }),
-                    // ...(category && { category }),
-                    // ...(brand && { brand }),
-                    ...(quantity && { quantity }),
-                    ...(sold && { sold }),
-                    ...(images && { images }),
-                    ...(color && { color }),
-                    // ...(ratings && { ratings }),
-                },
-                { new: true },
-            );
+            const newProduct = await this.product.findByIdAndUpdate(id, body, {
+                new: true,
+            });
             if (!newProduct) throw new Error();
             return newProduct;
         } catch (error) {

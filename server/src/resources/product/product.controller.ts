@@ -66,30 +66,7 @@ class ProductController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const {
-                title,
-                description,
-                price,
-                // category,
-                // brand,
-                quantity,
-                sold,
-                images,
-                color,
-                // ratings,
-            } = req.body;
-            const product = await this.ProductService.createProduct(
-                title,
-                description,
-                price,
-                // category,
-                // brand,
-                quantity,
-                sold,
-                images,
-                color,
-                // ratings,
-            );
+            const product = await this.ProductService.createProduct(req.body);
             res.json(new SuccessResponse('Product created', product));
         } catch (error: any) {
             next(new HttpException(400, error.message));
@@ -132,32 +109,10 @@ class ProductController implements Controller {
         try {
             const { id } = req.params;
             validateDBId(id);
-            const {
-                title,
-                slug,
-                description,
-                price,
-                category,
-                brand,
-                quantity,
-                sold,
-                images,
-                color,
-                ratings,
-            } = req.body;
+
             const product = await this.ProductService.updateProduct(
                 id,
-                title,
-                slug,
-                description,
-                price,
-                // category,
-                // brand,
-                quantity,
-                sold,
-                images,
-                color,
-                // ratings,
+                req.body,
             );
             res.json(new SuccessResponse('Product updated', product));
         } catch (error: any) {

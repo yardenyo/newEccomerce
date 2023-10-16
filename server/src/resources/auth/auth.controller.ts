@@ -42,15 +42,7 @@ class AuthController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { firstName, lastName, email, mobile, password } = req.body;
-            const user = await this.AuthService.signup(
-                firstName,
-                lastName,
-                email,
-                mobile,
-                password,
-                Roles.USER,
-            );
+            const user = await this.AuthService.signup(req.body, Roles.USER);
             res.json(
                 new SuccessResponse('User created successfully', {
                     id: user._id,
