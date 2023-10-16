@@ -32,19 +32,16 @@ class UserService {
         mobile: string,
     ): Promise<User> {
         try {
-            //check if email exists
             if (email) {
                 const emailExists = await this.user.findOne({ email });
                 if (emailExists) throw new Error();
             }
 
-            //check if mobile exists
             if (mobile) {
                 const mobileExists = await this.user.findOne({ mobile });
                 if (mobileExists) throw new Error();
             }
 
-            //update user
             const user = await this.user.findByIdAndUpdate(
                 id,
                 {
@@ -111,7 +108,6 @@ class UserService {
     public async updateRole(id: string, role: string): Promise<User> {
         try {
             const roleExists = await roleModel.findOne({ name: role });
-            console.log(roleExists);
             if (!roleExists) throw new Error();
 
             const user = await this.user.findByIdAndUpdate(

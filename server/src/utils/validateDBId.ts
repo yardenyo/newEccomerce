@@ -1,4 +1,3 @@
-//validateDBId.ts
 import mongoose from 'mongoose';
 
 export default async (id: string) => {
