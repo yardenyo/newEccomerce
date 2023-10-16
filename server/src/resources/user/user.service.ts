@@ -1,4 +1,5 @@
 import userModel from '@/resources/user/user.model';
+import roleModel from '@/resources/role/role.model';
 import User from '@/resources/user/user.interface';
 
 class UserService {
@@ -109,15 +110,19 @@ class UserService {
 
     public async updateRole(id: string, role: string): Promise<User> {
         try {
+            const roleExists = await roleModel.findOne({ name: role });
+            console.log(roleExists);
+            if (!roleExists) throw new Error();
+
             const user = await this.user.findByIdAndUpdate(
                 id,
-                { role },
+                { role: roleExists._id },
                 { new: true },
             );
             if (!user) throw new Error();
             return user;
         } catch (error) {
-            throw new Error('Error updating user role');
+            throw new Error('Error updating role');
         }
     }
 }

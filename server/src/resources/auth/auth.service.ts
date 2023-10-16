@@ -1,8 +1,10 @@
 import userModel from '@/resources/user/user.model';
+import roleModel from '@/resources/role/role.model';
 import User from '@/resources/user/user.interface';
 
 class AuthService {
     private user = userModel;
+    private role = roleModel;
 
     public async signup(
         firstName: string,
@@ -10,6 +12,7 @@ class AuthService {
         email: string,
         mobile: string,
         password: string,
+        role: string,
     ): Promise<User> {
         try {
             //check if all fields are provided
@@ -24,6 +27,10 @@ class AuthService {
             const mobileExists = await this.user.findOne({ mobile });
             if (mobileExists) throw new Error();
 
+            //check if role exists
+            const roleExists = await this.role.findOne({ name: role });
+            if (!roleExists) throw new Error();
+
             //create user
             const user = await this.user.create({
                 firstName,
@@ -31,7 +38,9 @@ class AuthService {
                 email,
                 mobile,
                 password,
+                role: roleExists._id,
             });
+
             return user;
         } catch (error) {
             throw new Error('Error creating user');

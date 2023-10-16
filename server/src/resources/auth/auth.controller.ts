@@ -9,6 +9,7 @@ import { generateRefreshToken } from '@/utils/refreshToken';
 import SuccessResponse from '@/utils/responses/success.response';
 import { NextFunction, Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
+import Roles from '@/utils/enums/roles.enums';
 
 class AuthController implements Controller {
     public path = '/auth';
@@ -48,6 +49,7 @@ class AuthController implements Controller {
                 email,
                 mobile,
                 password,
+                Roles.USER,
             );
             res.json(
                 new SuccessResponse('User created successfully', {
