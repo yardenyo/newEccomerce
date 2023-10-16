@@ -1,35 +1,35 @@
 import productModel from '@/resources/product/product.model';
 import Product from '@/resources/product/product.interface';
+import slugify from 'slugify';
 
 class ProductService {
     private product = productModel;
 
     public async createProduct(
         title: string,
-        slug: string,
         description: string,
         price: number,
-        category: string,
-        brand: string,
+        // category: string,
+        // brand: string,
         quantity: number,
         sold: number,
         images: string[],
         color: string,
-        ratings: { star: number; postedBy: string }[],
+        // ratings: { star: number; postedBy: string }[],
     ): Promise<Product> {
         try {
             const product = await this.product.create({
                 title,
-                slug,
+                slug: slugify(title, { lower: true }),
                 description,
                 price,
-                category,
-                brand,
+                // category,
+                // brand,
                 quantity,
                 sold,
                 images,
                 color,
-                ratings,
+                // ratings,
             });
             return product;
         } catch (error) {
@@ -62,29 +62,29 @@ class ProductService {
         slug: string,
         description: string,
         price: number,
-        category: string,
-        brand: string,
+        // category: string,
+        // brand: string,
         quantity: number,
         sold: number,
         images: string[],
         color: string,
-        ratings: { star: number; postedBy: string }[],
+        // ratings: { star: number; postedBy: string }[],
     ): Promise<Product> {
         try {
             const newProduct = await this.product.findByIdAndUpdate(
                 id,
                 {
-                    title,
-                    slug,
-                    description,
-                    price,
-                    category,
-                    brand,
-                    quantity,
-                    sold,
-                    images,
-                    color,
-                    ratings,
+                    ...(title && { title }),
+                    ...(title && { slug: slugify(title, { lower: true }) }),
+                    ...(description && { description }),
+                    ...(price && { price }),
+                    // ...(category && { category }),
+                    // ...(brand && { brand }),
+                    ...(quantity && { quantity }),
+                    ...(sold && { sold }),
+                    ...(images && { images }),
+                    ...(color && { color }),
+                    // ...(ratings && { ratings }),
                 },
                 { new: true },
             );
@@ -108,6 +108,15 @@ class ProductService {
             await this.product.deleteMany();
         } catch (error) {
             throw new Error('Error deleting products');
+        }
+    }
+
+    public async searchProducts(query: any): Promise<Product[]> {
+        try {
+            const products = await this.product.find(query);
+            return products;
+        } catch (error) {
+            throw new Error('Error searching products');
         }
     }
 }

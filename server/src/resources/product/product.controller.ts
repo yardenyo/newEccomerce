@@ -28,6 +28,11 @@ class ProductController implements Controller {
             validationMiddleware(validate.createProduct),
             this.createProduct,
         );
+        this.router.get(
+            `${this.path}/search`,
+            authMiddleware,
+            this.searchProducts,
+        );
         this.router.get(`${this.path}`, authMiddleware, this.getAllProducts);
         this.router.get(
             `${this.path}/:id`,
@@ -63,29 +68,27 @@ class ProductController implements Controller {
         try {
             const {
                 title,
-                slug,
                 description,
                 price,
-                category,
-                brand,
+                // category,
+                // brand,
                 quantity,
                 sold,
                 images,
                 color,
-                ratings,
+                // ratings,
             } = req.body;
             const product = await this.ProductService.createProduct(
                 title,
-                slug,
                 description,
                 price,
-                category,
-                brand,
+                // category,
+                // brand,
                 quantity,
                 sold,
                 images,
                 color,
-                ratings,
+                // ratings,
             );
             res.json(new SuccessResponse('Product created', product));
         } catch (error: any) {
@@ -113,6 +116,7 @@ class ProductController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
+            console.log('inside getProductById');
             validateDBId(id);
             const product = await this.ProductService.getProductById(id);
             res.json(new SuccessResponse('Product retrieved', product));
@@ -128,6 +132,7 @@ class ProductController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
+            console.log('inside updateProduct');
             validateDBId(id);
             const {
                 title,
@@ -148,13 +153,13 @@ class ProductController implements Controller {
                 slug,
                 description,
                 price,
-                category,
-                brand,
+                // category,
+                // brand,
                 quantity,
                 sold,
                 images,
                 color,
-                ratings,
+                // ratings,
             );
             res.json(new SuccessResponse('Product updated', product));
         } catch (error: any) {
@@ -169,6 +174,7 @@ class ProductController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
+            console.log('inside deleteProduct');
             validateDBId(id);
             await this.ProductService.deleteProductById(id);
             res.json(new SuccessResponse('Product deleted'));
@@ -185,6 +191,22 @@ class ProductController implements Controller {
         try {
             await this.ProductService.deleteAllProducts();
             res.json(new SuccessResponse('Products deleted'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private searchProducts = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            console.log(req.query);
+            const products = await this.ProductService.searchProducts(
+                req.query,
+            );
+            res.json(new SuccessResponse('Products retrieved', products));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

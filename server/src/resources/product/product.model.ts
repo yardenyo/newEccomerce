@@ -30,14 +30,14 @@ const ProductSchema = new Schema(
             trim: true,
             maxlength: 32,
         },
-        category: {
-            type: Schema.Types.ObjectId,
-            ref: 'Category',
-        },
-        brand: {
-            type: Schema.Types.ObjectId,
-            ref: 'Brand',
-        },
+        // category: {
+        //     type: Schema.Types.ObjectId,
+        //     ref: 'Category',
+        // },
+        // brand: {
+        //     type: Schema.Types.ObjectId,
+        //     ref: 'Brand',
+        // },
         quantity: {
             type: Number,
             required: true,
@@ -55,18 +55,18 @@ const ProductSchema = new Schema(
             enum: Colors,
             default: 'White',
         },
-        ratings: [
-            {
-                star: {
-                    type: Number,
-                    required: true,
-                },
-                postedBy: {
-                    type: Schema.Types.ObjectId,
-                    ref: 'User',
-                },
-            },
-        ],
+        // ratings: [
+        //     {
+        //         star: {
+        //             type: Number,
+        //             required: true,
+        //         },
+        //         postedBy: {
+        //             type: Schema.Types.ObjectId,
+        //             ref: 'User',
+        //         },
+        //     },
+        // ],
     },
     {
         timestamps: true,
