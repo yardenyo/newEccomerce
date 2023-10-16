@@ -22,17 +22,13 @@ class ProductController implements Controller {
 
     private initializeRoutes(): void {
         this.router.post(
-            `${this.path}`,
+            `${this.path}/create`,
             authMiddleware,
             creatorMiddleware,
             validationMiddleware(validate.createProduct),
             this.createProduct,
         );
-        this.router.post(
-            `${this.path}/getAll`,
-            authMiddleware,
-            this.getAllProducts,
-        );
+        this.router.post(`${this.path}`, authMiddleware, this.getAllProducts);
         this.router.get(
             `${this.path}/:id`,
             authMiddleware,

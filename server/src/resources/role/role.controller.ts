@@ -18,7 +18,7 @@ class RoleController implements Controller {
     }
 
     private initializeRoutes(): void {
-        this.router.get(
+        this.router.post(
             `${this.path}`,
             authMiddleware,
             adminMiddleware,
@@ -31,7 +31,7 @@ class RoleController implements Controller {
             this.getRoleById,
         );
         this.router.post(
-            `${this.path}`,
+            `${this.path}/create`,
             authMiddleware,
             adminMiddleware,
             validationMiddleware(validate.createRole),
@@ -64,7 +64,7 @@ class RoleController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const roles = await this.roleService.getAllRoles(request.query);
+            const roles = await this.roleService.getAllRoles(request.body);
             response.json(
                 new SuccessResponse('Successfully retrieved roles', roles),
             );

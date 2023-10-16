@@ -1,12 +1,21 @@
 import roleModel from '@/resources/role/role.model';
 import Role from '@/resources/role/role.interface';
+import PostBody from '@/utils/interfaces/postbody.interface';
+import ConvertResponse from '@/utils/helpers/convertresponse.helper';
 
 class RoleService {
     private role = roleModel;
 
-    public async getAllRoles(query: any): Promise<Role[]> {
+    public async getAllRoles(body: PostBody): Promise<Role[]> {
         try {
-            const roles = await this.role.find(query);
+            const { sort, skip, limit, searchFilter } =
+                await ConvertResponse(body);
+
+            const roles = await this.role
+                .find(searchFilter)
+                .sort(sort)
+                .skip(skip)
+                .limit(limit);
             return roles;
         } catch (error) {
             throw new Error('Error getting roles');

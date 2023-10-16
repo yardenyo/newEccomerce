@@ -1,13 +1,23 @@
 import userModel from '@/resources/user/user.model';
 import roleModel from '@/resources/role/role.model';
 import User from '@/resources/user/user.interface';
+import PostBody from '@/utils/interfaces/postbody.interface';
+import ConvertResponse from '@/utils/helpers/convertresponse.helper';
 
 class UserService {
     private user = userModel;
 
-    public async getAllUsers(query: any): Promise<User[]> {
+    public async getAllUsers(body: PostBody): Promise<User[]> {
         try {
-            const users = await this.user.find(query);
+            const { sort, skip, limit, searchFilter } =
+                await ConvertResponse(body);
+
+            const users = await this.user
+                .find(searchFilter)
+                .sort(sort)
+                .skip(skip)
+                .limit(limit);
+
             return users;
         } catch (error) {
             throw new Error('Error getting users');

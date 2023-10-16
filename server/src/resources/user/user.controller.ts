@@ -18,7 +18,7 @@ class UserController implements Controller {
     }
 
     private initializeRoutes(): void {
-        this.router.get(
+        this.router.post(
             `${this.path}`,
             authMiddleware,
             adminMiddleware,
@@ -76,7 +76,7 @@ class UserController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const users = await this.UserService.getAllUsers(req.query);
+            const users = await this.UserService.getAllUsers(req.body);
             res.json(new SuccessResponse('Users fetched successfully', users));
         } catch (error: any) {
             next(new HttpException(400, error.message));
