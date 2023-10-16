@@ -32,6 +32,10 @@ const UserSchema = new Schema(
             enum: ['user', 'admin'],
             default: 'user',
         },
+        isBlocked: {
+            type: Boolean,
+            default: false,
+        },
         cart: [
             {
                 type: Schema.Types.ObjectId,

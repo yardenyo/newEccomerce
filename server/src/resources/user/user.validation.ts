@@ -7,4 +7,8 @@ const updateUser = Joi.object({
     mobile: Joi.string(),
 });
 
-export default { updateUser };
+const updateRole = Joi.object({
+    role: Joi.string().valid('user', 'admin').required(),
+});
+
+export default { updateUser, updateRole };

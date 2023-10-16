@@ -35,12 +35,38 @@ class UserController implements Controller {
             adminMiddleware,
             this.deleteUserById,
         );
+        this.router.delete(
+            `${this.path}`,
+            authMiddleware,
+            adminMiddleware,
+            this.deleteAllUsers,
+        );
         this.router.put(
             `${this.path}/:id`,
             authMiddleware,
             adminMiddleware,
             validationMiddleware(validate.updateUser),
             this.updateUserById,
+        );
+        this.router.put(
+            `${this.path}/:id/block`,
+            authMiddleware,
+            adminMiddleware,
+            this.blockUserById,
+        );
+        this.router.put(
+            `${this.path}/:id/unblock`,
+            authMiddleware,
+            adminMiddleware,
+            this.unblockUserById,
+        );
+        //update role
+        this.router.put(
+            `${this.path}/:id/role`,
+            authMiddleware,
+            adminMiddleware,
+            validationMiddleware(validate.updateRole),
+            this.updateRole,
         );
     }
 
@@ -85,6 +111,19 @@ class UserController implements Controller {
         }
     };
 
+    private deleteAllUsers = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            await this.UserService.deleteAllUsers();
+            res.json(new SuccessResponse('Users deleted successfully'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
     private updateUserById = async (
         req: Request,
         res: Response,
@@ -101,6 +140,51 @@ class UserController implements Controller {
                 mobile,
             );
             res.json(new SuccessResponse('User updated successfully', user));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private blockUserById = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { id } = req.params;
+            const user = await this.UserService.blockUserById(id);
+            res.json(new SuccessResponse('User blocked successfully', user));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private unblockUserById = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { id } = req.params;
+            const user = await this.UserService.unblockUserById(id);
+            res.json(new SuccessResponse('User unblocked successfully', user));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private updateRole = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { id } = req.params;
+            const { role } = req.body;
+            const user = await this.UserService.updateRole(id, role);
+            res.json(
+                new SuccessResponse('User role updated successfully', user),
+            );
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

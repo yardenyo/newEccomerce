@@ -70,6 +70,56 @@ class UserService {
             throw new Error('Error deleting user');
         }
     }
+
+    public async deleteAllUsers(): Promise<void> {
+        try {
+            await this.user.deleteMany();
+        } catch (error) {
+            throw new Error('Error deleting users');
+        }
+    }
+
+    public async blockUserById(id: string): Promise<User> {
+        try {
+            const user = await this.user.findByIdAndUpdate(
+                id,
+                { isBlocked: true },
+                { new: true },
+            );
+            if (!user) throw new Error();
+            return user;
+        } catch (error) {
+            throw new Error('Error blocking user');
+        }
+    }
+
+    public async unblockUserById(id: string): Promise<User> {
+        try {
+            const user = await this.user.findByIdAndUpdate(
+                id,
+                { isBlocked: false },
+                { new: true },
+            );
+            if (!user) throw new Error();
+            return user;
+        } catch (error) {
+            throw new Error('Error unblocking user');
+        }
+    }
+
+    public async updateRole(id: string, role: string): Promise<User> {
+        try {
+            const user = await this.user.findByIdAndUpdate(
+                id,
+                { role },
+                { new: true },
+            );
+            if (!user) throw new Error();
+            return user;
+        } catch (error) {
+            throw new Error('Error updating user role');
+        }
+    }
 }
 
 export default UserService;
