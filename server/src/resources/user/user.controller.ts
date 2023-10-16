@@ -49,20 +49,19 @@ class UserController implements Controller {
             this.updateUserById,
         );
         this.router.put(
-            `${this.path}/:id/block`,
+            `${this.path}/block/:id`,
             authMiddleware,
             adminMiddleware,
             this.blockUserById,
         );
         this.router.put(
-            `${this.path}/:id/unblock`,
+            `${this.path}/unblock/:id`,
             authMiddleware,
             adminMiddleware,
             this.unblockUserById,
         );
-        //update role
         this.router.put(
-            `${this.path}/:id/role`,
+            `${this.path}/role/:id`,
             authMiddleware,
             adminMiddleware,
             validationMiddleware(validate.updateRole),
