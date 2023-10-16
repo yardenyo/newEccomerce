@@ -7,6 +7,7 @@ import Controller from '@/utils/interfaces/controller.interface';
 import ErrorMiddleware from '@/middleware/error.middleware';
 import NotFoundMiddleware from '@/middleware/notFound.middleware';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 
 class App {
     public express: Application;
@@ -30,6 +31,7 @@ class App {
         this.express.use(express.json());
         this.express.use(express.urlencoded({ extended: false }));
         this.express.use(compression());
+        this.express.use(cookieParser());
     }
 
     private initializeControllers(controllers: Controller[]): void {

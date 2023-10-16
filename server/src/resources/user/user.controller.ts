@@ -6,6 +6,7 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/user/user.validation';
 import UserService from '@/resources/user/user.service';
 import { authMiddleware, adminMiddleware } from '@/middleware/auth.middleware';
+import validateDBId from '@/utils/validateDBId';
 
 class UserController implements Controller {
     public path = '/users';
@@ -89,6 +90,7 @@ class UserController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
+            await validateDBId(id);
             const user = await this.UserService.getUserById(id);
             res.json(new SuccessResponse('User fetched successfully', user));
         } catch (error: any) {
@@ -103,6 +105,7 @@ class UserController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
+            await validateDBId(id);
             await this.UserService.deleteUserById(id);
             res.json(new SuccessResponse('User deleted successfully'));
         } catch (error: any) {
@@ -130,6 +133,7 @@ class UserController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
+            await validateDBId(id);
             const { firstName, lastName, email, mobile } = req.body;
             const user = await this.UserService.updateUserById(
                 id,
@@ -151,6 +155,7 @@ class UserController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
+            await validateDBId(id);
             const user = await this.UserService.blockUserById(id);
             res.json(new SuccessResponse('User blocked successfully', user));
         } catch (error: any) {
@@ -165,6 +170,7 @@ class UserController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
+            await validateDBId(id);
             const user = await this.UserService.unblockUserById(id);
             res.json(new SuccessResponse('User unblocked successfully', user));
         } catch (error: any) {
@@ -179,6 +185,7 @@ class UserController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.params;
+            await validateDBId(id);
             const { role } = req.body;
             const user = await this.UserService.updateRole(id, role);
             res.json(

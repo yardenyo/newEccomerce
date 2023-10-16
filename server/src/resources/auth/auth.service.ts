@@ -56,6 +56,36 @@ class AuthService {
             throw new Error('Error signing in');
         }
     }
+
+    public async updateRefreshToken(userId: string, refreshToken: string) {
+        try {
+            await this.user.updateOne(
+                { _id: userId },
+                { refreshToken: refreshToken },
+            );
+        } catch (error) {
+            throw new Error('Error updating refresh token');
+        }
+    }
+
+    public async refreshToken(refreshToken: string): Promise<User> {
+        try {
+            const user = await this.user.findOne({ refreshToken });
+            if (!user) throw new Error();
+
+            return user;
+        } catch (error) {
+            throw new Error('Error refreshing token');
+        }
+    }
+
+    public async signout(refreshToken: string): Promise<void> {
+        try {
+            await this.user.updateOne({ refreshToken }, { refreshToken: null });
+        } catch (error) {
+            throw new Error('Error signing out');
+        }
+    }
 }
 
 export default AuthService;
