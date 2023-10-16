@@ -25,12 +25,37 @@ class ProductController implements Controller {
             `${this.path}`,
             authMiddleware,
             creatorMiddleware,
-            validationMiddleware(validate.create),
-            this.create,
+            validationMiddleware(validate.createProduct),
+            this.createProduct,
+        );
+        this.router.get(`${this.path}`, authMiddleware, this.getAllProducts);
+        this.router.get(
+            `${this.path}/:id`,
+            authMiddleware,
+            this.getProductById,
+        );
+        this.router.put(
+            `${this.path}/:id`,
+            authMiddleware,
+            creatorMiddleware,
+            validationMiddleware(validate.updateProduct),
+            this.updateProduct,
+        );
+        this.router.delete(
+            `${this.path}/:id`,
+            authMiddleware,
+            creatorMiddleware,
+            this.deleteProduct,
+        );
+        this.router.delete(
+            `${this.path}`,
+            authMiddleware,
+            creatorMiddleware,
+            this.deleteAllProducts,
         );
     }
 
-    private create = async (
+    private createProduct = async (
         req: Request,
         res: Response,
         next: NextFunction,
@@ -49,7 +74,7 @@ class ProductController implements Controller {
                 color,
                 ratings,
             } = req.body;
-            const product = await this.ProductService.create(
+            const product = await this.ProductService.createProduct(
                 title,
                 slug,
                 description,
@@ -63,6 +88,103 @@ class ProductController implements Controller {
                 ratings,
             );
             res.json(new SuccessResponse('Product created', product));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private getAllProducts = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const products = await this.ProductService.getAllProducts();
+            res.json(new SuccessResponse('Products retrieved', products));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private getProductById = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { id } = req.params;
+            validateDBId(id);
+            const product = await this.ProductService.getProductById(id);
+            res.json(new SuccessResponse('Product retrieved', product));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private updateProduct = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { id } = req.params;
+            validateDBId(id);
+            const {
+                title,
+                slug,
+                description,
+                price,
+                category,
+                brand,
+                quantity,
+                sold,
+                images,
+                color,
+                ratings,
+            } = req.body;
+            const product = await this.ProductService.updateProduct(
+                id,
+                title,
+                slug,
+                description,
+                price,
+                category,
+                brand,
+                quantity,
+                sold,
+                images,
+                color,
+                ratings,
+            );
+            res.json(new SuccessResponse('Product updated', product));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private deleteProduct = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { id } = req.params;
+            validateDBId(id);
+            await this.ProductService.deleteProductById(id);
+            res.json(new SuccessResponse('Product deleted'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private deleteAllProducts = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            await this.ProductService.deleteAllProducts();
+            res.json(new SuccessResponse('Products deleted'));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
