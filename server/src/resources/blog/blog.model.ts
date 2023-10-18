@@ -1,16 +1,64 @@
-
 import { Schema, model } from 'mongoose';
 import Blog from '@/resources/blog/blog.interface';
 
 const BlogSchema = new Schema(
     {
+        title: {
+            type: String,
+            required: true,
+        },
+        description: {
+            type: String,
+            required: true,
+        },
+        category: {
+            type: String,
+            required: true,
+        },
+        views: {
+            type: Number,
+            default: 0,
+        },
+        isLiked: {
+            type: Boolean,
+            default: false,
+        },
+        isDisliked: {
+            type: Boolean,
+            default: false,
+        },
+        likes: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+                required: true,
+            },
+        ],
+        dislikes: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+                required: true,
+            },
+        ],
+        image: {
+            type: String,
+            default:
+                'https://thumbs.dreamstime.com/z/blogging-blog-concepts-ideas-worktable-blogging-blog-concepts-ideas-white-worktable-110423482.jpg?w=992',
+        },
+        author: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
     },
-    { timestamps: true },
+    {
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
+        timestamps: true,
+    },
 );
 
-const BlogModel = model<Blog>(
-    'Blog',
-    BlogSchema,
-);
+const BlogModel = model<Blog>('Blog', BlogSchema);
 
 export default BlogModel;
