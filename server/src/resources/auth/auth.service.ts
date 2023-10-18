@@ -105,7 +105,7 @@ class AuthService {
             const token = await user.createPasswordResetToken();
             await user.save();
 
-            const resetURL = `${process.env.CLIENT_URL}/api/auth/reset-password/${token}`;
+            const resetURL = `${process.env.CLIENT_URL}/auth/reset-password/${token}`;
             const message = `Hi, Please click on the link below to reset your password:
             <br />
             </br />

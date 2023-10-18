@@ -46,7 +46,7 @@ class AuthController implements Controller {
             validationMiddleware(validate.forgotPassword),
             this.forgotPassword,
         );
-        this.router.post(
+        this.router.put(
             `${this.path}/reset-password/:token`,
             validationMiddleware(validate.resetPassword),
             this.resetPassword,
