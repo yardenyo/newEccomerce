@@ -41,11 +41,15 @@ class AuthController implements Controller {
             this.refreshToken,
         );
         this.router.get(`${this.path}/signout`, authMiddleware, this.signout);
-        this.router.put(
-            `${this.path}/update-password`,
-            validationMiddleware(validate.updatePassword),
-            authMiddleware,
-            this.updatePassword,
+        this.router.post(
+            `${this.path}/forgot-password`,
+            validationMiddleware(validate.forgotPassword),
+            this.forgotPassword,
+        );
+        this.router.post(
+            `${this.path}/reset-password/:token`,
+            validationMiddleware(validate.resetPassword),
+            this.resetPassword,
         );
     }
 
@@ -131,20 +135,41 @@ class AuthController implements Controller {
         }
     };
 
-    private updatePassword = async (
+    private forgotPassword = async (
         req: Request,
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { id } = req.body.user;
-            const { password } = req.body;
+            const { email } = req.body;
+            await this.AuthService.forgotPassword(email);
 
-            await validateDBId(id);
+            res.json(
+                new SuccessResponse(
+                    'Password reset link sent to your email address',
+                ),
+            );
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
 
-            await this.AuthService.updatePassword(id, password);
+    private resetPassword = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { token } = req.params;
+            const { password, confirmPassword } = req.body;
 
-            res.json(new SuccessResponse('Password updated successfully'));
+            await this.AuthService.resetPassword(
+                token,
+                password,
+                confirmPassword,
+            );
+
+            res.json(new SuccessResponse('Password reset successfully'));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

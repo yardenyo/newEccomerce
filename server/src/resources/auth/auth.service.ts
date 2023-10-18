@@ -4,6 +4,8 @@ import userModel from '@/resources/user/user.model';
 import redisClient from '@/utils/config/redisConfig';
 import { generateToken } from '@/utils/jwtToken';
 import { generateRefreshToken } from '@/utils/refreshToken';
+import sendEmail from '@/utils/helpers/sendEmail';
+import crypto from 'crypto';
 
 class AuthService {
     private user = userModel;
@@ -94,16 +96,67 @@ class AuthService {
         }
     }
 
-    public async updatePassword(id: string, password: string): Promise<void> {
+    public async forgotPassword(email: string): Promise<void> {
         try {
-            if (!id) throw new Error();
-            const user = await this.user.findById(id);
+            if (!email) throw new Error();
+            const user = await this.user.findOne({ email });
+            if (!user) throw new Error();
+
+            const token = await user.createPasswordResetToken();
+            await user.save();
+
+            const resetURL = `${process.env.CLIENT_URL}/api/auth/reset-password/${token}`;
+            const message = `Hi, Please click on the link below to reset your password:
+            <br />
+            </br />
+            <a href="${resetURL}">Click here to reset your password</a>
+            <br />
+            </br />
+            <strong>NOTE: </strong> The above link expires in 10 minutes. If you did not request a password reset, please ignore this email.
+            `;
+
+            const data = {
+                to: user.email,
+                subject: 'Password Reset',
+                text: `Hey ${user.firstName} !`,
+                html: message,
+            };
+
+            await sendEmail(data);
+        } catch (error) {
+            throw new Error('Error sending password reset email');
+        }
+    }
+
+    public async resetPassword(
+        token: string,
+        password: string,
+        confirmPassword: string,
+    ): Promise<void> {
+        try {
+            if (!token) throw new Error();
+
+            if (password !== confirmPassword) throw new Error();
+
+            const hashedToken = crypto
+                .createHash('sha256')
+                .update(token)
+                .digest('hex');
+
+            const user = await this.user.findOne({
+                resetPasswordToken: hashedToken,
+                resetPasswordExpires: { $gt: Date.now() },
+            });
+
             if (!user) throw new Error();
 
             user.password = password;
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpires = undefined;
+
             await user.save();
         } catch (error) {
-            throw new Error('Error updating password');
+            throw new Error('Error resetting password');
         }
     }
 }

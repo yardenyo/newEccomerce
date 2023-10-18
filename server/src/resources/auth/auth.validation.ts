@@ -37,4 +37,28 @@ const updatePassword = Joi.object({
         ),
 });
 
-export default { signup, signin, refreshToken, updatePassword };
+const forgotPassword = Joi.object({
+    email: Joi.string().email().required(),
+});
+
+const resetPassword = Joi.object({
+    password: Joi.string()
+        .required()
+        .min(8)
+        .max(32)
+        .pattern(
+            new RegExp(
+                '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,32}$',
+            ),
+        ),
+    confirmPassword: Joi.string().required().valid(Joi.ref('password')),
+});
+
+export default {
+    signup,
+    signin,
+    refreshToken,
+    updatePassword,
+    forgotPassword,
+    resetPassword,
+};

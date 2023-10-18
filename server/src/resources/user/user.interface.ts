@@ -11,5 +11,9 @@ export default interface User extends Document {
     password: string;
     createdAt: Date;
     updatedAt: Date;
+    passwordChangedAt: Date;
+    resetPasswordToken: string | undefined;
+    resetPasswordExpires: Date | undefined;
     isValidPassword(password: string): Promise<boolean>;
+    createPasswordResetToken(): Promise<string>;
 }
