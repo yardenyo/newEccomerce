@@ -1,5 +1,12 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import {
+    controllerContent,
+    interfaceContent,
+    modelContent,
+    serviceContent,
+    validationContent,
+} from '../server/src/utils/helpers/resourceContent.helper';
 
 const resourceName = process.argv[2];
 
@@ -26,10 +33,25 @@ const createFile = (filePath: string, content: string) => {
 
 createFolder(resourceFolder);
 
-createFile(path.join(resourceFolder, `${resourceName}.controller.ts`), '');
-createFile(path.join(resourceFolder, `${resourceName}.interface.ts`), '');
-createFile(path.join(resourceFolder, `${resourceName}.model.ts`), '');
-createFile(path.join(resourceFolder, `${resourceName}.service.ts`), '');
-createFile(path.join(resourceFolder, `${resourceName}.validation.ts`), '');
+createFile(
+    path.join(resourceFolder, `${resourceName}.controller.ts`),
+    controllerContent(resourceName),
+);
+createFile(
+    path.join(resourceFolder, `${resourceName}.interface.ts`),
+    interfaceContent(resourceName),
+);
+createFile(
+    path.join(resourceFolder, `${resourceName}.model.ts`),
+    modelContent(resourceName),
+);
+createFile(
+    path.join(resourceFolder, `${resourceName}.service.ts`),
+    serviceContent(resourceName),
+);
+createFile(
+    path.join(resourceFolder, `${resourceName}.validation.ts`),
+    validationContent(resourceName),
+);
 
 console.log(`Resource '${resourceName}' created successfully.`);
