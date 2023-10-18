@@ -26,7 +26,6 @@ const UserSchema = new Schema(
         password: {
             type: String,
             required: true,
-            select: false,
         },
         role: {
             type: Schema.Types.ObjectId,
@@ -56,7 +55,6 @@ const UserSchema = new Schema(
         ],
         refreshToken: {
             type: String,
-            select: false,
         },
     },
     {

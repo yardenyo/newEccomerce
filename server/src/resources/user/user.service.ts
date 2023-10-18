@@ -3,6 +3,7 @@ import roleModel from '@/resources/role/role.model';
 import User from '@/resources/user/user.interface';
 import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
+import Roles from '@/utils/enums/roles.enums';
 
 class UserService {
     private user = userModel;
@@ -59,18 +60,31 @@ class UserService {
 
     public async deleteUserById(id: string): Promise<User> {
         try {
-            const user = await this.user.findByIdAndDelete(id);
+            const user = await this.user.findById(id);
             if (!user) throw new Error();
+
+            const userRole = await roleModel.findOne({ name: Roles.USER });
+            if (!userRole) throw new Error();
+
+            if (user.role.toString() !== userRole._id.toString())
+                throw new Error();
+
+            await this.user.findByIdAndDelete(id);
+
             return user;
         } catch (error) {
-            throw new Error('Error deleting user');
+            throw new Error(`Error deleting user`);
         }
     }
 
     public async deleteAllUsers(): Promise<void> {
         try {
-            await this.user.deleteMany();
-        } catch (error) {
+            const userRole = await roleModel.findOne({ name: Roles.USER });
+            if (!userRole) throw new Error();
+
+            await this.user.deleteMany({ role: userRole._id });
+        } catch (error: any) {
+            console.log(error);
             throw new Error('Error deleting users');
         }
     }
