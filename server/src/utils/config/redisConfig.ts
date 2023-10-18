@@ -1,5 +1,4 @@
 import { createClient } from 'redis';
-import { promisify } from 'util';
 
 const redisClient = createClient({
     password: process.env.REDIS_PASSWORD,
@@ -8,9 +7,6 @@ const redisClient = createClient({
         port: Number(process.env.REDIS_PORT),
     },
 });
-
-const setAsync = promisify(redisClient.set).bind(redisClient);
-const getAsync = promisify(redisClient.get).bind(redisClient);
 
 redisClient.on('connect', () => {
     console.log('Connected to Redis');
@@ -33,4 +29,3 @@ process.on('SIGINT', () => {
 });
 
 export default redisClient;
-export { setAsync, getAsync };

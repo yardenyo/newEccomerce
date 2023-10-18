@@ -1,7 +1,6 @@
 import roleModel from '@/resources/role/role.model';
 import User from '@/resources/user/user.interface';
 import userModel from '@/resources/user/user.model';
-import { setAsync, getAsync } from '@/utils/config/redisConfig';
 
 class AuthService {
     private user = userModel;
