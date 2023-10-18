@@ -1,15 +1,16 @@
-import validationMiddleware from '@/middleware/validation.middleware';
 import loginLimiter from '@/middleware/loginLimiter.middleware';
+import SuccessResponse from '@/middleware/success.middleware';
+import validationMiddleware from '@/middleware/validation.middleware';
+import {
+    verifyRefreshTokenMiddleware,
+    authMiddleware,
+} from '@/middleware/auth.middleware';
 import AuthService from '@/resources/auth/auth.service';
 import validate from '@/resources/auth/auth.validation';
+import Roles from '@/utils/enums/roles.enums';
 import HttpException from '@/utils/exceptions/http.exception';
 import Controller from '@/utils/interfaces/controller.interface';
-import { generateToken } from '@/utils/jwtToken';
-import { generateRefreshToken } from '@/utils/refreshToken';
-import SuccessResponse from '@/middleware/success.middleware';
 import { NextFunction, Request, Response, Router } from 'express';
-import jwt from 'jsonwebtoken';
-import Roles from '@/utils/enums/roles.enums';
 
 class AuthController implements Controller {
     public path = '/auth';
@@ -32,8 +33,13 @@ class AuthController implements Controller {
             validationMiddleware(validate.signin),
             this.signin,
         );
-        this.router.get(`${this.path}/refresh-token`, this.refreshToken);
-        this.router.get(`${this.path}/signout`, this.signout);
+        this.router.post(
+            `${this.path}/refresh-token`,
+            validationMiddleware(validate.refreshToken),
+            verifyRefreshTokenMiddleware,
+            this.refreshToken,
+        );
+        this.router.get(`${this.path}/signout`, authMiddleware, this.signout);
     }
 
     private signup = async (
@@ -43,6 +49,7 @@ class AuthController implements Controller {
     ): Promise<void> => {
         try {
             const user = await this.AuthService.signup(req.body, Roles.USER);
+
             res.json(
                 new SuccessResponse('User created successfully', {
                     id: user._id,
@@ -64,25 +71,15 @@ class AuthController implements Controller {
     ): Promise<void> => {
         try {
             const { email, password } = req.body;
-            const user = await this.AuthService.signin(email, password);
-
-            const refreshToken = generateRefreshToken(user._id);
-
-            await this.AuthService.updateRefreshToken(user._id, refreshToken);
-
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                maxAge: 72 * 60 * 60 * 1000,
-            });
+            const { accessToken, refreshToken } = await this.AuthService.signin(
+                email,
+                password,
+            );
 
             res.json(
                 new SuccessResponse('User signed in successfully', {
-                    id: user._id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    mobile: user.mobile,
-                    token: generateToken(user._id),
+                    accessToken,
+                    refreshToken,
                 }),
             );
         } catch (error: any) {
@@ -96,40 +93,14 @@ class AuthController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { refreshToken } = req.cookies;
-            const user = await this.AuthService.refreshToken(refreshToken);
-
-            jwt.verify(
-                user.refreshToken,
-                process.env.JWT_SECRET as string,
-                (err: any, decoded: any) => {
-                    if (err) {
-                        throw new Error('Invalid refresh token');
-                    }
-                },
-            );
-
-            const newRefreshToken = generateRefreshToken(user._id);
-
-            await this.AuthService.updateRefreshToken(
-                user._id,
-                newRefreshToken,
-            );
-
-            res.cookie('refreshToken', newRefreshToken, {
-                httpOnly: true,
-                maxAge: 72 * 60 * 60 * 1000,
-            });
+            const { id } = req.body;
+            const { accessToken, refreshToken } =
+                await this.AuthService.refreshToken(id);
 
             res.json(
                 new SuccessResponse('Token refreshed successfully', {
-                    id: user._id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    mobile: user.mobile,
-                    refreshToken: user.refreshToken,
-                    token: generateToken(user._id),
+                    accessToken,
+                    refreshToken,
                 }),
             );
         } catch (error: any) {
@@ -143,11 +114,9 @@ class AuthController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { refreshToken } = req.cookies;
-            await this.AuthService.signout(refreshToken);
-            res.clearCookie('refreshToken', {
-                httpOnly: true,
-            });
+            const { _id } = req.body.user;
+            await this.AuthService.signout(_id);
+
             res.json(new SuccessResponse('User signed out successfully'));
         } catch (error: any) {
             next(new HttpException(400, error.message));

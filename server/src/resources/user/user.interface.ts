@@ -11,6 +11,5 @@ export default interface User extends Document {
     password: string;
     createdAt: Date;
     updatedAt: Date;
-    refreshToken: string;
     isValidPassword(password: string): Promise<boolean>;
 }

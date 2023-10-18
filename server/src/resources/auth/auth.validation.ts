@@ -21,4 +21,8 @@ const signin = Joi.object({
     password: Joi.string().required(),
 });
 
-export default { signup, signin };
+const refreshToken = Joi.object({
+    refreshToken: Joi.string().required(),
+});
+
+export default { signup, signin, refreshToken };

@@ -84,7 +84,6 @@ class UserService {
 
             await this.user.deleteMany({ role: userRole._id });
         } catch (error: any) {
-            console.log(error);
             throw new Error('Error deleting users');
         }
     }
