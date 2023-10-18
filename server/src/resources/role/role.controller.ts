@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import Controller from '@/utils/interfaces/controller.interface';
 import HttpException from '@/utils/exceptions/http.exception';
-import SuccessResponse from '@/utils/responses/success.response';
+import SuccessResponse from '@/middleware/success.middleware';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/role/role.validation';
 import RoleService from '@/resources/role/role.service';
@@ -18,7 +18,7 @@ class RoleController implements Controller {
     }
 
     private initializeRoutes(): void {
-        this.router.get(
+        this.router.post(
             `${this.path}`,
             authMiddleware,
             adminMiddleware,
@@ -31,10 +31,10 @@ class RoleController implements Controller {
             this.getRoleById,
         );
         this.router.post(
-            `${this.path}`,
+            `${this.path}/create`,
+            validationMiddleware(validate.createRole),
             authMiddleware,
             adminMiddleware,
-            validationMiddleware(validate.createRole),
             this.createRole,
         );
         this.router.delete(
@@ -51,9 +51,9 @@ class RoleController implements Controller {
         );
         this.router.put(
             `${this.path}/:id`,
+            validationMiddleware(validate.updateRole),
             authMiddleware,
             adminMiddleware,
-            validationMiddleware(validate.updateRole),
             this.updateRoleById,
         );
     }
@@ -64,8 +64,8 @@ class RoleController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const roles = await this.roleService.getAllRoles();
-            response.send(
+            const roles = await this.roleService.getAllRoles(request.body);
+            response.json(
                 new SuccessResponse('Successfully retrieved roles', roles),
             );
         } catch (error) {
@@ -83,7 +83,7 @@ class RoleController implements Controller {
 
         try {
             const role = await this.roleService.getRoleById(id);
-            response.send(
+            response.json(
                 new SuccessResponse('Successfully retrieved role', role),
             );
         } catch (error) {
@@ -100,7 +100,7 @@ class RoleController implements Controller {
 
         try {
             const newRole = await this.roleService.createRole(name);
-            response.send(
+            response.json(
                 new SuccessResponse('Successfully created role', newRole),
             );
         } catch (error) {
@@ -118,7 +118,7 @@ class RoleController implements Controller {
 
         try {
             await this.roleService.deleteRoleById(id);
-            response.send(new SuccessResponse('Successfully deleted role'));
+            response.json(new SuccessResponse('Successfully deleted role'));
         } catch (error) {
             next(new HttpException(500, 'Error deleting role'));
         }
@@ -131,7 +131,7 @@ class RoleController implements Controller {
     ): Promise<void> => {
         try {
             await this.roleService.deleteAllRoles();
-            response.send(new SuccessResponse('Successfully deleted roles'));
+            response.json(new SuccessResponse('Successfully deleted roles'));
         } catch (error) {
             next(new HttpException(500, 'Error deleting roles'));
         }
@@ -148,7 +148,7 @@ class RoleController implements Controller {
 
         try {
             const updatedRole = await this.roleService.updateRole(id, role);
-            response.send(
+            response.json(
                 new SuccessResponse('Successfully updated role', updatedRole),
             );
         } catch (error) {

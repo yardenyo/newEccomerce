@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import User from '@/resources/user/user.interface';
+import crypto from 'crypto';
 
 const UserSchema = new Schema(
     {
@@ -53,9 +54,9 @@ const UserSchema = new Schema(
                 ref: 'Product',
             },
         ],
-        refreshToken: {
-            type: String,
-        },
+        passwordChangedAt: Date,
+        resetPasswordToken: String,
+        resetPasswordExpires: Date,
     },
     {
         timestamps: true,
@@ -64,6 +65,9 @@ const UserSchema = new Schema(
 
 UserSchema.pre<User>('save', async function (next) {
     try {
+        if (!this.isModified('password')) {
+            return next();
+        }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(this.password, salt);
         this.password = hashedPassword;
@@ -72,6 +76,17 @@ UserSchema.pre<User>('save', async function (next) {
         next(error);
     }
 });
+
+UserSchema.methods.createPasswordResetToken =
+    async function (): Promise<string> {
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        this.resetPasswordToken = crypto
+            .createHash('sha256')
+            .update(resetToken)
+            .digest('hex');
+        this.resetPasswordExpires = Date.now() + 10 * 60 * 1000;
+        return resetToken;
+    };
 
 UserSchema.methods.isValidPassword = async function (
     password: string,

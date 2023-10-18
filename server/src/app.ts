@@ -8,6 +8,7 @@ import ErrorMiddleware from '@/middleware/error.middleware';
 import NotFoundMiddleware from '@/middleware/notFound.middleware';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import redisClient from '@/utils/config/redisConfig';
 
 class App {
     public express: Application;
@@ -18,6 +19,7 @@ class App {
         this.port = port;
 
         this.initializeDatabaseConnection();
+        this.initializeRedisConnection();
         this.initializeMiddleware();
         this.initializeControllers(controllers);
         this.initializeErrorHandling();
@@ -50,6 +52,10 @@ class App {
 
     private initializeDatabaseConnection(): void {
         mongoose.connect(process.env.MONGODB_URI as string);
+    }
+
+    private initializeRedisConnection(): void {
+        redisClient.connect();
     }
 
     public listen(): void {

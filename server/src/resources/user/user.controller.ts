@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import Controller from '@/utils/interfaces/controller.interface';
 import HttpException from '@/utils/exceptions/http.exception';
-import SuccessResponse from '@/utils/responses/success.response';
+import SuccessResponse from '@/middleware/success.middleware';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/user/user.validation';
 import UserService from '@/resources/user/user.service';
@@ -18,7 +18,7 @@ class UserController implements Controller {
     }
 
     private initializeRoutes(): void {
-        this.router.get(
+        this.router.post(
             `${this.path}`,
             authMiddleware,
             adminMiddleware,
@@ -44,9 +44,9 @@ class UserController implements Controller {
         );
         this.router.put(
             `${this.path}/:id`,
+            validationMiddleware(validate.updateUser),
             authMiddleware,
             adminMiddleware,
-            validationMiddleware(validate.updateUser),
             this.updateUserById,
         );
         this.router.put(
@@ -63,9 +63,9 @@ class UserController implements Controller {
         );
         this.router.put(
             `${this.path}/role/:id`,
+            validationMiddleware(validate.updateRole),
             authMiddleware,
             adminMiddleware,
-            validationMiddleware(validate.updateRole),
             this.updateRole,
         );
     }
@@ -76,7 +76,7 @@ class UserController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const users = await this.UserService.getAllUsers();
+            const users = await this.UserService.getAllUsers(req.body);
             res.json(new SuccessResponse('Users fetched successfully', users));
         } catch (error: any) {
             next(new HttpException(400, error.message));
@@ -134,14 +134,7 @@ class UserController implements Controller {
         try {
             const { id } = req.params;
             await validateDBId(id);
-            const { firstName, lastName, email, mobile } = req.body;
-            const user = await this.UserService.updateUserById(
-                id,
-                firstName,
-                lastName,
-                email,
-                mobile,
-            );
+            const user = await this.UserService.updateUserById(id, req.body);
             res.json(new SuccessResponse('User updated successfully', user));
         } catch (error: any) {
             next(new HttpException(400, error.message));

@@ -1,13 +1,24 @@
 import userModel from '@/resources/user/user.model';
 import roleModel from '@/resources/role/role.model';
 import User from '@/resources/user/user.interface';
+import PostBody from '@/utils/interfaces/postbody.interface';
+import ConvertResponse from '@/utils/helpers/convertresponse.helper';
+import Roles from '@/utils/enums/roles.enums';
 
 class UserService {
     private user = userModel;
 
-    public async getAllUsers(): Promise<User[]> {
+    public async getAllUsers(body: PostBody): Promise<User[]> {
         try {
-            const users = await this.user.find();
+            const { sort, skip, limit, searchFilter } =
+                await ConvertResponse(body);
+
+            const users = await this.user
+                .find(searchFilter)
+                .sort(sort)
+                .skip(skip)
+                .limit(limit);
+
             return users;
         } catch (error) {
             throw new Error('Error getting users');
@@ -24,14 +35,9 @@ class UserService {
         }
     }
 
-    public async updateUserById(
-        id: string,
-        firstName: string,
-        lastName: string,
-        email: string,
-        mobile: string,
-    ): Promise<User> {
+    public async updateUserById(id: string, body: User): Promise<User> {
         try {
+            const { firstName, lastName, email, mobile } = body;
             if (email) {
                 const emailExists = await this.user.findOne({ email });
                 if (emailExists) throw new Error();
@@ -42,16 +48,9 @@ class UserService {
                 if (mobileExists) throw new Error();
             }
 
-            const user = await this.user.findByIdAndUpdate(
-                id,
-                {
-                    ...(firstName && { firstName }),
-                    ...(lastName && { lastName }),
-                    ...(email && { email }),
-                    ...(mobile && { mobile }),
-                },
-                { new: true },
-            );
+            const user = await this.user.findByIdAndUpdate(id, body, {
+                new: true,
+            });
             if (!user) throw new Error();
             return user;
         } catch (error) {
@@ -61,18 +60,30 @@ class UserService {
 
     public async deleteUserById(id: string): Promise<User> {
         try {
-            const user = await this.user.findByIdAndDelete(id);
+            const user = await this.user.findById(id);
             if (!user) throw new Error();
+
+            const userRole = await roleModel.findOne({ name: Roles.USER });
+            if (!userRole) throw new Error();
+
+            if (user.role.toString() !== userRole._id.toString())
+                throw new Error();
+
+            await this.user.findByIdAndDelete(id);
+
             return user;
         } catch (error) {
-            throw new Error('Error deleting user');
+            throw new Error(`Error deleting user`);
         }
     }
 
     public async deleteAllUsers(): Promise<void> {
         try {
-            await this.user.deleteMany();
-        } catch (error) {
+            const userRole = await roleModel.findOne({ name: Roles.USER });
+            if (!userRole) throw new Error();
+
+            await this.user.deleteMany({ role: userRole._id });
+        } catch (error: any) {
             throw new Error('Error deleting users');
         }
     }
