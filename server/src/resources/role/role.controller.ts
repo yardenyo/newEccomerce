@@ -32,9 +32,9 @@ class RoleController implements Controller {
         );
         this.router.post(
             `${this.path}/create`,
+            validationMiddleware(validate.createRole),
             authMiddleware,
             adminMiddleware,
-            validationMiddleware(validate.createRole),
             this.createRole,
         );
         this.router.delete(
@@ -51,9 +51,9 @@ class RoleController implements Controller {
         );
         this.router.put(
             `${this.path}/:id`,
+            validationMiddleware(validate.updateRole),
             authMiddleware,
             adminMiddleware,
-            validationMiddleware(validate.updateRole),
             this.updateRoleById,
         );
     }

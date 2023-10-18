@@ -11,6 +11,7 @@ import Roles from '@/utils/enums/roles.enums';
 import HttpException from '@/utils/exceptions/http.exception';
 import Controller from '@/utils/interfaces/controller.interface';
 import { NextFunction, Request, Response, Router } from 'express';
+import validateDBId from '@/utils/validateDBId';
 
 class AuthController implements Controller {
     public path = '/auth';
@@ -40,6 +41,12 @@ class AuthController implements Controller {
             this.refreshToken,
         );
         this.router.get(`${this.path}/signout`, authMiddleware, this.signout);
+        this.router.put(
+            `${this.path}/update-password`,
+            validationMiddleware(validate.updatePassword),
+            authMiddleware,
+            this.updatePassword,
+        );
     }
 
     private signup = async (
@@ -94,6 +101,7 @@ class AuthController implements Controller {
     ): Promise<void> => {
         try {
             const { id } = req.body;
+            await validateDBId(id);
             const { accessToken, refreshToken } =
                 await this.AuthService.refreshToken(id);
 
@@ -118,6 +126,25 @@ class AuthController implements Controller {
             await this.AuthService.signout(_id);
 
             res.json(new SuccessResponse('User signed out successfully'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private updatePassword = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { id } = req.body.user;
+            const { password } = req.body;
+
+            await validateDBId(id);
+
+            await this.AuthService.updatePassword(id, password);
+
+            res.json(new SuccessResponse('Password updated successfully'));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

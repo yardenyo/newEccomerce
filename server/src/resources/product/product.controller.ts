@@ -23,9 +23,9 @@ class ProductController implements Controller {
     private initializeRoutes(): void {
         this.router.post(
             `${this.path}/create`,
+            validationMiddleware(validate.createProduct),
             authMiddleware,
             creatorMiddleware,
-            validationMiddleware(validate.createProduct),
             this.createProduct,
         );
         this.router.post(`${this.path}`, authMiddleware, this.getAllProducts);
@@ -36,9 +36,9 @@ class ProductController implements Controller {
         );
         this.router.put(
             `${this.path}/:id`,
+            validationMiddleware(validate.updateProduct),
             authMiddleware,
             creatorMiddleware,
-            validationMiddleware(validate.updateProduct),
             this.updateProduct,
         );
         this.router.delete(

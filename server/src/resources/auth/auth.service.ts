@@ -93,6 +93,19 @@ class AuthService {
             throw new Error('Error signing out');
         }
     }
+
+    public async updatePassword(id: string, password: string): Promise<void> {
+        try {
+            if (!id) throw new Error();
+            const user = await this.user.findById(id);
+            if (!user) throw new Error();
+
+            user.password = password;
+            await user.save();
+        } catch (error) {
+            throw new Error('Error updating password');
+        }
+    }
 }
 
 export default AuthService;

@@ -25,4 +25,16 @@ const refreshToken = Joi.object({
     refreshToken: Joi.string().required(),
 });
 
-export default { signup, signin, refreshToken };
+const updatePassword = Joi.object({
+    password: Joi.string()
+        .required()
+        .min(8)
+        .max(32)
+        .pattern(
+            new RegExp(
+                '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,32}$',
+            ),
+        ),
+});
+
+export default { signup, signin, refreshToken, updatePassword };

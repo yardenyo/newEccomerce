@@ -44,9 +44,9 @@ class UserController implements Controller {
         );
         this.router.put(
             `${this.path}/:id`,
+            validationMiddleware(validate.updateUser),
             authMiddleware,
             adminMiddleware,
-            validationMiddleware(validate.updateUser),
             this.updateUserById,
         );
         this.router.put(
@@ -63,9 +63,9 @@ class UserController implements Controller {
         );
         this.router.put(
             `${this.path}/role/:id`,
+            validationMiddleware(validate.updateRole),
             authMiddleware,
             adminMiddleware,
-            validationMiddleware(validate.updateRole),
             this.updateRole,
         );
     }
