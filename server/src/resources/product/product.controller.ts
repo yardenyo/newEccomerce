@@ -53,6 +53,21 @@ class ProductController implements Controller {
             creatorMiddleware,
             this.deleteAllProducts,
         );
+        this.router.put(
+            `${this.path}/wishlist/add`,
+            authMiddleware,
+            this.addProductToWishlist,
+        );
+        this.router.put(
+            `${this.path}/wishlist/remove`,
+            authMiddleware,
+            this.removeProductFromWishlist,
+        );
+        this.router.put(
+            `${this.path}/wishlist/removeAll`,
+            authMiddleware,
+            this.removeAllProductsFromWishlist,
+        );
     }
 
     private createProduct = async (
@@ -104,7 +119,6 @@ class ProductController implements Controller {
         try {
             const { id } = req.params;
             validateDBId(id);
-
             const product = await this.ProductService.updateProduct(
                 id,
                 req.body,
@@ -138,6 +152,59 @@ class ProductController implements Controller {
         try {
             await this.ProductService.deleteAllProducts();
             res.json(new SuccessResponse('Products deleted'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private addProductToWishlist = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const product = await this.ProductService.addProductToWishlist(
+                req.body,
+            );
+            res.json(new SuccessResponse('Product added to wishlist', product));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private removeProductFromWishlist = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const product = await this.ProductService.removeProductFromWishlist(
+                req.body,
+            );
+            res.json(
+                new SuccessResponse('Product removed from wishlist', product),
+            );
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private removeAllProductsFromWishlist = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const product =
+                await this.ProductService.removeAllProductsFromWishlist(
+                    req.body,
+                );
+            res.json(
+                new SuccessResponse(
+                    'All products removed from wishlist',
+                    product,
+                ),
+            );
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

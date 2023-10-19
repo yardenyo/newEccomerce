@@ -8,6 +8,9 @@ export default interface User extends Document {
     mobile: string;
     role: Roles;
     isBlocked: boolean;
+    cart: string[];
+    wishlist: string[];
+    address: string[];
     password: string;
     createdAt: Date;
     updatedAt: Date;

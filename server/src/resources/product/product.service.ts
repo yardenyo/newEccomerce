@@ -1,5 +1,7 @@
 import productModel from '@/resources/product/product.model';
 import Product from '@/resources/product/product.interface';
+import userModel from '@/resources/user/user.model';
+import User from '@/resources/user/user.interface';
 import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
 import slugify from 'slugify';
@@ -71,6 +73,59 @@ class ProductService {
             await this.product.deleteMany();
         } catch (error) {
             throw new Error('Error deleting products');
+        }
+    }
+
+    public async addProductToWishlist(body: any): Promise<User> {
+        try {
+            const product = await this.product.findById(body.productId);
+            if (!product) throw new Error();
+
+            const user = await userModel.findByIdAndUpdate(
+                body.user._id,
+                {
+                    $addToSet: { wishlist: product._id },
+                },
+                { new: true },
+            );
+
+            if (!user) throw new Error();
+            return user;
+        } catch (error) {
+            throw new Error('Error adding product to wishlist');
+        }
+    }
+
+    public async removeProductFromWishlist(body: any): Promise<User> {
+        try {
+            const product = await this.product.findById(body.productId);
+            if (!product) throw new Error();
+
+            const user = await userModel.findByIdAndUpdate(
+                body.user._id,
+                {
+                    $pull: { wishlist: product._id },
+                },
+                { new: true },
+            );
+
+            if (!user) throw new Error();
+            return user;
+        } catch (error) {
+            throw new Error('Error removing product from wishlist');
+        }
+    }
+
+    public async removeAllProductsFromWishlist(id: string): Promise<void> {
+        try {
+            await this.product.updateMany(
+                {},
+                {
+                    $pull: { wishlist: id },
+                },
+            );
+        } catch (error) {
+            throw new Error('Error emptying wishlist');
         }
     }
 }
