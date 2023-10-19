@@ -1,5 +1,6 @@
 import Blog from '@/resources/blog/blog.interface';
 import BlogModel from '@/resources/blog/blog.model';
+import userModel from '@/resources/user/user.model';
 import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
 import slugify from 'slugify';
@@ -10,8 +11,19 @@ class BlogService {
     public async createBlog(blogData: Blog, userId: string): Promise<Blog> {
         try {
             const slug = slugify(blogData.title, { lower: true });
+            let author = userId;
+
+            if (blogData.author) {
+                const authorData = await userModel.findById(blogData.author);
+                if (!authorData) {
+                    throw new Error('Author not found');
+                }
+                author = authorData._id;
+            }
+
             const blog = await this.blog.create({
                 ...blogData,
+                author,
                 slug,
             });
             return blog;

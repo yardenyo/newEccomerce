@@ -12,7 +12,7 @@ const createBlog = Joi.object({
     image: Joi.string().default(
         'https://thumbs.dreamstime.com/z/blogging-blog-concepts-ideas-worktable-blogging-blog-concepts-ideas-white-worktable-110423482.jpg?w=992',
     ),
-    author: Joi.string().required(),
+    author: Joi.string(),
 });
 
 const updateBlog = Joi.object({});
