@@ -8,6 +8,7 @@ import RoleController from "@/resources/role/role.controller";
 import ProductController from "@/resources/product/product.controller";
 import BlogController from "@/resources/blog/blog.controller";
 import categoryController from "@/resources/category/category.controller";
+import blogCategoryController from "@/resources/blogCategory/blogCategory.controller";
 
 validateEnv();
 
@@ -19,6 +20,7 @@ const app = new App(
     new ProductController(),
     new BlogController(),
     new categoryController(),
+    new blogCategoryController(),
   ],
   Number(process.env.PORT),
 );
