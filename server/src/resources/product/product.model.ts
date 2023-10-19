@@ -33,12 +33,10 @@ const ProductSchema = new Schema(
         category: {
             type: Schema.Types.ObjectId,
             ref: 'Category',
-            required: true,
         },
         brand: {
             type: Schema.Types.ObjectId,
             ref: 'Brand',
-            required: true,
         },
         quantity: {
             type: Number,
@@ -66,7 +64,6 @@ const ProductSchema = new Schema(
                 postedBy: {
                     type: Schema.Types.ObjectId,
                     ref: 'User',
-                    required: true,
                 },
             },
         ],

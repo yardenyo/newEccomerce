@@ -35,14 +35,12 @@ const BlogSchema = new Schema(
             {
                 type: Schema.Types.ObjectId,
                 ref: 'User',
-                required: true,
             },
         ],
         dislikes: [
             {
                 type: Schema.Types.ObjectId,
                 ref: 'User',
-                required: true,
             },
         ],
         image: {
@@ -53,7 +51,6 @@ const BlogSchema = new Schema(
         author: {
             type: Schema.Types.ObjectId,
             ref: 'User',
-            required: true,
         },
     },
     {

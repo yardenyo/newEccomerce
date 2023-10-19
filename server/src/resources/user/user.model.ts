@@ -31,7 +31,6 @@ const UserSchema = new Schema(
         role: {
             type: Schema.Types.ObjectId,
             ref: 'Role',
-            required: true,
         },
         isBlocked: {
             type: Boolean,
@@ -41,21 +40,18 @@ const UserSchema = new Schema(
             {
                 type: Schema.Types.ObjectId,
                 ref: 'Product',
-                required: true,
             },
         ],
         address: [
             {
                 type: Schema.Types.ObjectId,
                 ref: 'Address',
-                required: true,
             },
         ],
         wishlist: [
             {
                 type: Schema.Types.ObjectId,
                 ref: 'Product',
-                required: true,
             },
         ],
         passwordChangedAt: Date,
