@@ -8,7 +8,7 @@
         "start": "node dist/index.js",
         "dev": "tsc-watch --onSuccess \"node ./dist/index.js\"",
         "build": "tsc",
-        "generate-resource": "npx ts-node generateResource.ts",
+        "generate-resource": "npx ts-node ./src/generateResource.ts",
         "postinstall": "npm run build"
     },
     "keywords": [],
@@ -22,6 +22,7 @@
         "@types/express": "^4.17.19",
         "@types/fs-extra": "^11.0.2",
         "@types/jsonwebtoken": "^9.0.3",
+        "@types/module-alias": "^2.0.3",
         "@types/morgan": "^1.9.6",
         "@types/node": "^20.8.6",
         "@types/nodemailer": "^6.4.12",

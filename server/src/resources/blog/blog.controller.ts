@@ -39,6 +39,7 @@ class BlogController implements Controller {
         try {
             const blogData = req.body;
             const userId = req.body.user._id;
+            await validateDBId(userId);
             const blog = await this.blogService.createBlog(blogData, userId);
             res.json(new SuccessResponse('Blog created successfully', blog));
         } catch (error: any) {

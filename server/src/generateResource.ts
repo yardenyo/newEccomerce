@@ -6,7 +6,7 @@ import {
     modelContent,
     serviceContent,
     validationContent,
-} from '../server/src/utils/helpers/resourceContent.helper';
+} from './utils/helpers/resourceContent.helper';
 import prettier from 'prettier';
 
 const resourceName = process.argv[2];
@@ -16,7 +16,7 @@ if (!resourceName) {
     process.exit(1);
 }
 
-const resourceFolder = path.join(__dirname, 'src/resources', resourceName);
+const resourceFolder = path.join(__dirname, 'resources', resourceName);
 
 const createFolder = (folderPath: string) => {
     if (!fs.existsSync(folderPath)) {
@@ -58,7 +58,7 @@ createFile(
 console.log(`Resource '${resourceName}' created successfully.`);
 
 async function updateIndexFile() {
-    const indexPath = path.join(__dirname, 'src/index.ts');
+    const indexPath = path.join(__dirname, 'index.ts');
     const controllerImport = `import ${resourceName}Controller from '@/resources/${resourceName}/${resourceName}.controller';`;
     const controllerNewInstance = `new ${resourceName}Controller(),`;
 
