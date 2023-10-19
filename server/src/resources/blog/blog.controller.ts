@@ -20,7 +20,46 @@ class BlogController implements Controller {
         this.initializeRoutes();
     }
 
-    private initializeRoutes(): void {}
+    private initializeRoutes(): void {
+        this.router.post(
+            `${this.path}/create`,
+            validationMiddleware(validate.createBlog),
+            authMiddleware,
+            creatorMiddleware,
+            this.createBlog,
+        );
+        this.router.post(`${this.path}`, authMiddleware, this.getAllBlogs);
+    }
+
+    private createBlog = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const blogData = req.body;
+            const userId = req.body.user._id;
+            const blog = await this.blogService.createBlog(blogData, userId);
+            res.json(new SuccessResponse('Blog created successfully', blog));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private getAllBlogs = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const blogs = await this.blogService.getAllBlogs(req.body);
+            res.json(
+                new SuccessResponse('Blogs retrieved successfully', blogs),
+            );
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
 }
 
 export default BlogController;
