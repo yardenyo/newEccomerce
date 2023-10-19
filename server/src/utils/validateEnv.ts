@@ -5,8 +5,18 @@ function validateEnv(): void {
         NODE_ENV: str({
             choices: ['development', 'production'],
         }),
-        MONGODB_URI: str(),
         PORT: port({ default: 5000 }),
+        MONGODB_URI: str(),
+        REDIS_HOST: str(),
+        REDIS_PORT: port(),
+        REDIS_PASSWORD: str(),
+        JWT_ACCESS_SECRET: str(),
+        JWT_REFRESH_SECRET: str(),
+        JWT_ACCESS_EXPIRES_IN: str(),
+        JWT_REFRESH_EXPIRES_IN: str(),
+        EMAIL_USER: str(),
+        EMAIL_PASSWORD: str(),
+        CLIENT_URL: str(),
     });
 }
 

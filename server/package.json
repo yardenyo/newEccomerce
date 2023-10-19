@@ -8,6 +8,7 @@
         "start": "node dist/index.js",
         "dev": "tsc-watch --onSuccess \"node ./dist/index.js\"",
         "build": "tsc",
+        "generate-resource": "npx ts-node ./src/generateResource.ts",
         "postinstall": "npm run build"
     },
     "keywords": [],
@@ -19,7 +20,9 @@
         "@types/cookie-parser": "^1.4.4",
         "@types/cors": "^2.8.14",
         "@types/express": "^4.17.19",
+        "@types/fs-extra": "^11.0.2",
         "@types/jsonwebtoken": "^9.0.3",
+        "@types/module-alias": "^2.0.3",
         "@types/morgan": "^1.9.6",
         "@types/node": "^20.8.6",
         "@types/nodemailer": "^6.4.12",
@@ -29,6 +32,7 @@
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-prettier": "^5.0.1",
         "prettier": "^3.0.3",
+        "ts-node": "^10.9.1",
         "tsc-watch": "^6.0.4",
         "typescript": "^5.2.2"
     },
@@ -41,6 +45,7 @@
         "envalid": "^8.0.0",
         "express": "^4.18.2",
         "express-rate-limit": "^7.1.1",
+        "fs-extra": "^11.1.1",
         "helmet": "^7.0.0",
         "joi": "^17.11.0",
         "jsonwebtoken": "^9.0.2",
