@@ -7,6 +7,7 @@ import {
     serviceContent,
     validationContent,
 } from '../server/src/utils/helpers/resourceContent.helper';
+import prettier from 'prettier';
 
 const resourceName = process.argv[2];
 
@@ -55,3 +56,40 @@ createFile(
 );
 
 console.log(`Resource '${resourceName}' created successfully.`);
+
+async function updateIndexFile() {
+    const indexPath = path.join(__dirname, 'src/index.ts');
+    const controllerImport = `import ${resourceName}Controller from '@/resources/${resourceName}/${resourceName}.controller';`;
+    const controllerNewInstance = `new ${resourceName}Controller(),`;
+
+    let indexContent = fs.readFileSync(indexPath, 'utf-8');
+    const indexContentArray = indexContent.split('\n');
+
+    const validateEnvIndex = indexContentArray.findIndex((line) =>
+        line.includes('validateEnv()'),
+    );
+
+    indexContentArray.splice(validateEnvIndex - 1, 0, controllerImport);
+
+    const lastControllerInstance = indexContentArray.findIndex((line) =>
+        line.includes('],'),
+    );
+
+    indexContentArray.splice(lastControllerInstance, 0, controllerNewInstance);
+
+    const newContent = indexContentArray.join('\n');
+
+    const formattedContent = await prettier.format(newContent, {
+        parser: 'typescript',
+    });
+
+    fs.writeFileSync(indexPath, formattedContent, 'utf-8');
+}
+
+updateIndexFile()
+    .then(() => {
+        console.log('Index file updated successfully.');
+    })
+    .catch((error) => {
+        console.error('Error updating index file:', error);
+    });
