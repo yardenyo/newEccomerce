@@ -15,6 +15,16 @@ const createBlog = Joi.object({
     author: Joi.string(),
 });
 
-const updateBlog = Joi.object({});
+const updateBlog = Joi.object({
+    title: Joi.string(),
+    description: Joi.string(),
+    category: Joi.string(),
+    views: Joi.number(),
+    isLiked: Joi.boolean(),
+    isDisliked: Joi.boolean(),
+    likes: Joi.array().items(Joi.string()),
+    dislikes: Joi.array().items(Joi.string()),
+    image: Joi.string(),
+});
 
 export default { createBlog, updateBlog };
