@@ -55,11 +55,13 @@ class ProductController implements Controller {
         );
         this.router.put(
             `${this.path}/wishlist/add`,
+            validationMiddleware(validate.addProductToWishlist),
             authMiddleware,
             this.addProductToWishlist,
         );
         this.router.put(
             `${this.path}/wishlist/remove`,
+            validationMiddleware(validate.removeProductFromWishlist),
             authMiddleware,
             this.removeProductFromWishlist,
         );
@@ -67,6 +69,24 @@ class ProductController implements Controller {
             `${this.path}/wishlist/removeAll`,
             authMiddleware,
             this.removeAllProductsFromWishlist,
+        );
+        this.router.put(
+            `${this.path}/cart/add`,
+            validationMiddleware(validate.addProductToCart),
+            authMiddleware,
+            this.addProductToCart,
+        );
+        this.router.put(
+            `${this.path}/cart/remove`,
+            validationMiddleware(validate.removeProductFromCart),
+            authMiddleware,
+            this.removeProductFromCart,
+        );
+        this.router.put(
+            `${this.path}/ratings/add`,
+            validationMiddleware(validate.addProductRating),
+            authMiddleware,
+            this.addProductRating,
         );
     }
 
@@ -205,6 +225,51 @@ class ProductController implements Controller {
                     product,
                 ),
             );
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private addProductToCart = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const product = await this.ProductService.addProductToCart(
+                req.body,
+            );
+            res.json(new SuccessResponse('Product added to cart', product));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private removeProductFromCart = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const product = await this.ProductService.removeProductFromCart(
+                req.body,
+            );
+            res.json(new SuccessResponse('Product removed from cart', product));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private addProductRating = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const product = await this.ProductService.addProductRating(
+                req.body,
+            );
+            res.json(new SuccessResponse('Product rating added', product));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

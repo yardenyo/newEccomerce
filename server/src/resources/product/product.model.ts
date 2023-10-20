@@ -67,6 +67,10 @@ const ProductSchema = new Schema(
                 },
             },
         ],
+        totalRating: {
+            type: String,
+            default: 0,
+        },
     },
     {
         timestamps: true,

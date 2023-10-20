@@ -1,5 +1,7 @@
 import productModel from '@/resources/product/product.model';
 import Product from '@/resources/product/product.interface';
+import BrandModel from '@/resources/brand/brand.model';
+import CategoryModel from '@/resources/category/category.model';
 import userModel from '@/resources/user/user.model';
 import User from '@/resources/user/user.interface';
 import PostBody from '@/utils/interfaces/postbody.interface';
@@ -10,7 +12,14 @@ class ProductService {
     private product = productModel;
 
     public async createProduct(body: Product): Promise<Product> {
+        const { brand, category } = body;
         try {
+            const brandExists = await BrandModel.findById(brand);
+            if (!brandExists) throw new Error();
+
+            const categoryExists = await CategoryModel.findById(category);
+            if (!categoryExists) throw new Error();
+
             const product = await this.product.create({
                 ...body,
                 slug: slugify(body.title, { lower: true }),
@@ -62,7 +71,8 @@ class ProductService {
 
     public async deleteProductById(id: string): Promise<void> {
         try {
-            await this.product.findByIdAndDelete(id);
+            const deletedItem = await this.product.findByIdAndDelete(id);
+            if (!deletedItem) throw new Error();
         } catch (error) {
             throw new Error('Error deleting product');
         }
@@ -126,6 +136,138 @@ class ProductService {
             );
         } catch (error) {
             throw new Error('Error emptying wishlist');
+        }
+    }
+
+    public async addProductToCart(body: any): Promise<User> {
+        try {
+            const user = await userModel.findById(body.user._id);
+            if (!user) throw new Error();
+
+            const product = await this.product.findById(body.productId);
+            if (!product) throw new Error();
+
+            const productExists = user.cart.find(
+                (item: any) => item.product == body.productId,
+            ) as any;
+
+            if (productExists) {
+                const totalQuantity = productExists.quantity + body.quantity;
+
+                if (totalQuantity <= product.quantity) {
+                    const updatedUser = await userModel.findOneAndUpdate(
+                        { _id: body.user._id, 'cart.product': body.productId },
+                        { $inc: { 'cart.$.quantity': body.quantity } },
+                        { new: true },
+                    );
+                    if (!updatedUser) throw new Error();
+                    return updatedUser;
+                } else {
+                    throw new Error();
+                }
+            }
+
+            if (!productExists) {
+                if (body.quantity <= product.quantity) {
+                    const updatedUser = await userModel.findByIdAndUpdate(
+                        body.user._id,
+                        {
+                            $addToSet: {
+                                cart: {
+                                    product: body.productId,
+                                    quantity: body.quantity,
+                                },
+                            },
+                        },
+                        { new: true },
+                    );
+                    if (!updatedUser) throw new Error();
+                    return updatedUser;
+                } else {
+                    throw new Error();
+                }
+            }
+
+            throw new Error();
+        } catch (error: any) {
+            throw new Error('Error adding product to cart');
+        }
+    }
+
+    public async removeProductFromCart(body: any): Promise<User> {
+        try {
+            const user = await userModel.findById(body.user._id);
+            if (!user) throw new Error();
+
+            const product = await this.product.findById(body.productId);
+            if (!product) throw new Error();
+
+            const productExists = user.cart.find(
+                (item: any) => item.product.toString() === body.productId,
+            ) as any;
+
+            if (productExists) {
+                const quantityToRemove = body.quantity;
+
+                if (
+                    quantityToRemove > 0 &&
+                    quantityToRemove <= productExists.quantity
+                ) {
+                    const newQuantity =
+                        productExists.quantity - quantityToRemove;
+
+                    if (newQuantity > 0) {
+                        const updatedUser = await userModel.findOneAndUpdate(
+                            {
+                                _id: body.user._id,
+                                'cart.product': body.productId,
+                            },
+                            { $set: { 'cart.$.quantity': newQuantity } },
+                            { new: true },
+                        );
+
+                        if (!updatedUser) throw new Error();
+                        return updatedUser;
+                    } else {
+                        user.cart = user.cart.filter(
+                            (item: any) =>
+                                item.product.toString() !== body.productId,
+                        );
+
+                        const updatedUser = await user.save();
+                        if (!updatedUser) throw new Error();
+                        return updatedUser;
+                    }
+                } else {
+                    throw new Error();
+                }
+            } else {
+                throw new Error();
+            }
+        } catch (error) {
+            throw new Error('Error removing product from cart');
+        }
+    }
+
+    public async addProductRating(body: any): Promise<Product> {
+        try {
+            const user = await userModel.findById(body.user._id);
+            if (!user) throw new Error();
+
+            const product = await this.product.findByIdAndUpdate(
+                body.productId,
+                {
+                    $addToSet: {
+                        ratings: { user: user._id, rating: body.rating },
+                    },
+                },
+                { new: true },
+            );
+
+            if (!product) throw new Error();
+            return product;
+        } catch (error) {
+            throw new Error('Error adding product rating');
         }
     }
 }
