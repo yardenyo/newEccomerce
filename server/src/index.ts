@@ -10,6 +10,7 @@ import BlogController from "@/resources/blog/blog.controller";
 import categoryController from "@/resources/category/category.controller";
 import blogCategoryController from "@/resources/blogCategory/blogCategory.controller";
 import brandController from "@/resources/brand/brand.controller";
+import couponController from "@/resources/coupon/coupon.controller";
 
 validateEnv();
 
@@ -23,6 +24,7 @@ const app = new App(
     new categoryController(),
     new blogCategoryController(),
     new brandController(),
+    new couponController(),
   ],
   Number(process.env.PORT),
 );
