@@ -254,11 +254,21 @@ class ProductService {
             const user = await userModel.findById(body.user._id);
             if (!user) throw new Error();
 
+            const productExists = await this.product.findOne({
+                _id: body.productId,
+                'ratings.postedBy': body.user._id,
+            });
+            if (productExists) throw new Error();
+
             const product = await this.product.findByIdAndUpdate(
                 body.productId,
                 {
                     $addToSet: {
-                        ratings: { user: user._id, rating: body.rating },
+                        ratings: {
+                            postedBy: body.user._id,
+                            comment: body.comment,
+                            star: body.star,
+                        },
                     },
                 },
                 { new: true },

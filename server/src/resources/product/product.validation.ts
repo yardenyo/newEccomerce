@@ -46,6 +46,7 @@ const removeProductFromCart = Joi.object({
 
 const addProductRating = Joi.object({
     productId: Joi.string().required(),
+    comment: Joi.string(),
     star: Joi.number().default(5).min(1).max(5),
 });
 

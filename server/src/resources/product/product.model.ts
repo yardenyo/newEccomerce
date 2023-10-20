@@ -61,6 +61,9 @@ const ProductSchema = new Schema(
                     type: Number,
                     required: true,
                 },
+                comment: {
+                    type: String,
+                },
                 postedBy: {
                     type: Schema.Types.ObjectId,
                     ref: 'User',
