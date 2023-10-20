@@ -36,17 +36,17 @@ const removeProductFromWishlist = Joi.object({
 
 const addProductToCart = Joi.object({
     productId: Joi.string().required(),
-    quantity: Joi.number().required(),
+    quantity: Joi.number().default(1),
 });
 
 const removeProductFromCart = Joi.object({
     productId: Joi.string().required(),
-    quantity: Joi.number().required(),
+    quantity: Joi.number().default(1),
 });
 
 const addProductRating = Joi.object({
     productId: Joi.string().required(),
-    star: Joi.number().required(),
+    star: Joi.number().default(5).min(1).max(5),
 });
 
 export default {
