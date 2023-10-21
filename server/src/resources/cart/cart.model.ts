@@ -40,6 +40,14 @@ const CartSchema = new Schema(
     { timestamps: true },
 );
 
+CartSchema.path('cartTotal').set(function (value: number) {
+    return parseFloat(value.toFixed(2));
+});
+
+CartSchema.path('totalAfterDiscount').set(function (value: number) {
+    return parseFloat(value.toFixed(2));
+});
+
 const CartModel = model<Cart>('Cart', CartSchema);
 
 export default CartModel;
