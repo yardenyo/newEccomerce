@@ -109,6 +109,14 @@ class AddressService {
             )
                 throw new Error();
 
+            const userToUpdate = await userModel.findById(address.user);
+            if (userToUpdate) {
+                userToUpdate.address = userToUpdate.address.filter(
+                    (addrId) => addrId.toString() !== id,
+                );
+                await userToUpdate.save();
+            }
+
             await this.address.findByIdAndDelete(id);
 
             return address;
@@ -119,6 +127,19 @@ class AddressService {
 
     public async deleteAllAddresses(): Promise<void> {
         try {
+            const addresses = await this.address.find();
+
+            for (const address of addresses) {
+                const userToUpdate = await userModel.findById(address.user);
+                if (userToUpdate) {
+                    userToUpdate.address = userToUpdate.address.filter(
+                        (addrId) =>
+                            addrId.toString() !== address._id.toString(),
+                    );
+                    await userToUpdate.save();
+                }
+            }
+
             await this.address.deleteMany({});
         } catch (error) {
             throw new Error('Error deleting addresses');
