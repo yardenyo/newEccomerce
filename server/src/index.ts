@@ -12,6 +12,8 @@ import blogCategoryController from "@/resources/blogCategory/blogCategory.contro
 import brandController from "@/resources/brand/brand.controller";
 import couponController from "@/resources/coupon/coupon.controller";
 import addressController from "@/resources/address/address.controller";
+import orderController from "@/resources/order/order.controller";
+import cartController from "@/resources/cart/cart.controller";
 
 validateEnv();
 
@@ -27,6 +29,8 @@ const app = new App(
     new brandController(),
     new couponController(),
     new addressController(),
+    new orderController(),
+    new cartController(),
   ],
   Number(process.env.PORT),
 );

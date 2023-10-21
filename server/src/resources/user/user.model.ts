@@ -38,14 +38,8 @@ const UserSchema = new Schema(
         },
         cart: [
             {
-                product: {
-                    type: Schema.Types.ObjectId,
-                    ref: 'Product',
-                },
-                quantity: {
-                    type: Number,
-                    default: 1,
-                },
+                type: Schema.Types.ObjectId,
+                ref: 'Cart',
             },
         ],
         address: [
