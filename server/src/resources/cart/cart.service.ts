@@ -2,11 +2,13 @@ import Cart from '@/resources/cart/cart.interface';
 import CartModel from '@/resources/cart/cart.model';
 import ProductModel from '@/resources/product/product.model';
 import UserModel from '@/resources/user/user.model';
+import couponModel from '@/resources/coupon/coupon.model';
 
 class CartService {
     private cart = CartModel;
     private user = UserModel;
     private product = ProductModel;
+    private coupon = couponModel;
 
     public async addProductToCart(
         userId: string,
@@ -174,6 +176,67 @@ class CartService {
             await user.save();
         } catch (error: any) {
             throw new Error('Error emptying cart');
+        }
+    }
+
+    public async applyCoupon(
+        userId: string,
+        couponCode: string,
+    ): Promise<Cart> {
+        try {
+            const existingCart = await this.cart.findOne({ orderedBy: userId });
+
+            if (!existingCart) {
+                throw new Error();
+            }
+
+            if (existingCart.activeCoupon) throw new Error();
+
+            const coupon = await this.coupon.findOne({ code: couponCode });
+
+            if (!coupon) {
+                throw new Error();
+            }
+
+            const { totalAfterDiscount } = await existingCart.populate(
+                'products.productId',
+                'price',
+            );
+
+            const totalAfterDiscountCalculation =
+                totalAfterDiscount -
+                (totalAfterDiscount * coupon.discount) / 100;
+
+            existingCart.totalAfterDiscount = totalAfterDiscountCalculation;
+
+            existingCart.activeCoupon = couponCode;
+
+            await existingCart.save();
+
+            return existingCart;
+        } catch (error: any) {
+            throw new Error('Error applying coupon');
+        }
+    }
+
+    public async removeCoupon(userId: string): Promise<Cart> {
+        try {
+            const existingCart = await this.cart.findOne({ orderedBy: userId });
+
+            if (!existingCart) {
+                throw new Error();
+            }
+
+            if (!existingCart.activeCoupon) throw new Error();
+
+            existingCart.totalAfterDiscount = existingCart.cartTotal;
+            existingCart.activeCoupon = undefined;
+
+            await existingCart.save();
+
+            return existingCart;
+        } catch (error: any) {
+            throw new Error('Error removing coupon');
         }
     }
 }

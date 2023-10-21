@@ -32,6 +32,18 @@ class CartController implements Controller {
         );
         this.router.get(`${this.path}`, authMiddleware, this.getUserCart);
         this.router.delete(`${this.path}`, authMiddleware, this.emptyCart);
+        this.router.post(
+            `${this.path}/apply-coupon`,
+            validationMiddleware(validate.applyCoupon),
+            authMiddleware,
+            this.applyCoupon,
+        );
+        this.router.post(
+            `${this.path}/remove-coupon`,
+            validationMiddleware(validate.removeCoupon),
+            authMiddleware,
+            this.removeCoupon,
+        );
     }
 
     private addProductToCart = async (
@@ -101,6 +113,40 @@ class CartController implements Controller {
             const cart = await this.cartService.emptyCart(userId);
 
             res.json(new SuccessResponse('Cart emptied', cart));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private applyCoupon = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { coupon } = req.body;
+            const { _id: userId } = req.body.user;
+            await validateDBId(userId);
+            const cart = await this.cartService.applyCoupon(userId, coupon);
+
+            res.json(new SuccessResponse('Coupon applied', cart));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private removeCoupon = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { coupon } = req.body;
+            const { _id: userId } = req.body.user;
+            await validateDBId(userId);
+            const cart = await this.cartService.removeCoupon(userId);
+
+            res.json(new SuccessResponse('Coupon removed', cart));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

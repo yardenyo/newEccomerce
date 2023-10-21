@@ -24,4 +24,12 @@ const removeFromCart = Joi.object({
         .required(),
 });
 
-export default { addToCart, removeFromCart };
+const applyCoupon = Joi.object({
+    coupon: Joi.string().required(),
+});
+
+const removeCoupon = Joi.object({
+    coupon: Joi.string().required(),
+});
+
+export default { addToCart, removeFromCart, applyCoupon, removeCoupon };
