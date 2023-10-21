@@ -296,9 +296,8 @@ class ProductService {
 
             const imageUrls = uploadedImages.map((image: any) => image.url);
 
-            product.images = imageUrls;
+            product.images = product.images.concat(imageUrls);
             await product.save();
-
             return product;
         } catch (error) {
             throw new Error('Error uploading product images');
