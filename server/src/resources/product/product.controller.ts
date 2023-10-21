@@ -9,6 +9,10 @@ import {
     authMiddleware,
     creatorMiddleware,
 } from '@/middleware/auth.middleware';
+import {
+    uploadPhoto,
+    productImageResize,
+} from '@/middleware/uploadImage.middleware';
 import validateDBId from '@/utils/validateDBId';
 
 class ProductController implements Controller {
@@ -87,6 +91,14 @@ class ProductController implements Controller {
             validationMiddleware(validate.addProductRating),
             authMiddleware,
             this.addProductRating,
+        );
+        this.router.put(
+            `${this.path}/upload/:productId`,
+            authMiddleware,
+            creatorMiddleware,
+            uploadPhoto.array('images', 10),
+            productImageResize,
+            this.uploadProductImages,
         );
     }
 
@@ -270,6 +282,22 @@ class ProductController implements Controller {
                 req.body,
             );
             res.json(new SuccessResponse('Product rating added', product));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private uploadProductImages = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const product = await this.ProductService.uploadProductImages(
+                req.params.productId,
+                req.body.images as Express.Multer.File[],
+            );
+            res.json(new SuccessResponse('Product images uploaded', product));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

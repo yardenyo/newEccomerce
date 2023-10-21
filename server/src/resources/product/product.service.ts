@@ -7,6 +7,7 @@ import User from '@/resources/user/user.interface';
 import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
 import slugify from 'slugify';
+import { cloudinaryUploadImage } from '@/utils/config/cloudinaryConfig';
 
 class ProductService {
     private product = productModel;
@@ -278,6 +279,29 @@ class ProductService {
             return product;
         } catch (error) {
             throw new Error('Error adding product rating');
+        }
+    }
+
+    public async uploadProductImages(
+        productId: string,
+        images: Express.Multer.File[],
+    ): Promise<Product> {
+        try {
+            const product = await this.product.findById(productId);
+            if (!product) throw new Error();
+
+            const uploadedImages = await Promise.all(
+                images.map((image) => cloudinaryUploadImage(image)),
+            );
+
+            const imageUrls = uploadedImages.map((image: any) => image.url);
+
+            product.images = imageUrls;
+            await product.save();
+
+            return product;
+        } catch (error) {
+            throw new Error('Error uploading product images');
         }
     }
 }
