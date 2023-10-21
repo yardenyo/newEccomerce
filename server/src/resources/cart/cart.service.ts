@@ -41,10 +41,6 @@ class CartService {
                     throw new Error();
                 }
 
-                if (productInStock.quantity < quantity) {
-                    throw new Error();
-                }
-
                 const cartProduct = existingCart.products.find(
                     (cartItem: any) =>
                         cartItem.productId.equals(productId) &&
@@ -59,12 +55,15 @@ class CartService {
                         throw new Error();
                     }
                     cartProduct.quantity += quantity;
+
+                    cartProduct.price =
+                        productInStock.price * cartProduct.quantity;
                 } else {
                     const cartProductToAdd = {
                         productId: productInStock._id,
                         quantity,
                         color,
-                        price: productInStock.price,
+                        price: productInStock.price * quantity,
                     };
 
                     existingCart.products.push(cartProductToAdd as any);
@@ -110,27 +109,28 @@ class CartService {
                         cartItem.color === color,
                 );
 
-                if (!cartProduct) {
-                    throw new Error();
-                }
+                if (cartProduct) {
+                    if (cartProduct.quantity < quantity) {
+                        throw new Error();
+                    }
 
-                if (cartProduct.quantity < quantity) {
-                    throw new Error();
-                }
+                    if (cartProduct.quantity === quantity) {
+                        existingCart.products = existingCart.products.filter(
+                            (cartItem: any) =>
+                                !cartItem.productId.equals(productId) ||
+                                cartItem.color !== color,
+                        );
+                    } else {
+                        cartProduct.quantity -= quantity;
 
-                if (cartProduct.quantity === quantity) {
-                    existingCart.products = existingCart.products.filter(
-                        (cartItem: any) =>
-                            !cartItem.productId.equals(productId) ||
-                            cartItem.color !== color,
-                    );
-                } else {
-                    cartProduct.quantity -= quantity;
-                }
+                        cartProduct.price =
+                            productInStock.price * cartProduct.quantity;
+                    }
 
-                existingCart.cartTotal -= productInStock.price * quantity;
-                existingCart.totalAfterDiscount -=
-                    productInStock.price * quantity;
+                    existingCart.cartTotal -= productInStock.price * quantity;
+                    existingCart.totalAfterDiscount -=
+                        productInStock.price * quantity;
+                }
             }
 
             await existingCart.save();
