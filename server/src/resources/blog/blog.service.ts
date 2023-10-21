@@ -7,6 +7,7 @@ import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
 import slugify from 'slugify';
 import Roles from '@/utils/enums/roles.enums';
+import cloudinaryUploader from '@/utils/helpers/cloudinaryUploader.helper';
 
 class BlogService {
     private blog = BlogModel;
@@ -205,6 +206,25 @@ class BlogService {
             return blog;
         } catch (error) {
             throw new Error('Error disliking blog');
+        }
+    }
+
+    public async uploadBlogImages(
+        id: string,
+        files: Express.Multer.File[],
+    ): Promise<Blog> {
+        try {
+            const blog = await this.blog.findById(id);
+            if (!blog) throw new Error();
+
+            const imageLinks = await cloudinaryUploader(files);
+
+            blog.images = blog.images.concat(imageLinks);
+            await blog.save();
+
+            return blog;
+        } catch (error) {
+            throw new Error('Error uploading blog images');
         }
     }
 }

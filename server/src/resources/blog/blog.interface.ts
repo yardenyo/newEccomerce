@@ -12,4 +12,5 @@ export default interface Blog extends Document {
     dislikes: User[];
     image: string;
     author: User;
+    images: string[];
 }
