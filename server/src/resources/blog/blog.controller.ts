@@ -205,7 +205,7 @@ class BlogController implements Controller {
             await validateDBId(blogId);
             const blog = await this.blogService.uploadBlogImages(
                 blogId,
-                req.body.images as Express.Multer.File[],
+                req.files as Express.Multer.File[],
             );
             res.json(
                 new SuccessResponse('Blog images uploaded successfully', blog),

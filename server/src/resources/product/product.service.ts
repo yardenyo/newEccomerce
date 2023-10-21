@@ -8,6 +8,7 @@ import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
 import slugify from 'slugify';
 import { cloudinaryUploadImage } from '@/utils/config/cloudinaryConfig';
+import fs from 'fs';
 
 class ProductService {
     private product = productModel;
@@ -284,20 +285,23 @@ class ProductService {
 
     public async uploadProductImages(
         productId: string,
-        images: Express.Multer.File[],
+        files: Express.Multer.File[],
     ): Promise<Product> {
         try {
             const product = await this.product.findById(productId);
             if (!product) throw new Error();
 
-            const uploadedImages = await Promise.all(
-                images.map((image) => cloudinaryUploadImage(image)),
-            );
+            const imageLinks = [];
 
-            const imageUrls = uploadedImages.map((image: any) => image.url);
+            for (const file of files) {
+                const image: any = await cloudinaryUploadImage(file.path);
+                imageLinks.push(image.url);
+                fs.unlinkSync(file.path);
+            }
 
-            product.images = product.images.concat(imageUrls);
+            product.images = product.images.concat(imageLinks);
             await product.save();
+
             return product;
         } catch (error) {
             throw new Error('Error uploading product images');

@@ -297,7 +297,7 @@ class ProductController implements Controller {
             validateDBId(productId);
             const product = await this.ProductService.uploadProductImages(
                 req.params.productId,
-                req.body.images as Express.Multer.File[],
+                req.files as Express.Multer.File[],
             );
             res.json(new SuccessResponse('Product images uploaded', product));
         } catch (error: any) {

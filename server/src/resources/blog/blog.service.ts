@@ -8,6 +8,7 @@ import ConvertResponse from '@/utils/helpers/convertresponse.helper';
 import slugify from 'slugify';
 import Roles from '@/utils/enums/roles.enums';
 import { cloudinaryUploadImage } from '@/utils/config/cloudinaryConfig';
+import fs from 'fs';
 
 class BlogService {
     private blog = BlogModel;
@@ -211,19 +212,21 @@ class BlogService {
 
     public async uploadBlogImages(
         id: string,
-        images: Express.Multer.File[],
+        files: Express.Multer.File[],
     ): Promise<Blog> {
         try {
             const blog = await this.blog.findById(id);
             if (!blog) throw new Error();
 
-            const uploadedImages = await Promise.all(
-                images.map((image) => cloudinaryUploadImage(image)),
-            );
+            const imageLinks = [];
 
-            const imageUrls = uploadedImages.map((image: any) => image.url);
+            for (const file of files) {
+                const image: any = await cloudinaryUploadImage(file.path);
+                imageLinks.push(image.url);
+                fs.unlinkSync(file.path);
+            }
 
-            blog.images = blog.images.concat(imageUrls);
+            blog.images = blog.images.concat(imageLinks);
             await blog.save();
 
             return blog;

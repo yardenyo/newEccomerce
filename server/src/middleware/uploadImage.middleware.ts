@@ -52,7 +52,7 @@ const imageResizeMiddleware =
         if (!req.files) return next();
 
         try {
-            const outputPaths = await Promise.all(
+            await Promise.all(
                 (req.files as Express.Multer.File[]).map(
                     async (file: Express.Multer.File) => {
                         const subdirectoryPath = path.join(
@@ -83,12 +83,19 @@ const imageResizeMiddleware =
                             .jpeg({ quality: 90 })
                             .toFile(destinationPath);
 
-                        return destinationPath;
+                        fs.unlinkSync(file.path);
                     },
                 ),
             );
 
-            req.body.images = outputPaths;
+            (req.files as Express.Multer.File[]).forEach((file) => {
+                file.path = path.join(
+                    imageUploadPath,
+                    outputPath,
+                    file.filename,
+                );
+            });
+
             next();
         } catch (error) {
             next(error);
