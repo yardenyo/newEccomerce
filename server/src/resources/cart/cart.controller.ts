@@ -31,6 +31,7 @@ class CartController implements Controller {
             this.removeProductFromCart,
         );
         this.router.get(`${this.path}`, authMiddleware, this.getUserCart);
+        this.router.delete(`${this.path}`, authMiddleware, this.emptyCart);
     }
 
     private addProductToCart = async (
@@ -84,6 +85,22 @@ class CartController implements Controller {
             const cart = await this.cartService.getUserCart(userId);
 
             res.json(new SuccessResponse('User cart', cart));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private emptyCart = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { _id: userId } = req.body.user;
+            await validateDBId(userId);
+            const cart = await this.cartService.emptyCart(userId);
+
+            res.json(new SuccessResponse('Cart emptied', cart));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

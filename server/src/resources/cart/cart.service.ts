@@ -160,6 +160,25 @@ class CartService {
             throw new Error('Error getting user cart');
         }
     }
+
+    public async emptyCart(userId: string): Promise<Cart> {
+        try {
+            const cart = await this.cart.findOne({ orderedBy: userId });
+
+            if (!cart) {
+                throw new Error();
+            }
+
+            cart.products = [];
+            cart.cartTotal = 0;
+            cart.totalAfterDiscount = 0;
+            await cart.save();
+
+            return cart;
+        } catch (error: any) {
+            throw new Error('Error emptying cart');
+        }
+    }
 }
 
 export default CartService;
