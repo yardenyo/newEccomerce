@@ -80,18 +80,6 @@ class ProductController implements Controller {
             this.getUserWishlist,
         );
         this.router.put(
-            `${this.path}/cart/add`,
-            validationMiddleware(validate.addProductToCart),
-            authMiddleware,
-            this.addProductToCart,
-        );
-        this.router.put(
-            `${this.path}/cart/remove`,
-            validationMiddleware(validate.removeProductFromCart),
-            authMiddleware,
-            this.removeProductFromCart,
-        );
-        this.router.put(
             `${this.path}/ratings/add`,
             validationMiddleware(validate.addProductRating),
             authMiddleware,
@@ -257,36 +245,6 @@ class ProductController implements Controller {
                 req.body,
             );
             res.json(new SuccessResponse('User wishlist retrieved', products));
-        } catch (error: any) {
-            next(new HttpException(400, error.message));
-        }
-    };
-
-    private addProductToCart = async (
-        req: Request,
-        res: Response,
-        next: NextFunction,
-    ): Promise<void> => {
-        try {
-            const product = await this.ProductService.addProductToCart(
-                req.body,
-            );
-            res.json(new SuccessResponse('Product added to cart', product));
-        } catch (error: any) {
-            next(new HttpException(400, error.message));
-        }
-    };
-
-    private removeProductFromCart = async (
-        req: Request,
-        res: Response,
-        next: NextFunction,
-    ): Promise<void> => {
-        try {
-            const product = await this.ProductService.removeProductFromCart(
-                req.body,
-            );
-            res.json(new SuccessResponse('Product removed from cart', product));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
