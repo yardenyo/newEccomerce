@@ -8,7 +8,7 @@ export default interface User extends Document {
     mobile: string;
     role: Roles;
     isBlocked: boolean;
-    cart: string;
+    cart: string | undefined;
     wishlist: string[];
     address: string[];
     password: string;

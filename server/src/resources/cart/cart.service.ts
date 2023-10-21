@@ -161,20 +161,17 @@ class CartService {
         }
     }
 
-    public async emptyCart(userId: string): Promise<Cart> {
+    public async emptyCart(userId: string): Promise<void> {
         try {
-            const cart = await this.cart.findOne({ orderedBy: userId });
+            await this.cart.findOneAndRemove({
+                orderedBy: userId,
+            });
 
-            if (!cart) {
-                throw new Error();
-            }
+            const user = await this.user.findById(userId);
+            if (!user) throw new Error();
 
-            cart.products = [];
-            cart.cartTotal = 0;
-            cart.totalAfterDiscount = 0;
-            await cart.save();
-
-            return cart;
+            user.cart = undefined;
+            await user.save();
         } catch (error: any) {
             throw new Error('Error emptying cart');
         }
