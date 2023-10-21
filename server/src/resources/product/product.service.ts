@@ -7,8 +7,7 @@ import User from '@/resources/user/user.interface';
 import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
 import slugify from 'slugify';
-import { cloudinaryUploadImage } from '@/utils/config/cloudinaryConfig';
-import fs from 'fs';
+import cloudinaryUploader from '@/utils/helpers/cloudinaryUploader.helper';
 
 class ProductService {
     private product = productModel;
@@ -291,13 +290,7 @@ class ProductService {
             const product = await this.product.findById(productId);
             if (!product) throw new Error();
 
-            const imageLinks = [];
-
-            for (const file of files) {
-                const image: any = await cloudinaryUploadImage(file.path);
-                imageLinks.push(image.url);
-                fs.unlinkSync(file.path);
-            }
+            const imageLinks = await cloudinaryUploader(files);
 
             product.images = product.images.concat(imageLinks);
             await product.save();

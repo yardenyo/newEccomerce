@@ -7,8 +7,7 @@ import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
 import slugify from 'slugify';
 import Roles from '@/utils/enums/roles.enums';
-import { cloudinaryUploadImage } from '@/utils/config/cloudinaryConfig';
-import fs from 'fs';
+import cloudinaryUploader from '@/utils/helpers/cloudinaryUploader.helper';
 
 class BlogService {
     private blog = BlogModel;
@@ -218,13 +217,7 @@ class BlogService {
             const blog = await this.blog.findById(id);
             if (!blog) throw new Error();
 
-            const imageLinks = [];
-
-            for (const file of files) {
-                const image: any = await cloudinaryUploadImage(file.path);
-                imageLinks.push(image.url);
-                fs.unlinkSync(file.path);
-            }
+            const imageLinks = await cloudinaryUploader(files);
 
             blog.images = blog.images.concat(imageLinks);
             await blog.save();
