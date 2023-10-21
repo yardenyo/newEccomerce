@@ -143,13 +143,19 @@ class CartService {
 
     public async getUserCart(userId: string): Promise<Cart> {
         try {
-            const existingCart = await this.cart.findOne({ orderedBy: userId });
+            const cart = await this.cart
+                .findOne({ orderedBy: userId })
+                .populate(
+                    'products.productId',
+                    '_id title description price category brand quantity sold images color ratings',
+                )
+                .exec();
 
-            if (!existingCart) {
+            if (!cart) {
                 throw new Error();
             }
 
-            return existingCart;
+            return cart;
         } catch (error: any) {
             throw new Error('Error getting user cart');
         }
