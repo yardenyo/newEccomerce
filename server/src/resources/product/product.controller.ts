@@ -293,6 +293,8 @@ class ProductController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
+            const productId = req.params.productId;
+            validateDBId(productId);
             const product = await this.ProductService.uploadProductImages(
                 req.params.productId,
                 req.body.images as Express.Multer.File[],

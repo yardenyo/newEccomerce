@@ -10,6 +10,10 @@ import {
     creatorMiddleware,
 } from '@/middleware/auth.middleware';
 import validateDBId from '@/utils/validateDBId';
+import {
+    blogImageResize,
+    uploadPhoto,
+} from '@/middleware/uploadImage.middleware';
 
 class BlogController implements Controller {
     public path = '/blogs';
@@ -57,6 +61,14 @@ class BlogController implements Controller {
             `${this.path}/dislike/:id`,
             authMiddleware,
             this.dislikeBlog,
+        );
+        this.router.put(
+            `${this.path}/upload/:blogId`,
+            authMiddleware,
+            creatorMiddleware,
+            uploadPhoto.array('images', 10),
+            blogImageResize,
+            this.uploadBlogImages,
         );
     }
 
@@ -178,6 +190,26 @@ class BlogController implements Controller {
             const user = req.body.user;
             await this.blogService.dislikeBlog(id, user);
             res.json(new SuccessResponse('Blog disliked successfully'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private uploadBlogImages = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const blogId = req.params.blogId;
+            await validateDBId(blogId);
+            const blog = await this.blogService.uploadBlogImages(
+                blogId,
+                req.body.images as Express.Multer.File[],
+            );
+            res.json(
+                new SuccessResponse('Blog images uploaded successfully', blog),
+            );
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

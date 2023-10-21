@@ -52,6 +52,10 @@ const BlogSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'User',
         },
+        images: {
+            type: Array,
+            required: true,
+        },
     },
     {
         toJSON: { virtuals: true },
