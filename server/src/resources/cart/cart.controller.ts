@@ -5,10 +5,7 @@ import SuccessResponse from '@/middleware/success.middleware';
 import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/cart/cart.validation';
 import CartService from '@/resources/cart/cart.service';
-import {
-    authMiddleware,
-    creatorMiddleware,
-} from '@/middleware/auth.middleware';
+import { authMiddleware } from '@/middleware/auth.middleware';
 import validateDBId from '@/utils/validateDBId';
 
 class CartController implements Controller {
@@ -27,6 +24,13 @@ class CartController implements Controller {
             authMiddleware,
             this.addProductToCart,
         );
+        this.router.put(
+            `${this.path}/remove`,
+            validationMiddleware(validate.removeFromCart),
+            authMiddleware,
+            this.removeProductFromCart,
+        );
+        this.router.get(`${this.path}`, authMiddleware, this.getUserCart);
     }
 
     private addProductToCart = async (
@@ -37,12 +41,49 @@ class CartController implements Controller {
         try {
             const { products } = req.body;
             const { _id: userId } = req.body.user;
+            await validateDBId(userId);
             const cart = await this.cartService.addProductToCart(
                 userId,
                 products,
             );
 
             res.json(new SuccessResponse('Product added to cart', cart));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private removeProductFromCart = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { products } = req.body;
+            const { _id: userId } = req.body.user;
+            await validateDBId(userId);
+            const cart = await this.cartService.removeProductFromCart(
+                userId,
+                products,
+            );
+
+            res.json(new SuccessResponse('Product removed from cart', cart));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private getUserCart = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { _id: userId } = req.body.user;
+            await validateDBId(userId);
+            const cart = await this.cartService.getUserCart(userId);
+
+            res.json(new SuccessResponse('User cart', cart));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

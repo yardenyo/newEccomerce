@@ -3,7 +3,11 @@ import Joi from 'joi';
 const createProduct = Joi.object({
     title: Joi.string().required(),
     description: Joi.string().required(),
-    price: Joi.number().required(),
+    price: Joi.number()
+        .required()
+        .min(1)
+        .precision(2)
+        .prefs({ convert: false }),
     category: Joi.string().required(),
     brand: Joi.string().required(),
     quantity: Joi.number().required(),

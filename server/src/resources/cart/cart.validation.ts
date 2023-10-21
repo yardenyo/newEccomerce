@@ -12,4 +12,16 @@ const addToCart = Joi.object({
         .required(),
 });
 
-export default { addToCart };
+const removeFromCart = Joi.object({
+    products: Joi.array()
+        .items(
+            Joi.object({
+                productId: Joi.string().required(),
+                quantity: Joi.number().required(),
+                color: Joi.string().required(),
+            }),
+        )
+        .required(),
+});
+
+export default { addToCart, removeFromCart };
