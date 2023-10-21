@@ -6,6 +6,7 @@ export default interface Cart extends Document {
     products: Product[];
     cartTotal: number;
     totalAfterDiscount: number;
+    activeCoupon: string | undefined;
     orderedBy: string;
     createdAt: string;
     updatedAt: string;

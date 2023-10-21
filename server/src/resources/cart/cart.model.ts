@@ -32,6 +32,9 @@ const CartSchema = new Schema(
             type: Number,
             required: true,
         },
+        activeCoupon: {
+            type: String,
+        },
         orderedBy: {
             type: Schema.Types.ObjectId,
             ref: 'User',
