@@ -140,6 +140,21 @@ class ProductService {
         }
     }
 
+    public async getUserWishlist(body: any): Promise<Product[]> {
+        try {
+            const user = await userModel.findById(body.user._id);
+            if (!user) throw new Error();
+
+            const products = await this.product.find({
+                _id: { $in: user.wishlist },
+            });
+
+            return products;
+        } catch (error) {
+            throw new Error('Error retrieving user wishlist');
+        }
+    }
+
     public async addProductToCart(body: any): Promise<User> {
         try {
             const user = await userModel.findById(body.user._id);

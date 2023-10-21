@@ -74,6 +74,11 @@ class ProductController implements Controller {
             authMiddleware,
             this.removeAllProductsFromWishlist,
         );
+        this.router.get(
+            `${this.path}/wishlist/getItems`,
+            authMiddleware,
+            this.getUserWishlist,
+        );
         this.router.put(
             `${this.path}/cart/add`,
             validationMiddleware(validate.addProductToCart),
@@ -237,6 +242,21 @@ class ProductController implements Controller {
                     product,
                 ),
             );
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private getUserWishlist = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const products = await this.ProductService.getUserWishlist(
+                req.body,
+            );
+            res.json(new SuccessResponse('User wishlist retrieved', products));
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
