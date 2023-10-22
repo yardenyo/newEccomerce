@@ -35,6 +35,10 @@ const createSession = async (products: Product[], user: User) => {
         customer_email: user.email,
         client_reference_id: user._id.toString(),
         allow_promotion_codes: true,
+        billing_address_collection: 'required',
+        shipping_address_collection: {
+            allowed_countries: ['US', 'IL'],
+        },
     });
 
     return session;
