@@ -2,6 +2,7 @@ import { Document } from 'mongoose';
 
 export default interface Product extends Document {
     title: string;
+    name: string;
     slug: string;
     description: string;
     price: number;
