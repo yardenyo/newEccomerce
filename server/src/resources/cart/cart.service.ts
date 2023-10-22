@@ -62,7 +62,9 @@ class CartService {
                         productInStock.price * cartProduct.quantity;
                 } else {
                     const cartProductToAdd = {
+                        name: productInStock.title,
                         productId: productInStock._id,
+                        images: productInStock.images,
                         quantity,
                         color,
                         price: productInStock.price * quantity,

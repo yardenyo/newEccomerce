@@ -20,6 +20,7 @@ function validateEnv(): void {
         CLOUDINARY_CLOUD_NAME: str(),
         CLOUDINARY_API_KEY: str(),
         CLOUDINARY_API_SECRET: str(),
+        STRIPE_SECRET_KEY: str(),
     });
 }
 

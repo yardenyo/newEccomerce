@@ -10,6 +10,10 @@ const CartSchema = new Schema(
                     ref: 'Product',
                     required: true,
                 },
+                name: {
+                    type: String,
+                    required: true,
+                },
                 quantity: {
                     type: Number,
                     required: true,
@@ -20,6 +24,10 @@ const CartSchema = new Schema(
                 },
                 price: {
                     type: Number,
+                    required: true,
+                },
+                images: {
+                    type: Array,
                     required: true,
                 },
             },

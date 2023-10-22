@@ -1,16 +1,8 @@
-
-import { Router, Request, Response, NextFunction } from 'express';
-import Controller from '@/utils/interfaces/controller.interface';
-import HttpException from '@/utils/exceptions/http.exception';
+import { authMiddleware } from '@/middleware/auth.middleware';
 import SuccessResponse from '@/middleware/success.middleware';
-import validationMiddleware from '@/middleware/validation.middleware';
-import validate from '@/resources/order/order.validation';
 import OrderService from '@/resources/order/order.service';
-import {
-    authMiddleware,
-    creatorMiddleware,
-} from '@/middleware/auth.middleware';
-import validateDBId from '@/utils/validateDBId';
+import Controller from '@/utils/interfaces/controller.interface';
+import { NextFunction, Request, Response, Router } from 'express';
 
 class OrderController implements Controller {
     public path = '/orders';
@@ -22,10 +14,21 @@ class OrderController implements Controller {
     }
 
     private initializeRoutes(): void {
-
+        this.router.post(`${this.path}`, authMiddleware, this.createOrder);
     }
 
-    
+    private createOrder = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const session = await this.orderService.createOrder(req.body.user);
+            res.json(new SuccessResponse('Order created', session));
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 export default OrderController;
