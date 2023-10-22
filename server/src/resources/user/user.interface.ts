@@ -1,4 +1,5 @@
 import Roles from '@/utils/enums/roles.enums';
+import UserSettings from '@/resources/setting/setting.interface';
 import { Document } from 'mongoose';
 
 export default interface User extends Document {
@@ -11,6 +12,7 @@ export default interface User extends Document {
     cart: string | undefined;
     wishlist: string[];
     address: string[];
+    userSettings: UserSettings;
     password: string;
     createdAt: Date;
     updatedAt: Date;
