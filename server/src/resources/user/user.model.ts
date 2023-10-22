@@ -54,6 +54,10 @@ const UserSchema = new Schema(
                 ref: 'Product',
             },
         ],
+        userSettings: {
+            type: Schema.Types.ObjectId,
+            ref: 'Setting',
+        },
         passwordChangedAt: Date,
         resetPasswordToken: String,
         resetPasswordExpires: Date,
