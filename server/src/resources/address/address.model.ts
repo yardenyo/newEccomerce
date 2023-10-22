@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
 import Address from '@/resources/address/address.interface';
+import { Schema, model } from 'mongoose';
 
 const AddressSchema = new Schema(
     {

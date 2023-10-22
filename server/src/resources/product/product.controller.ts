@@ -1,19 +1,19 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import Controller from '@/utils/interfaces/controller.interface';
-import HttpException from '@/utils/exceptions/http.exception';
-import SuccessResponse from '@/middleware/success.middleware';
-import validationMiddleware from '@/middleware/validation.middleware';
-import validate from '@/resources/product/product.validation';
-import ProductService from '@/resources/product/product.service';
 import {
     authMiddleware,
     creatorMiddleware,
 } from '@/middleware/auth.middleware';
+import SuccessResponse from '@/middleware/success.middleware';
 import {
-    uploadPhoto,
     productImageResize,
+    uploadPhoto,
 } from '@/middleware/uploadImage.middleware';
+import validationMiddleware from '@/middleware/validation.middleware';
+import ProductService from '@/resources/product/product.service';
+import validate from '@/resources/product/product.validation';
+import HttpException from '@/utils/exceptions/http.exception';
+import Controller from '@/utils/interfaces/controller.interface';
 import validateDBId from '@/utils/validateDBId';
+import { NextFunction, Request, Response, Router } from 'express';
 
 class ProductController implements Controller {
     public path = '/products';

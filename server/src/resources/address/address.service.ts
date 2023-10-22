@@ -1,11 +1,11 @@
 import Address from '@/resources/address/address.interface';
 import AddressModel from '@/resources/address/address.model';
 import roleModel from '@/resources/role/role.model';
-import userModel from '@/resources/user/user.model';
 import User from '@/resources/user/user.interface';
-import PostBody from '@/utils/interfaces/postbody.interface';
-import ConvertResponse from '@/utils/helpers/convertresponse.helper';
+import userModel from '@/resources/user/user.model';
 import Roles from '@/utils/enums/roles.enums';
+import ConvertResponse from '@/utils/helpers/convertresponse.helper';
+import PostBody from '@/utils/interfaces/postbody.interface';
 
 class AddressService {
     private address = AddressModel;

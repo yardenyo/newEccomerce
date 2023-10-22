@@ -1,12 +1,7 @@
-import Order from '@/resources/order/order.interface';
-import OrderModel from '@/resources/order/order.model';
 import cartModel from '@/resources/cart/cart.model';
-import PostBody from '@/utils/interfaces/postbody.interface';
-import ConvertResponse from '@/utils/helpers/convertresponse.helper';
-import slugify from 'slugify';
-import createSession from '@/utils/config/stripeConfig';
-import Product from '@/resources/product/product.interface';
+import OrderModel from '@/resources/order/order.model';
 import User from '@/resources/user/user.interface';
+import createSession from '@/utils/config/stripeConfig';
 
 class OrderService {
     private order = OrderModel;

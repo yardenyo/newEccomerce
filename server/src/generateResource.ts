@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import prettier from 'prettier';
 import {
     controllerContent,
     interfaceContent,
@@ -7,7 +8,6 @@ import {
     serviceContent,
     validationContent,
 } from './utils/helpers/resourceContent.helper';
-import prettier from 'prettier';
 
 const resourceName = process.argv[2];
 

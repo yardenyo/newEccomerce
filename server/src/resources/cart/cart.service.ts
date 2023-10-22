@@ -1,8 +1,8 @@
 import Cart from '@/resources/cart/cart.interface';
 import CartModel from '@/resources/cart/cart.model';
+import couponModel from '@/resources/coupon/coupon.model';
 import ProductModel from '@/resources/product/product.model';
 import UserModel from '@/resources/user/user.model';
-import couponModel from '@/resources/coupon/coupon.model';
 
 class CartService {
     private cart = CartModel;

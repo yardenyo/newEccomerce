@@ -1,12 +1,12 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import Controller from '@/utils/interfaces/controller.interface';
-import HttpException from '@/utils/exceptions/http.exception';
+import { adminMiddleware, authMiddleware } from '@/middleware/auth.middleware';
 import SuccessResponse from '@/middleware/success.middleware';
 import validationMiddleware from '@/middleware/validation.middleware';
-import validate from '@/resources/coupon/coupon.validation';
 import CouponService from '@/resources/coupon/coupon.service';
-import { authMiddleware, adminMiddleware } from '@/middleware/auth.middleware';
+import validate from '@/resources/coupon/coupon.validation';
+import HttpException from '@/utils/exceptions/http.exception';
+import Controller from '@/utils/interfaces/controller.interface';
 import validateDBId from '@/utils/validateDBId';
+import { NextFunction, Request, Response, Router } from 'express';
 
 class CouponController implements Controller {
     public path = '/coupons';

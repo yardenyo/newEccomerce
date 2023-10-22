@@ -1,15 +1,15 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import Controller from '@/utils/interfaces/controller.interface';
-import HttpException from '@/utils/exceptions/http.exception';
-import SuccessResponse from '@/middleware/success.middleware';
-import validationMiddleware from '@/middleware/validation.middleware';
-import validate from '@/resources/category/category.validation';
-import CategoryService from '@/resources/category/category.service';
 import {
     authMiddleware,
     creatorMiddleware,
 } from '@/middleware/auth.middleware';
+import SuccessResponse from '@/middleware/success.middleware';
+import validationMiddleware from '@/middleware/validation.middleware';
+import CategoryService from '@/resources/category/category.service';
+import validate from '@/resources/category/category.validation';
+import HttpException from '@/utils/exceptions/http.exception';
+import Controller from '@/utils/interfaces/controller.interface';
 import validateDBId from '@/utils/validateDBId';
+import { NextFunction, Request, Response, Router } from 'express';
 
 class CategoryController implements Controller {
     public path = '/categories';

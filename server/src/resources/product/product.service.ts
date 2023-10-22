@@ -1,13 +1,13 @@
-import productModel from '@/resources/product/product.model';
-import Product from '@/resources/product/product.interface';
 import BrandModel from '@/resources/brand/brand.model';
 import CategoryModel from '@/resources/category/category.model';
-import userModel from '@/resources/user/user.model';
+import Product from '@/resources/product/product.interface';
+import productModel from '@/resources/product/product.model';
 import User from '@/resources/user/user.interface';
-import PostBody from '@/utils/interfaces/postbody.interface';
-import ConvertResponse from '@/utils/helpers/convertresponse.helper';
-import slugify from 'slugify';
+import userModel from '@/resources/user/user.model';
 import cloudinaryUploader from '@/utils/helpers/cloudinaryUploader.helper';
+import ConvertResponse from '@/utils/helpers/convertresponse.helper';
+import PostBody from '@/utils/interfaces/postbody.interface';
+import slugify from 'slugify';
 
 class ProductService {
     private product = productModel;

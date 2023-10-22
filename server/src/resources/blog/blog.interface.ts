@@ -1,5 +1,5 @@
-import { Document } from 'mongoose';
 import User from '@/resources/user/user.interface';
+import { Document } from 'mongoose';
 
 export default interface Blog extends Document {
     title: string;

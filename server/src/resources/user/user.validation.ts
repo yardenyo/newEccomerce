@@ -1,5 +1,5 @@
-import Joi from 'joi';
 import Roles from '@/utils/enums/roles.enums';
+import Joi from 'joi';
 
 const updateUser = Joi.object({
     firstName: Joi.string(),

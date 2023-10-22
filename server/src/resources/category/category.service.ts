@@ -1,7 +1,7 @@
 import Category from '@/resources/category/category.interface';
 import CategoryModel from '@/resources/category/category.model';
-import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
+import PostBody from '@/utils/interfaces/postbody.interface';
 
 class CategoryService {
     private category = CategoryModel;

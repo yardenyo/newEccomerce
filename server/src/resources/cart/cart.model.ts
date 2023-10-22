@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
 import Cart from '@/resources/cart/cart.interface';
+import { Schema, model } from 'mongoose';
 
 const CartSchema = new Schema(
     {

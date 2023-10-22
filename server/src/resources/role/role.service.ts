@@ -1,7 +1,7 @@
-import roleModel from '@/resources/role/role.model';
 import Role from '@/resources/role/role.interface';
-import PostBody from '@/utils/interfaces/postbody.interface';
+import roleModel from '@/resources/role/role.model';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
+import PostBody from '@/utils/interfaces/postbody.interface';
 
 class RoleService {
     private role = roleModel;
