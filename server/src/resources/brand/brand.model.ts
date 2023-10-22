@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
 import Brand from '@/resources/brand/brand.interface';
+import { Schema, model } from 'mongoose';
 
 const BrandSchema = new Schema(
     {

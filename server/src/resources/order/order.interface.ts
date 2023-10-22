@@ -1,6 +1,6 @@
-import { Document } from 'mongoose';
 import Product from '@/resources/product/product.interface';
 import orderStatus from '@/utils/enums/orderStatus.enums';
+import { Document } from 'mongoose';
 
 export default interface Order extends Document {
     _id: string;

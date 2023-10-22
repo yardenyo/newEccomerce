@@ -1,5 +1,5 @@
-import { Document } from 'mongoose';
 import Product from '@/resources/product/product.interface';
+import { Document } from 'mongoose';
 
 export default interface Cart extends Document {
     _id: string;

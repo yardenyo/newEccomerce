@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
 import Order from '@/resources/order/order.interface';
 import orderStatus from '@/utils/enums/orderStatus.enums';
+import { Schema, model } from 'mongoose';
 
 const OrderSchema = new Schema(
     {

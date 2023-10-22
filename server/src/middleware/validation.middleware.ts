@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction, RequestHandler } from 'express';
 import HttpException from '@/utils/exceptions/http.exception';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 import Joi from 'joi';
 
 function validationMiddleware(schema: Joi.Schema): RequestHandler {

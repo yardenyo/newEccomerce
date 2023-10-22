@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
 import Blog from '@/resources/blog/blog.interface';
+import { Schema, model } from 'mongoose';
 
 const BlogSchema = new Schema(
     {

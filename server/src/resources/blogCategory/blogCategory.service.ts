@@ -1,7 +1,7 @@
 import BlogCategory from '@/resources/blogCategory/blogCategory.interface';
 import BlogCategoryModel from '@/resources/blogCategory/blogCategory.model';
-import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
+import PostBody from '@/utils/interfaces/postbody.interface';
 
 class BlogCategoryService {
     private blogCategory = BlogCategoryModel;

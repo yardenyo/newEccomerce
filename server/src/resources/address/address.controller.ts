@@ -1,16 +1,12 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import Controller from '@/utils/interfaces/controller.interface';
-import HttpException from '@/utils/exceptions/http.exception';
+import { authMiddleware } from '@/middleware/auth.middleware';
 import SuccessResponse from '@/middleware/success.middleware';
 import validationMiddleware from '@/middleware/validation.middleware';
-import validate from '@/resources/address/address.validation';
 import AddressService from '@/resources/address/address.service';
-import {
-    authMiddleware,
-    creatorMiddleware,
-    adminMiddleware,
-} from '@/middleware/auth.middleware';
+import validate from '@/resources/address/address.validation';
+import HttpException from '@/utils/exceptions/http.exception';
+import Controller from '@/utils/interfaces/controller.interface';
 import validateDBId from '@/utils/validateDBId';
+import { NextFunction, Request, Response, Router } from 'express';
 
 class AddressController implements Controller {
     public path = '/addresses';

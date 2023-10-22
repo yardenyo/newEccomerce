@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
 import BlogCategory from '@/resources/blogCategory/blogCategory.interface';
+import { Schema, model } from 'mongoose';
 
 const BlogCategorySchema = new Schema(
     {

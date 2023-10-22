@@ -1,8 +1,8 @@
-import multer from 'multer';
-import sharp from 'sharp';
-import path from 'path';
+import { NextFunction, Request, Response } from 'express';
 import fs from 'fs';
-import { Request, Response, NextFunction } from 'express';
+import multer from 'multer';
+import path from 'path';
+import sharp from 'sharp';
 
 const imageUploadPath = path.join(__dirname, '../public/images');
 
@@ -105,4 +105,4 @@ const imageResizeMiddleware =
 const productImageResize = imageResizeMiddleware('products');
 const blogImageResize = imageResizeMiddleware('blogs');
 
-export { uploadPhoto, productImageResize, blogImageResize };
+export { blogImageResize, productImageResize, uploadPhoto };

@@ -1,5 +1,5 @@
-import Joi from 'joi';
 import Roles from '@/utils/enums/roles.enums';
+import Joi from 'joi';
 
 const createRole = Joi.object({
     name: Joi.string()

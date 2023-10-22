@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import Coupon from '@/resources/coupon/coupon.interface';
 import voucher_codes from 'voucher-code-generator';
 
 const CouponSchema = new Schema(

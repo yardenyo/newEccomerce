@@ -1,13 +1,13 @@
-import userModel from '@/resources/user/user.model';
 import roleModel from '@/resources/role/role.model';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
-import HttpException from '@/utils/exceptions/http.exception';
 import User from '@/resources/user/user.interface';
-import Roles from '@/utils/enums/roles.enums';
-import { verifyToken } from '@/utils/jwtToken';
+import userModel from '@/resources/user/user.model';
 import redisClient from '@/utils/config/redisConfig';
+import Roles from '@/utils/enums/roles.enums';
+import HttpException from '@/utils/exceptions/http.exception';
+import { verifyToken } from '@/utils/jwtToken';
 import { verifyRefreshToken } from '@/utils/refreshToken';
+import { NextFunction, Request, Response } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
 
 interface NewRequest extends Request {
     user?: User;
@@ -102,8 +102,8 @@ const verifyRefreshTokenMiddleware = async (
 };
 
 export {
+    adminMiddleware,
     authMiddleware,
     creatorMiddleware,
-    adminMiddleware,
     verifyRefreshTokenMiddleware,
 };

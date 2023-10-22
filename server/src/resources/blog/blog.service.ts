@@ -1,13 +1,13 @@
 import Blog from '@/resources/blog/blog.interface';
-import User from '@/resources/user/user.interface';
 import BlogModel from '@/resources/blog/blog.model';
-import userModel from '@/resources/user/user.model';
 import roleModel from '@/resources/role/role.model';
-import PostBody from '@/utils/interfaces/postbody.interface';
-import ConvertResponse from '@/utils/helpers/convertresponse.helper';
-import slugify from 'slugify';
+import User from '@/resources/user/user.interface';
+import userModel from '@/resources/user/user.model';
 import Roles from '@/utils/enums/roles.enums';
 import cloudinaryUploader from '@/utils/helpers/cloudinaryUploader.helper';
+import ConvertResponse from '@/utils/helpers/convertresponse.helper';
+import PostBody from '@/utils/interfaces/postbody.interface';
+import slugify from 'slugify';
 
 class BlogService {
     private blog = BlogModel;

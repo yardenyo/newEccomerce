@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
 import Role from '@/resources/role/role.interface';
 import Roles from '@/utils/enums/roles.enums';
+import { Schema, model } from 'mongoose';
 
 const RoleSchema = new Schema(
     {

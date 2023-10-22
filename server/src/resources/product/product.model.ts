@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
 import Product from '@/resources/product/product.interface';
 import Colors from '@/utils/enums/colors.enums';
+import { Schema, model } from 'mongoose';
 
 const ProductSchema = new Schema(
     {

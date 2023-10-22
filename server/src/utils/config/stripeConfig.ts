@@ -1,6 +1,6 @@
-import Stripe from 'stripe';
 import Product from '@/resources/product/product.interface';
 import User from '@/resources/user/user.interface';
+import Stripe from 'stripe';
 
 const createSession = async (products: Product[], user: User) => {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {

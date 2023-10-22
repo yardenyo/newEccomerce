@@ -1,8 +1,7 @@
 import Coupon from '@/resources/coupon/coupon.interface';
 import CouponModel from '@/resources/coupon/coupon.model';
-import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
-import slugify from 'slugify';
+import PostBody from '@/utils/interfaces/postbody.interface';
 
 class CouponService {
     private coupon = CouponModel;

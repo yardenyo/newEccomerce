@@ -1,17 +1,17 @@
+import {
+    authMiddleware,
+    verifyRefreshTokenMiddleware,
+} from '@/middleware/auth.middleware';
 import loginLimiter from '@/middleware/loginLimiter.middleware';
 import SuccessResponse from '@/middleware/success.middleware';
 import validationMiddleware from '@/middleware/validation.middleware';
-import {
-    verifyRefreshTokenMiddleware,
-    authMiddleware,
-} from '@/middleware/auth.middleware';
 import AuthService from '@/resources/auth/auth.service';
 import validate from '@/resources/auth/auth.validation';
 import Roles from '@/utils/enums/roles.enums';
 import HttpException from '@/utils/exceptions/http.exception';
 import Controller from '@/utils/interfaces/controller.interface';
-import { NextFunction, Request, Response, Router } from 'express';
 import validateDBId from '@/utils/validateDBId';
+import { NextFunction, Request, Response, Router } from 'express';
 
 class AuthController implements Controller {
     public path = '/auth';

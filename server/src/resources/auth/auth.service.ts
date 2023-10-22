@@ -2,9 +2,9 @@ import roleModel from '@/resources/role/role.model';
 import User from '@/resources/user/user.interface';
 import userModel from '@/resources/user/user.model';
 import redisClient from '@/utils/config/redisConfig';
+import sendEmail from '@/utils/helpers/sendEmail';
 import { generateToken } from '@/utils/jwtToken';
 import { generateRefreshToken } from '@/utils/refreshToken';
-import sendEmail from '@/utils/helpers/sendEmail';
 import crypto from 'crypto';
 
 class AuthService {

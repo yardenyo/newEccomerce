@@ -1,7 +1,7 @@
 import Brand from '@/resources/brand/brand.interface';
 import BrandModel from '@/resources/brand/brand.model';
-import PostBody from '@/utils/interfaces/postbody.interface';
 import ConvertResponse from '@/utils/helpers/convertresponse.helper';
+import PostBody from '@/utils/interfaces/postbody.interface';
 
 class BrandService {
     private brand = BrandModel;

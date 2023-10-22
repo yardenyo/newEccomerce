@@ -1,7 +1,7 @@
-import { Schema, model } from 'mongoose';
-import bcrypt from 'bcrypt';
 import User from '@/resources/user/user.interface';
+import bcrypt from 'bcrypt';
 import crypto from 'crypto';
+import { Schema, model } from 'mongoose';
 
 const UserSchema = new Schema(
     {
