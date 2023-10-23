@@ -2,7 +2,7 @@ import SignUp from "@/components/auth/SignUp";
 import SignIn from "@/components/auth/SignIn";
 function App() {
   return (
-    <main className="App">
+    <main className="App flex gap-4">
       <SignUp />
       <SignIn />
     </main>

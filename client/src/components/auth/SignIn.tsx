@@ -43,9 +43,9 @@ const SignIn: React.FC = () => {
   });
 
   return (
-    <div>
-      <h1>Sign In</h1>
-      <form onSubmit={formik.handleSubmit}>
+    <div className="flex flex-col gap-4">
+      <h1 className="text-xl text-red-500">Sign In</h1>
+      <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit}>
         <input
           type="text"
           id="email"
