@@ -38,7 +38,14 @@ const SignUp: React.FC = () => {
       lastName: Yup.string().required("Required"),
       email: Yup.string().email("Invalid email address").required("Required"),
       mobile: Yup.string().required("Required"),
-      password: Yup.string().required("Required"),
+      password: Yup.string()
+        .required("Required")
+        .min(8)
+        .max(32)
+        .matches(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
+          "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+        ),
     }),
     onSubmit: (values: FormValues) => {
       handleSubmit(values);
