@@ -1,8 +1,10 @@
 import Axios from "@/api/Axios";
 import { useFormik } from "formik";
 import React, { useState } from "react";
+import Helpers from "@/helpers/app.helpers";
 // import { Link } from "react-router-dom";
 import * as Yup from "yup";
+import { AxiosError } from "axios";
 
 interface FormValues {
   firstName: string;
@@ -18,10 +20,15 @@ const SignUp: React.FC = () => {
   const handleSubmit = async (values: FormValues) => {
     try {
       const response = await Axios.post("/auth/signup", values);
-      console.log(response);
+      const { data, message } = Helpers.handleAxiosSuccess(response);
+      console.log(data, message);
       // history.push("/login");
-    } catch (e) {
-      // setError(e.response.data.message);
+    } catch (e: unknown) {
+      if (e instanceof AxiosError) {
+        Helpers.handleAxiosError(e);
+      } else {
+        console.log(e);
+      }
     }
   };
 
