@@ -1,14 +1,12 @@
-import { useFormik } from "formik";
-import React, { useState } from "react";
-import Helpers from "@/helpers/app.helpers";
-import * as Yup from "yup";
-import { AxiosError } from "axios";
-import { SignUpPayload } from "@/types/auth";
 import authApi from "@/api/auth.api";
+import Helpers from "@/helpers/app.helpers";
+import { SignUpPayload } from "@/types/auth";
+import { AxiosError } from "axios";
+import { useFormik } from "formik";
+import React from "react";
+import * as Yup from "yup";
 
 const SignUp: React.FC = () => {
-  const [error] = useState<string>("");
-
   const handleSubmit = async (values: SignUpPayload) => {
     try {
       const response = await authApi.signUp(values);
@@ -116,7 +114,6 @@ const SignUp: React.FC = () => {
         <br />
         <button type="submit">Sign Up</button>
       </form>
-      {error && <p>{error}</p>}
     </div>
   );
 };
