@@ -16,7 +16,7 @@ const Users = () => {
         const response = await api.post("/users", {
           signal: controller.signal,
         });
-        const { data } = response.data;
+        const { data } = Helpers.handleAxiosSuccess(response);
         isMounted && setUsers(data);
       } catch (e: unknown) {
         if (e instanceof AxiosError) {
