@@ -3,15 +3,20 @@ import Helpers from "@/helpers/app.helpers";
 import { SignInPayload } from "@/types/auth";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useContext } from "react";
+import AuthContext from "@/context/AuthProvider";
 import * as Yup from "yup";
 
 const SignIn: React.FC = () => {
+  const { auth, setAuth } = useContext(AuthContext);
   const handleSubmit = async (values: SignInPayload) => {
     try {
       const response = await authApi.signIn(values);
-      const { data, message } = Helpers.handleAxiosSuccess(response);
-      console.log(data, message);
+      const { data } = Helpers.handleAxiosSuccess(response);
+      const user = data.user;
+      const accessToken = data.accessToken;
+      setAuth({ user, accessToken });
+      console.log(auth);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         Helpers.handleAxiosError(e);

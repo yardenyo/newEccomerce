@@ -1,5 +1,6 @@
 import roleModel from '@/resources/role/role.model';
 import User from '@/resources/user/user.interface';
+import Role from '@/resources/role/role.interface';
 import userModel from '@/resources/user/user.model';
 import settingsModel from '@/resources/setting/setting.model';
 import redisClient from '@/utils/config/redisConfig';
@@ -48,12 +49,16 @@ class AuthService {
         email: string,
         password: string,
     ): Promise<{
+        user: User;
+        userRole: Role;
         accessToken: string;
-        refreshToken: string;
     }> {
         try {
             const user = await this.user.findOne({ email });
             if (!user) throw new Error();
+
+            const userRole = await this.role.findById(user.role);
+            if (!userRole) throw new Error();
 
             const isValidPassword = await user.isValidPassword(password);
             if (!isValidPassword) throw new Error();
@@ -68,7 +73,7 @@ class AuthService {
 
             await this.redis.expire(user._id.toString(), 60 * 60 * 24 * 30);
 
-            return { accessToken, refreshToken };
+            return { user, userRole, accessToken };
         } catch (error) {
             throw new Error('Error signing in');
         }
@@ -76,7 +81,6 @@ class AuthService {
 
     public async refreshToken(id: string): Promise<{
         accessToken: string;
-        refreshToken: string;
     }> {
         try {
             if (!id) throw new Error();
@@ -90,7 +94,7 @@ class AuthService {
 
             await this.redis.expire(id.toString(), 60 * 60 * 24 * 30);
 
-            return { accessToken, refreshToken };
+            return { accessToken };
         } catch (error) {
             throw new Error('Error refreshing token');
         }

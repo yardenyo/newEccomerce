@@ -78,23 +78,19 @@ const verifyRefreshTokenMiddleware = async (
     next: NextFunction,
 ) => {
     try {
-        const { refreshToken } = req.body;
-        if (!refreshToken) throw new HttpException(401, 'Not Authorized');
+        const user = await userModel.findById(req.body.user?._id);
+        if (!user) throw new HttpException(401, 'Not Authorized');
 
-        const decoded = verifyRefreshToken(refreshToken);
-        if (typeof decoded === 'string')
-            throw new HttpException(401, 'Invalid token');
-
-        const redisData = await redisClient.get(decoded.id.toString());
-
+        const redisData = await redisClient.get(user._id.toString());
         if (!redisData) throw new HttpException(401, 'Not Authorized');
 
         const redisToken = JSON.parse(redisData).token;
+        if (!redisToken) throw new HttpException(401, 'Not Authorized');
 
-        if (refreshToken !== redisToken)
-            throw new HttpException(401, 'Not Authorized');
+        const decoded = verifyRefreshToken(redisToken) as JwtPayload;
+        if (!decoded) throw new HttpException(401, 'Not Authorized');
 
-        req.body.id = decoded.id;
+        req.body.user = user;
         next();
     } catch (error: any) {
         next();
