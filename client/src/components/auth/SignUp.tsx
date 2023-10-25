@@ -1,4 +1,4 @@
-import authApi from "@/api/auth.api";
+import api from "@/api/Api";
 import Helpers from "@/helpers/app.helpers";
 import { SignUpPayload } from "@/types/auth";
 import { AxiosError } from "axios";
@@ -9,7 +9,7 @@ import * as Yup from "yup";
 const SignUp: React.FC = () => {
   const handleSubmit = async (values: SignUpPayload) => {
     try {
-      const response = await authApi.signUp(values);
+      const response = await api.post("/auth/signup", values);
       const { data, message } = Helpers.handleAxiosSuccess(response);
       console.log(data, message);
     } catch (e: unknown) {

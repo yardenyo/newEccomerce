@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "@/components/Layout";
 import RequireAuth from "@/components/RequireAuth";
+import Home from "@/components/Home";
 import SignUp from "@/components/auth/SignUp";
 import SignIn from "@/components/auth/SignIn";
 import Unauthorized from "@/components/auth/Unauthorized";
@@ -12,7 +13,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* Public Routes */}
-        <Route path="/" element={<div>Home</div>} />
+        <Route path="/" element={<Home />} />
         <Route path="auth/sign-up" element={<SignUp />} />
         <Route path="auth/sign-in" element={<SignIn />} />
         <Route path="unauthorized" element={<Unauthorized />} />

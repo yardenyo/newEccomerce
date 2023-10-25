@@ -30,7 +30,7 @@ class AuthController implements Controller {
         );
         this.router.post(
             `${this.path}/signin`,
-            loginLimiter,
+            // loginLimiter,
             validationMiddleware(validate.signin),
             this.signin,
         );

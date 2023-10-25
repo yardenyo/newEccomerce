@@ -1,18 +1,21 @@
 import { useState, useEffect } from "react";
-import usersApi from "@/api/users.api";
 import { User } from "@/types";
 import { AxiosError } from "axios";
 import Helpers from "@/helpers/app.helpers";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const api = useAxiosPrivate();
 
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
     const getUsers = async () => {
       try {
-        const response = await usersApi.getUsers({}, controller.signal);
+        const response = await api.post("/users", {
+          signal: controller.signal,
+        });
         const { data } = response.data;
         isMounted && setUsers(data);
       } catch (e: unknown) {

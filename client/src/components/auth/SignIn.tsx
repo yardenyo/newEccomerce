@@ -1,4 +1,3 @@
-import authApi from "@/api/auth.api";
 import Helpers from "@/helpers/app.helpers";
 import { SignInPayload } from "@/types/auth";
 import { AxiosError } from "axios";
@@ -7,6 +6,7 @@ import useAuth from "@/hooks/useAuth";
 import React from "react";
 import * as Yup from "yup";
 import { useNavigate, useLocation } from "react-router-dom";
+import api from "@/api/Api";
 
 const SignIn: React.FC = () => {
   const { setAuth } = useAuth();
@@ -16,7 +16,7 @@ const SignIn: React.FC = () => {
 
   const handleSubmit = async (values: SignInPayload) => {
     try {
-      const response = await authApi.signIn(values);
+      const response = await api.post("/auth/signin", values);
       const { data } = Helpers.handleAxiosSuccess(response);
       const user = data.user;
       const accessToken = data.accessToken;
