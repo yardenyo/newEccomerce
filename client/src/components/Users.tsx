@@ -3,10 +3,13 @@ import { User } from "@/types";
 import { AxiosError } from "axios";
 import Helpers from "@/helpers/app.helpers";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const api = useAxiosPrivate();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     let isMounted = true;
@@ -24,6 +27,10 @@ const Users = () => {
         } else {
           console.log(e);
         }
+        navigate("/auth/sign-in", {
+          state: { from: location },
+          replace: true,
+        });
       }
     };
 
@@ -33,7 +40,7 @@ const Users = () => {
       isMounted = false;
       controller.abort();
     };
-  }, []);
+  }, [api, navigate, location]);
 
   return (
     <div>
