@@ -18,6 +18,7 @@ const useRefreshToken = () => {
           accessToken: data.accessToken,
         };
       });
+      return data.accessToken;
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         Helpers.handleAxiosError(e);
