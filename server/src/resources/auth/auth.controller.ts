@@ -34,7 +34,7 @@ class AuthController implements Controller {
             validationMiddleware(validate.signin),
             this.signin,
         );
-        this.router.post(
+        this.router.get(
             `${this.path}/refresh-token`,
             authMiddleware,
             verifyRefreshTokenMiddleware,

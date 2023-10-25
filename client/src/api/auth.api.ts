@@ -1,10 +1,11 @@
 import api from "@/api/Api";
 import { SignUpPayload, SignInPayload } from "@/types/auth";
 
-const auth = "/auth";
+const resource = "/auth";
 
 export default {
-  signUp: (payload: SignUpPayload) => api.post(`${auth}/signup`, payload),
-  signIn: (payload: SignInPayload) => api.post(`${auth}/signin`, payload),
-  signOut: () => api.post(`${auth}/signout`),
+  signUp: (payload: SignUpPayload) => api.post(`${resource}/signup`, payload),
+  signIn: (payload: SignInPayload) => api.post(`${resource}/signin`, payload),
+  signOut: () => api.get(`${resource}/signout`),
+  refreshToken: () => api.get(`${resource}/refresh-token`),
 };

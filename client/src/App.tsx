@@ -3,8 +3,9 @@ import Layout from "@/components/Layout";
 import RequireAuth from "@/components/RequireAuth";
 import SignUp from "@/components/auth/SignUp";
 import SignIn from "@/components/auth/SignIn";
-import { Roles } from "@/enums";
 import Unauthorized from "@/components/auth/Unauthorized";
+import AdminDashboard from "@/components/AdminDashboard";
+import { Roles } from "@/enums";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
 
         {/* Admin Routes */}
         <Route element={<RequireAuth allowedRoles={[Roles.ADMIN]} />}>
-          <Route path="admin-dashboard" element={<div>Admin Dashboard</div>} />
+          <Route path="admin-dashboard" element={<AdminDashboard />} />
         </Route>
 
         {/* Catch All */}
