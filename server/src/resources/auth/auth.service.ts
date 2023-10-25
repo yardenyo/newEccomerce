@@ -52,6 +52,7 @@ class AuthService {
         user: User;
         userRole: Role;
         accessToken: string;
+        refreshToken: string;
     }> {
         try {
             const user = await this.user.findOne({ email });
@@ -73,7 +74,7 @@ class AuthService {
 
             await this.redis.expire(user._id.toString(), 60 * 60 * 24 * 30);
 
-            return { user, userRole, accessToken };
+            return { user, userRole, accessToken, refreshToken };
         } catch (error) {
             throw new Error('Error signing in');
         }
@@ -81,6 +82,7 @@ class AuthService {
 
     public async refreshToken(id: string): Promise<{
         accessToken: string;
+        refreshToken: string;
     }> {
         try {
             if (!id) throw new Error();
@@ -94,7 +96,7 @@ class AuthService {
 
             await this.redis.expire(id.toString(), 60 * 60 * 24 * 30);
 
-            return { accessToken };
+            return { accessToken, refreshToken };
         } catch (error) {
             throw new Error('Error refreshing token');
         }

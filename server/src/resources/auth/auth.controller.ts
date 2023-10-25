@@ -36,7 +36,6 @@ class AuthController implements Controller {
         );
         this.router.get(
             `${this.path}/refresh-token`,
-            authMiddleware,
             verifyRefreshTokenMiddleware,
             this.refreshToken,
         );
@@ -82,8 +81,14 @@ class AuthController implements Controller {
     ): Promise<void> => {
         try {
             const { email, password } = req.body;
-            const { user, userRole, accessToken } =
+            const { user, userRole, accessToken, refreshToken } =
                 await this.AuthService.signin(email, password);
+
+            res.cookie('refreshToken', refreshToken, {
+                // secure: true,
+                httpOnly: true,
+                expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            });
 
             res.json(
                 new SuccessResponse('User signed in successfully', {
@@ -110,7 +115,14 @@ class AuthController implements Controller {
         try {
             const { id } = req.body.user;
             await validateDBId(id);
-            const { accessToken } = await this.AuthService.refreshToken(id);
+            const { accessToken, refreshToken } =
+                await this.AuthService.refreshToken(id);
+
+            res.cookie('refreshToken', refreshToken, {
+                // secure: true,
+                httpOnly: true,
+                expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            });
 
             res.json(
                 new SuccessResponse('Token refreshed successfully', {
@@ -130,6 +142,8 @@ class AuthController implements Controller {
         try {
             const { _id } = req.body.user;
             await this.AuthService.signout(_id);
+
+            res.clearCookie('refreshToken');
 
             res.json(new SuccessResponse('User signed out successfully'));
         } catch (error: any) {

@@ -6,9 +6,10 @@ import useAuth from "@/hooks/useAuth";
 import React from "react";
 import * as Yup from "yup";
 import { useNavigate, useLocation } from "react-router-dom";
-import api from "@/api/Api";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 
 const SignIn: React.FC = () => {
+  const api = useAxiosPrivate();
   const { setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
