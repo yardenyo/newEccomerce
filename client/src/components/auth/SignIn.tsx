@@ -1,27 +1,26 @@
+import { useSigninMutation } from "@/features/auth/authApiSlice";
+import { setCredentials } from "@/features/auth/authSlice";
 import Helpers from "@/helpers/app.helpers";
 import { SignInPayload } from "@/types/auth";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";
-import useAuth from "@/hooks/useAuth";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { useNavigate, useLocation } from "react-router-dom";
-import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 
 const SignIn: React.FC = () => {
-  const api = useAxiosPrivate();
-  const { setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  const [login] = useSigninMutation();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (values: SignInPayload) => {
     try {
-      const response = await api.post("/auth/signin", values);
+      const response = await login(values).unwrap();
       const { data } = Helpers.handleAxiosSuccess(response);
-      const user = data.user;
-      const accessToken = data.accessToken;
-      setAuth({ user, accessToken });
+      dispatch(setCredentials(data));
       navigate(from, { replace: true });
     } catch (e: unknown) {
       if (e instanceof AxiosError) {

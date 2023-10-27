@@ -1,23 +1,19 @@
-import api from "@/api/Api";
-import Helpers from "@/helpers/app.helpers";
+import { useSignupMutation } from "@/features/auth/authApiSlice";
 import { SignUpPayload } from "@/types/auth";
-import { AxiosError } from "axios";
 import { useFormik } from "formik";
 import React from "react";
+import { useNavigate } from "react-router";
 import * as Yup from "yup";
 
 const SignUp: React.FC = () => {
+  const [signup] = useSignupMutation();
+  const navigate = useNavigate();
   const handleSubmit = async (values: SignUpPayload) => {
     try {
-      const response = await api.post("/auth/signup", values);
-      const { data, message } = Helpers.handleAxiosSuccess(response);
-      console.log(data, message);
-    } catch (e: unknown) {
-      if (e instanceof AxiosError) {
-        Helpers.handleAxiosError(e);
-      } else {
-        console.log(e);
-      }
+      await signup(values).unwrap();
+      navigate("/auth/sign-in", { replace: true });
+    } catch (e) {
+      console.log(e);
     }
   };
 

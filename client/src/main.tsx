@@ -1,18 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "@/App.tsx";
-import { AuthProvider } from "@/context/AuthProvider";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "@/globals.css";
+import { store } from "@/store";
+import { Provider } from "react-redux";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
+    <Provider store={store}>
+      <BrowserRouter>
         <Routes>
           <Route path="/*" element={<App />} />
         </Routes>
-      </AuthProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );

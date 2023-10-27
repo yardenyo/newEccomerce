@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
-import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { AxiosError } from "axios";
 import Helpers from "@/helpers/app.helpers";
-import useAuth from "@/hooks/useAuth";
+import { useSignoutMutation } from "@/features/auth/authApiSlice";
+import { useDispatch } from "react-redux";
+import { logout } from "@/features/auth/authSlice";
 
 const Home = () => {
-  const { setAuth } = useAuth();
-  const api = useAxiosPrivate();
-
+  const dispatch = useDispatch();
+  const [signout] = useSignoutMutation();
   const signOut = async () => {
     try {
-      await api.get("/auth/signout");
-      setAuth({ user: null, accessToken: null });
+      await signout({}).unwrap();
+      dispatch(logout());
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         Helpers.handleAxiosError(e);

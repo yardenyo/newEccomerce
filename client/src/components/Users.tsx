@@ -1,53 +1,31 @@
-import { useState, useEffect } from "react";
+import { useGetUsersQuery } from "@/features/users/usersApiSlice";
 import { User } from "@/types";
-import { AxiosError } from "axios";
 import Helpers from "@/helpers/app.helpers";
-import useAxiosPrivate from "@/hooks/useAxiosPrivate";
-import { useNavigate, useLocation } from "react-router-dom";
+import { AxiosError } from "axios";
 
 const Users = () => {
-  const [users, setUsers] = useState([]);
-  const api = useAxiosPrivate();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { data: response } = useGetUsersQuery({});
+  let data;
 
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-    const getUsers = async () => {
-      try {
-        const response = await api.post("/users", {
-          signal: controller.signal,
-        });
-        const { data } = Helpers.handleAxiosSuccess(response);
-        isMounted && setUsers(data);
-      } catch (e: unknown) {
-        if (e instanceof AxiosError) {
-          Helpers.handleAxiosError(e);
-        } else {
-          console.log(e);
-        }
-        navigate("/auth/sign-in", {
-          state: { from: location },
-          replace: true,
-        });
-      }
-    };
-
-    getUsers();
-
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, [api, navigate, location]);
+  try {
+    const { data: responseData } = Helpers.handleAxiosSuccess(response);
+    data = responseData;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      Helpers.handleAxiosError(e);
+    } else {
+      console.log(e);
+    }
+  }
 
   return (
     <div>
       <h1>Users</h1>
       <ul>
-        {users.map((user: User) => (
-          <li key={user._id}>{user.email}</li>
+        {data?.map((user: User) => (
+          <li key={user._id}>
+            <p>{user.email}</p>
+          </li>
         ))}
       </ul>
     </div>
