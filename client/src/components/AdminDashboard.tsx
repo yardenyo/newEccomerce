@@ -6,7 +6,7 @@ import { selectCurrentUser } from "@/features/auth/authSlice";
 const AdminDashboard = () => {
   const user = useSelector(selectCurrentUser);
   return (
-    <section>
+    <section className="bg-white dark:bg-black dark:text-white">
       <h1>
         Admin Dashboard - {user?.firstName} {user?.lastName}
       </h1>

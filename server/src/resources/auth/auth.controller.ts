@@ -209,7 +209,8 @@ class AuthController implements Controller {
         try {
             const { id } = req.body.user;
             await validateDBId(id);
-            const { user, role } = await this.AuthService.getUser(id);
+            const { user, role, userSettings } =
+                await this.AuthService.getUser(id);
 
             res.json(
                 new SuccessResponse('User fetched successfully', {
@@ -223,7 +224,7 @@ class AuthController implements Controller {
                         cart: user.cart,
                         wishlist: user.wishlist,
                         address: user.address,
-                        userSettings: user.userSettings,
+                        userSettings: userSettings,
                     },
                 }),
             );
