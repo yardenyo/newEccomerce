@@ -1,5 +1,5 @@
 import { useSigninMutation } from "@/features/auth/authApiSlice";
-import { setCredentials } from "@/features/auth/authSlice";
+import { setAccessToken } from "@/features/auth/authSlice";
 import Helpers from "@/helpers/app.helpers";
 import { SignInPayload } from "@/types/auth";
 import { AxiosError } from "axios";
@@ -20,7 +20,7 @@ const SignIn: React.FC = () => {
     try {
       const response = await login(values).unwrap();
       const { data } = Helpers.handleAxiosSuccess(response);
-      dispatch(setCredentials(data));
+      dispatch(setAccessToken(data));
       navigate(from, { replace: true });
     } catch (e: unknown) {
       if (e instanceof AxiosError) {

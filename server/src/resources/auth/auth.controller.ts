@@ -50,6 +50,7 @@ class AuthController implements Controller {
             validationMiddleware(validate.resetPassword),
             this.resetPassword,
         );
+        this.router.get(`${this.path}/get-user`, authMiddleware, this.getUser);
     }
 
     private signup = async (
@@ -81,24 +82,19 @@ class AuthController implements Controller {
     ): Promise<void> => {
         try {
             const { email, password } = req.body;
-            const { user, userRole, accessToken, refreshToken } =
-                await this.AuthService.signin(email, password);
+            const { accessToken, refreshToken } = await this.AuthService.signin(
+                email,
+                password,
+            );
 
             res.cookie('refreshToken', refreshToken, {
                 secure: true,
                 httpOnly: true,
-                expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                expires: new Date(Date.now() + 60 * 60 * 1000),
             });
 
             res.json(
                 new SuccessResponse('User signed in successfully', {
-                    user: {
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        email: user.email,
-                        mobile: user.mobile,
-                        role: userRole.name,
-                    },
                     accessToken,
                 }),
             );
@@ -121,7 +117,7 @@ class AuthController implements Controller {
             res.cookie('refreshToken', refreshToken, {
                 secure: true,
                 httpOnly: true,
-                expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                expires: new Date(Date.now() + 60 * 60 * 1000),
             });
 
             res.json(
@@ -186,6 +182,37 @@ class AuthController implements Controller {
             );
 
             res.json(new SuccessResponse('Password reset successfully'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private getUser = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { id } = req.body.user;
+            await validateDBId(id);
+            const { user, role } = await this.AuthService.getUser(id);
+
+            res.json(
+                new SuccessResponse('User fetched successfully', {
+                    user: {
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email,
+                        mobile: user.mobile,
+                        role: role.name,
+                        isBlocked: user.isBlocked,
+                        cart: user.cart,
+                        wishlist: user.wishlist,
+                        address: user.address,
+                        userSettings: user.userSettings,
+                    },
+                }),
+            );
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
