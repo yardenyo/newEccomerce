@@ -1,7 +1,8 @@
+import Role from '@/resources/role/role.interface';
 import roleModel from '@/resources/role/role.model';
+import settingsModel from '@/resources/setting/setting.model';
 import User from '@/resources/user/user.interface';
 import userModel from '@/resources/user/user.model';
-import settingsModel from '@/resources/setting/setting.model';
 import redisClient from '@/utils/config/redisConfig';
 import sendEmail from '@/utils/helpers/sendEmail';
 import { generateToken } from '@/utils/jwtToken';
@@ -66,7 +67,7 @@ class AuthService {
                 JSON.stringify({ token: refreshToken }),
             );
 
-            await this.redis.expire(user._id.toString(), 60 * 60 * 24 * 30);
+            await this.redis.expire(user._id.toString(), 60 * 60);
 
             return { accessToken, refreshToken };
         } catch (error) {
@@ -88,7 +89,7 @@ class AuthService {
                 JSON.stringify({ token: refreshToken }),
             );
 
-            await this.redis.expire(id.toString(), 60 * 60 * 24 * 30);
+            await this.redis.expire(id.toString(), 60 * 60);
 
             return { accessToken, refreshToken };
         } catch (error) {
@@ -166,6 +167,19 @@ class AuthService {
             await user.save();
         } catch (error) {
             throw new Error('Error resetting password');
+        }
+    }
+
+    public async getUser(id: string): Promise<{ user: User; role: Role }> {
+        try {
+            if (!id) throw new Error();
+            const user = await this.user.findById(id);
+            if (!user) throw new Error();
+            const role = await this.role.findById(user.role);
+            if (!role) throw new Error();
+            return { user, role };
+        } catch (error) {
+            throw new Error('Error getting user');
         }
     }
 }

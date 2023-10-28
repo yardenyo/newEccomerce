@@ -78,26 +78,32 @@ const verifyRefreshTokenMiddleware = async (
     next: NextFunction,
 ) => {
     try {
-        const { refreshToken } = req.body;
+        const { refreshToken } = req.cookies;
         if (!refreshToken) throw new HttpException(401, 'Not Authorized');
 
         const decoded = verifyRefreshToken(refreshToken);
         if (typeof decoded === 'string')
-            throw new HttpException(401, 'Invalid token');
-
-        const redisData = await redisClient.get(decoded.id.toString());
-
-        if (!redisData) throw new HttpException(401, 'Not Authorized');
-
-        const redisToken = JSON.parse(redisData).token;
-
-        if (refreshToken !== redisToken)
             throw new HttpException(401, 'Not Authorized');
 
-        req.body.id = decoded.id;
+        const redisData = await redisClient.get(decoded.id.toString());
+        if (!redisData) {
+            res.clearCookie('refreshToken');
+            throw new HttpException(401, 'Not Authorized');
+        }
+
+        const redisToken = JSON.parse(redisData).token;
+        if (refreshToken !== redisToken) {
+            res.clearCookie('refreshToken');
+            throw new HttpException(401, 'Not Authorized');
+        }
+        const user = await userModel.findById(decoded.id);
+        if (!user) throw new HttpException(401, 'Not Authorized');
+
+        req.body.user = user;
+
         next();
     } catch (error: any) {
-        next();
+        next(error);
     }
 };
 

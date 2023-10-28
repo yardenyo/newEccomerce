@@ -1,34 +1,19 @@
-import Axios from "@/api/Axios";
+import { useSignupMutation } from "@/features/auth/authApiSlice";
+import { SignUpPayload } from "@/types/auth";
 import { useFormik } from "formik";
-import React, { useState } from "react";
-import Helpers from "@/helpers/app.helpers";
-// import { Link } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router";
 import * as Yup from "yup";
-import { AxiosError } from "axios";
-
-interface FormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  mobile: string;
-  password: string;
-}
 
 const SignUp: React.FC = () => {
-  const [error] = useState<string>("");
-
-  const handleSubmit = async (values: FormValues) => {
+  const [signup] = useSignupMutation();
+  const navigate = useNavigate();
+  const handleSubmit = async (values: SignUpPayload) => {
     try {
-      const response = await Axios.post("/auth/signup", values);
-      const { data, message } = Helpers.handleAxiosSuccess(response);
-      console.log(data, message);
-      // history.push("/login");
-    } catch (e: unknown) {
-      if (e instanceof AxiosError) {
-        Helpers.handleAxiosError(e);
-      } else {
-        console.log(e);
-      }
+      await signup(values).unwrap();
+      navigate("/auth/sign-in", { replace: true });
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -54,7 +39,7 @@ const SignUp: React.FC = () => {
           "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
         ),
     }),
-    onSubmit: (values: FormValues) => {
+    onSubmit: (values: SignUpPayload) => {
       handleSubmit(values);
     },
   });
@@ -125,8 +110,6 @@ const SignUp: React.FC = () => {
         <br />
         <button type="submit">Sign Up</button>
       </form>
-      {error && <p>{error}</p>}
-      <p>{/* Already have an account? <Link to="/login">Login</Link> */}</p>
     </div>
   );
 };

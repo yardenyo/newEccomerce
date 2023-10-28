@@ -34,9 +34,8 @@ class AuthController implements Controller {
             validationMiddleware(validate.signin),
             this.signin,
         );
-        this.router.post(
+        this.router.get(
             `${this.path}/refresh-token`,
-            validationMiddleware(validate.refreshToken),
             verifyRefreshTokenMiddleware,
             this.refreshToken,
         );
@@ -51,6 +50,7 @@ class AuthController implements Controller {
             validationMiddleware(validate.resetPassword),
             this.resetPassword,
         );
+        this.router.get(`${this.path}/get-user`, authMiddleware, this.getUser);
     }
 
     private signup = async (
@@ -87,10 +87,21 @@ class AuthController implements Controller {
                 password,
             );
 
+            res.cookie('refreshToken', refreshToken, {
+                secure: true,
+                httpOnly: true,
+                expires: new Date(Date.now() + 60 * 60 * 1000),
+            });
+
+            res.cookie('isAuthenticated', true, {
+                secure: true,
+                httpOnly: false,
+                expires: new Date(Date.now() + 60 * 60 * 1000),
+            });
+
             res.json(
                 new SuccessResponse('User signed in successfully', {
                     accessToken,
-                    refreshToken,
                 }),
             );
         } catch (error: any) {
@@ -104,15 +115,26 @@ class AuthController implements Controller {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { id } = req.body;
+            const { id } = req.body.user;
             await validateDBId(id);
             const { accessToken, refreshToken } =
                 await this.AuthService.refreshToken(id);
 
+            res.cookie('refreshToken', refreshToken, {
+                secure: true,
+                httpOnly: true,
+                expires: new Date(Date.now() + 60 * 60 * 1000),
+            });
+
+            res.cookie('isAuthenticated', true, {
+                secure: true,
+                httpOnly: false,
+                expires: new Date(Date.now() + 60 * 60 * 1000),
+            });
+
             res.json(
                 new SuccessResponse('Token refreshed successfully', {
                     accessToken,
-                    refreshToken,
                 }),
             );
         } catch (error: any) {
@@ -128,6 +150,10 @@ class AuthController implements Controller {
         try {
             const { _id } = req.body.user;
             await this.AuthService.signout(_id);
+
+            res.clearCookie('refreshToken');
+
+            res.clearCookie('isAuthenticated');
 
             res.json(new SuccessResponse('User signed out successfully'));
         } catch (error: any) {
@@ -170,6 +196,37 @@ class AuthController implements Controller {
             );
 
             res.json(new SuccessResponse('Password reset successfully'));
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private getUser = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { id } = req.body.user;
+            await validateDBId(id);
+            const { user, role } = await this.AuthService.getUser(id);
+
+            res.json(
+                new SuccessResponse('User fetched successfully', {
+                    user: {
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email,
+                        mobile: user.mobile,
+                        role: role.name,
+                        isBlocked: user.isBlocked,
+                        cart: user.cart,
+                        wishlist: user.wishlist,
+                        address: user.address,
+                        userSettings: user.userSettings,
+                    },
+                }),
+            );
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
