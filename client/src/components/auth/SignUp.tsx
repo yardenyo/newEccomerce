@@ -4,6 +4,9 @@ import { useFormik } from "formik";
 import React from "react";
 import { useNavigate } from "react-router";
 import * as Yup from "yup";
+import signPages from "@/assets/images/signPages.jpg";
+import InputField from "@/components/InputField";
+import CTAButton from "@/components/CTAButton";
 
 const SignUp: React.FC = () => {
   const [signup] = useSignupMutation();
@@ -45,71 +48,80 @@ const SignUp: React.FC = () => {
   });
 
   return (
-    <div>
-      <h1>Sign Up</h1>
-      <form onSubmit={formik.handleSubmit}>
-        <input
-          type="text"
-          id="firstName"
-          name="firstName"
-          placeholder="First Name"
-          onChange={formik.handleChange}
-          value={formik.values.firstName}
+    <div className="flex flex-col md:flex-row h-screen">
+      <div className="md:w-1/2 bg-gray-100 flex flex-col justify-center items-center">
+        <img
+          src={signPages}
+          alt="Sign Up"
+          className="w-screen h-screen object-cover"
         />
-        {formik.errors.firstName && formik.touched.firstName && (
-          <div>{formik.errors.firstName}</div>
-        )}
-        <br />
-        <input
-          type="text"
-          id="lastName"
-          name="lastName"
-          placeholder="Last Name"
-          onChange={formik.handleChange}
-          value={formik.values.lastName}
-        />
-        {formik.errors.lastName && formik.touched.lastName && (
-          <div>{formik.errors.lastName}</div>
-        )}
-        <br />
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-          onChange={formik.handleChange}
-          value={formik.values.email}
-        />
-        {formik.errors.email && formik.touched.email && (
-          <div>{formik.errors.email}</div>
-        )}
-        <br />
-        <input
-          type="text"
-          id="mobile"
-          name="mobile"
-          placeholder="Mobile"
-          onChange={formik.handleChange}
-          value={formik.values.mobile}
-        />
-        {formik.errors.mobile && formik.touched.mobile && (
-          <div>{formik.errors.mobile}</div>
-        )}
-        <br />
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-        />
-        {formik.errors.password && formik.touched.password && (
-          <div>{formik.errors.password}</div>
-        )}
-        <br />
-        <button type="submit">Sign Up</button>
-      </form>
+      </div>
+      <div className="md:w-1/2 bg-white flex flex-col justify-center items-center">
+        <div className="form p-4 w-full max-w-md">
+          <div className="title flex flex-col gap-4 py-4">
+            <h1 className="text-3xl font-bold">Sign Up</h1>
+            <p className="text-gray-500">
+              Already have an account?{" "}
+              <a href="/auth/sign-in" className="text-green-400">
+                Sign In
+              </a>
+            </p>
+          </div>
+          <form onSubmit={formik.handleSubmit}>
+            <InputField
+              id="firstName"
+              name="firstName"
+              type="text"
+              label="First name"
+              value={formik.values.firstName}
+              onChange={formik.handleChange}
+              errors={formik.errors.firstName}
+              touched={formik.touched.firstName}
+            />
+            <InputField
+              id="lastName"
+              name="lastName"
+              type="text"
+              label="Last name"
+              value={formik.values.lastName}
+              onChange={formik.handleChange}
+              errors={formik.errors.lastName}
+              touched={formik.touched.lastName}
+            />
+            <InputField
+              id="email"
+              name="email"
+              type="email"
+              label="Email address"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              errors={formik.errors.email}
+              touched={formik.touched.email}
+            />
+            <InputField
+              id="mobile"
+              name="mobile"
+              type="text"
+              label="Mobile"
+              value={formik.values.mobile}
+              onChange={formik.handleChange}
+              errors={formik.errors.mobile}
+              touched={formik.touched.mobile}
+            />
+            <InputField
+              id="password"
+              name="password"
+              type="password"
+              label="Password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              errors={formik.errors.password}
+              touched={formik.touched.password}
+            />
+            <CTAButton label="Sign Up" type="submit" />
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
