@@ -1,5 +1,6 @@
 import Role from '@/resources/role/role.interface';
 import roleModel from '@/resources/role/role.model';
+import UserSettings from '@/resources/setting/setting.interface';
 import settingsModel from '@/resources/setting/setting.model';
 import User from '@/resources/user/user.interface';
 import userModel from '@/resources/user/user.model';
@@ -170,14 +171,18 @@ class AuthService {
         }
     }
 
-    public async getUser(id: string): Promise<{ user: User; role: Role }> {
+    public async getUser(
+        id: string,
+    ): Promise<{ user: User; role: Role; userSettings: UserSettings }> {
         try {
             if (!id) throw new Error();
             const user = await this.user.findById(id);
             if (!user) throw new Error();
             const role = await this.role.findById(user.role);
             if (!role) throw new Error();
-            return { user, role };
+            const userSettings = await this.setting.findById(user.userSettings);
+            if (!userSettings) throw new Error();
+            return { user, role, userSettings };
         } catch (error) {
             throw new Error('Error getting user');
         }
