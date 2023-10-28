@@ -93,6 +93,12 @@ class AuthController implements Controller {
                 expires: new Date(Date.now() + 60 * 60 * 1000),
             });
 
+            res.cookie('isAuthenticated', true, {
+                secure: true,
+                httpOnly: false,
+                expires: new Date(Date.now() + 60 * 60 * 1000),
+            });
+
             res.json(
                 new SuccessResponse('User signed in successfully', {
                     accessToken,
@@ -120,6 +126,12 @@ class AuthController implements Controller {
                 expires: new Date(Date.now() + 60 * 60 * 1000),
             });
 
+            res.cookie('isAuthenticated', true, {
+                secure: true,
+                httpOnly: false,
+                expires: new Date(Date.now() + 60 * 60 * 1000),
+            });
+
             res.json(
                 new SuccessResponse('Token refreshed successfully', {
                     accessToken,
@@ -140,6 +152,8 @@ class AuthController implements Controller {
             await this.AuthService.signout(_id);
 
             res.clearCookie('refreshToken');
+
+            res.clearCookie('isAuthenticated');
 
             res.json(new SuccessResponse('User signed out successfully'));
         } catch (error: any) {

@@ -5,14 +5,20 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "@/globals.css";
 import { store } from "@/store";
 import { Provider } from "react-redux";
+import { CookiesProvider } from "react-cookie";
+import AuthMiddleware from "@/helpers/authMiddleware";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/*" element={<App />} />
-        </Routes>
+        <CookiesProvider>
+          <AuthMiddleware>
+            <Routes>
+              <Route path="/*" element={<App />} />
+            </Routes>
+          </AuthMiddleware>
+        </CookiesProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>
