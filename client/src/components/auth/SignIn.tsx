@@ -8,6 +8,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import InputField from "@/components/InputField";
+import signPages from "@/assets/images/signPages.jpg";
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
@@ -53,33 +55,54 @@ const SignIn: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-xl text-red-500">Sign In</h1>
-      <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit}>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          placeholder="Email"
-          onChange={formik.handleChange}
-          value={formik.values.email}
+    <div className="flex flex-col md:flex-row h-screen">
+      <div className="md:w-1/2 bg-gray-100 flex flex-col justify-center items-center">
+        <img
+          src={signPages}
+          alt="Sign In"
+          className="w-screen md:w-full h-auto md:h-screen"
         />
-        {formik.touched.email && formik.errors.email ? (
-          <div>{formik.errors.email}</div>
-        ) : null}
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-        />
-        {formik.touched.password && formik.errors.password ? (
-          <div>{formik.errors.password}</div>
-        ) : null}
-        <button type="submit">Submit</button>
-      </form>
+      </div>
+      <div className="md:w-1/2 bg-white flex flex-col justify-center items-center">
+        <div className="form p-4 w-full max-w-md">
+          <div className="title flex flex-col gap-4 py-4">
+            <h1 className="text-3xl font-bold">Sign In</h1>
+            <p className="text-gray-500">
+              Don't have an account yet?{" "}
+              <a href="/auth/sign-up" className="text-green-400">
+                Sign Up
+              </a>
+            </p>
+          </div>
+          <form onSubmit={formik.handleSubmit}>
+            <InputField
+              id="email"
+              name="email"
+              type="text"
+              label="Email address"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              errors={formik.errors.email}
+              touched={formik.touched.email}
+            />
+            <InputField
+              id="password"
+              name="password"
+              type="password"
+              label="Password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              errors={formik.errors.password}
+              touched={formik.touched.password}
+            />
+            <div className="input-field mt-4">
+              <button type="submit" className="w-full btn btn-primary">
+                Sign In
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

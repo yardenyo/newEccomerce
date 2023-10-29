@@ -52,7 +52,7 @@ const SignUp: React.FC = () => {
         <img
           src={signPages}
           alt="Sign Up"
-          className="w-screen h-screen object-cover"
+          className="w-screen md:w-full h-auto md:h-screen"
         />
       </div>
       <div className="md:w-1/2 bg-white flex flex-col justify-center items-center">
