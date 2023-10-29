@@ -6,7 +6,6 @@ import { useNavigate } from "react-router";
 import * as Yup from "yup";
 import signPages from "@/assets/images/signPages.jpg";
 import InputField from "@/components/InputField";
-import CTAButton from "@/components/CTAButton";
 
 const SignUp: React.FC = () => {
   const [signup] = useSignupMutation();
@@ -118,7 +117,11 @@ const SignUp: React.FC = () => {
               errors={formik.errors.password}
               touched={formik.touched.password}
             />
-            <CTAButton label="Sign Up" type="submit" />
+            <div className="input-field mt-4">
+              <button type="submit" className="w-full btn btn-primary">
+                Sign Up
+              </button>
+            </div>
           </form>
         </div>
       </div>
