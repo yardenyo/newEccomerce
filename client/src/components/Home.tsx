@@ -1,23 +1,22 @@
 import { Link } from "react-router-dom";
-import { AxiosError } from "axios";
-import Helpers from "@/helpers/app.helpers";
 import { useSignoutMutation } from "@/features/auth/authApiSlice";
 import { useDispatch } from "react-redux";
 import { logout } from "@/features/auth/authSlice";
+import useToast from "@/hooks/useToast";
+import { ErrorResponse } from "@/types";
 
 const Home = () => {
   const dispatch = useDispatch();
   const [signout] = useSignoutMutation();
+  const toast = useToast();
+
   const signOut = async () => {
     try {
       await signout({}).unwrap();
       dispatch(logout());
     } catch (e: unknown) {
-      if (e instanceof AxiosError) {
-        Helpers.handleAxiosError(e);
-      } else {
-        console.log(e);
-      }
+      const error = e as ErrorResponse;
+      toast.toastError(error.data.message);
     }
   };
   return (

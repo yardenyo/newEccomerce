@@ -7,16 +7,23 @@ import * as Yup from "yup";
 import signPages from "@/assets/images/signPages.jpg";
 import InputField from "@/components/InputField";
 import CheckBox from "@/components/CheckBox";
+import useToast from "@/hooks/useToast";
+import { ErrorResponse } from "@/types";
+import Helpers from "@/helpers/app.helpers";
 
 const SignUp: React.FC = () => {
   const [signup] = useSignupMutation();
   const navigate = useNavigate();
+  const toast = useToast();
   const handleSubmit = async (values: SignUpPayload) => {
     try {
-      await signup(values).unwrap();
+      const response = await signup(values).unwrap();
+      const { message } = Helpers.handleAxiosSuccess(response);
+      toast.toastSuccess(message);
       navigate("/auth/sign-in", { replace: true });
-    } catch (e) {
-      console.log(e);
+    } catch (e: unknown) {
+      const error = e as ErrorResponse;
+      toast.toastError(error.data.message);
     }
   };
 

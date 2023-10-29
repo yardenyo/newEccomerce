@@ -2,7 +2,6 @@ import { useSigninMutation } from "@/features/auth/authApiSlice";
 import { setAccessToken } from "@/features/auth/authSlice";
 import Helpers from "@/helpers/app.helpers";
 import { SignInPayload } from "@/types/auth";
-import { AxiosError } from "axios";
 import { useFormik } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -10,6 +9,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import InputField from "@/components/InputField";
 import signPages from "@/assets/images/signPages.jpg";
+import { ErrorResponse } from "@/types";
+import useToast from "@/hooks/useToast";
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
@@ -17,19 +18,18 @@ const SignIn: React.FC = () => {
   const from = location.state?.from?.pathname || "/";
   const [login] = useSigninMutation();
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const handleSubmit = async (values: SignInPayload) => {
     try {
       const response = await login(values).unwrap();
-      const { data } = Helpers.handleAxiosSuccess(response);
+      const { data, message } = Helpers.handleAxiosSuccess(response);
       dispatch(setAccessToken(data));
+      toast.toastSuccess(message);
       navigate(from, { replace: true });
     } catch (e: unknown) {
-      if (e instanceof AxiosError) {
-        Helpers.handleAxiosError(e);
-      } else {
-        console.log(e);
-      }
+      const error = e as ErrorResponse;
+      toast.toastError(error.data.message);
     }
   };
 

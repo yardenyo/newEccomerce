@@ -26,3 +26,12 @@ export interface User {
   resetPasswordToken: string | undefined;
   resetPasswordExpires: Date | undefined;
 }
+
+export interface ErrorResponse {
+  status: string;
+  data: {
+    status: string;
+    success: boolean;
+    message: string;
+  };
+}
