@@ -4,11 +4,11 @@
 
 @layer base {
   h1 {
-    @apply mb-2 text-3xl font-bold;
+    @apply text-3xl font-bold;
   }
 
   h2 {
-    @apply mb-1 text-xl font-semibold;
+    @apply text-xl font-semibold;
   }
 
   .btn {
@@ -25,5 +25,9 @@
 
   input[type="checkbox"] {
     @apply p-5 mr-1 mb-0 hover:cursor-pointer;
+  }
+
+  .navbar-link {
+    @apply text-gray-600 hover:cursor-pointer hover:text-gray-800 hover:font-semibold;
   }
 }

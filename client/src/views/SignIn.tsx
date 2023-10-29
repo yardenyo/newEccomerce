@@ -11,6 +11,7 @@ import signPages from "@/assets/images/signPages.jpg";
 import { ErrorResponse } from "@/types";
 import useToast from "@/hooks/useToast";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
@@ -73,9 +74,9 @@ const SignIn: React.FC = () => {
             <h1>Sign In</h1>
             <p className="text-gray-500">
               Don't have an account yet?{" "}
-              <a href="/auth/sign-up" className="text-green-400">
+              <Link to="/auth/sign-up" className="text-green-400">
                 Sign Up
-              </a>
+              </Link>
             </p>
           </div>
           <form onSubmit={formik.handleSubmit}>
@@ -101,9 +102,9 @@ const SignIn: React.FC = () => {
             />
             <div className="flex">
               <div className="text-sm">
-                <a href="/auth/forgot-password" className="font-semibold">
+                <Link to="/auth/forgot-password" className="font-semibold">
                   Forgot your password?
-                </a>
+                </Link>
               </div>
             </div>
             <div className="input-field mt-4">

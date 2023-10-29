@@ -9,6 +9,7 @@ import useToast from "@/hooks/useToast";
 import { ErrorResponse } from "@/types";
 import Helpers from "@/helpers/app.helpers";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const SignUp: React.FC = () => {
   const [signup] = useSignupMutation();
@@ -73,9 +74,9 @@ const SignUp: React.FC = () => {
             <h1>Sign Up</h1>
             <p className="text-gray-500">
               Already have an account?{" "}
-              <a href="/auth/sign-in" className="text-green-400">
+              <Link to="/auth/sign-in" className="text-green-400">
                 Sign In
-              </a>
+              </Link>
             </p>
           </div>
           <form onSubmit={formik.handleSubmit}>

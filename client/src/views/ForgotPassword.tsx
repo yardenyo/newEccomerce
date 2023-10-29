@@ -7,6 +7,7 @@ import signPages from "@/assets/images/signPages.jpg";
 import { ErrorResponse } from "@/types";
 import Helpers from "@/helpers/app.helpers";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const ForgotPassword: React.FC = () => {
   const [forgotPassword] = useForgotPasswordMutation();
@@ -54,9 +55,9 @@ const ForgotPassword: React.FC = () => {
             <h1>Forgot Password</h1>
             <p className="text-gray-500">
               Remember your password?{" "}
-              <a href="/auth/sign-in" className="text-green-400">
+              <Link to="/auth/sign-in" className="text-green-400">
                 Sign In
-              </a>
+              </Link>
             </p>
           </div>
           <form onSubmit={formik.handleSubmit}>
