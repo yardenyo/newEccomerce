@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import * as Yup from "yup";
 import signPages from "@/assets/images/signPages.jpg";
 import InputField from "@/components/InputField";
+import CheckBox from "@/components/CheckBox";
 
 const SignUp: React.FC = () => {
   const [signup] = useSignupMutation();
@@ -26,6 +27,7 @@ const SignUp: React.FC = () => {
       email: "",
       mobile: "",
       password: "",
+      termsAgree: false,
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required("Required"),
@@ -40,6 +42,10 @@ const SignUp: React.FC = () => {
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
           "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
         ),
+      termsAgree: Yup.boolean().oneOf(
+        [true],
+        "Must Accept Terms and Conditions"
+      ),
     }),
     onSubmit: (values: SignUpPayload) => {
       handleSubmit(values);
@@ -58,7 +64,7 @@ const SignUp: React.FC = () => {
       <div className="md:w-1/2 bg-white flex flex-col justify-center items-center">
         <div className="form p-4 w-full max-w-md">
           <div className="title flex flex-col gap-4 py-4">
-            <h1 className="text-3xl font-bold">Sign Up</h1>
+            <h1>Sign Up</h1>
             <p className="text-gray-500">
               Already have an account?{" "}
               <a href="/auth/sign-in" className="text-green-400">
@@ -116,6 +122,15 @@ const SignUp: React.FC = () => {
               onChange={formik.handleChange}
               errors={formik.errors.password}
               touched={formik.touched.password}
+            />
+            <CheckBox
+              id="termsAgree"
+              name="termsAgree"
+              type="checkbox"
+              label="I agree with Privacy Policy and Terms of Use"
+              onChange={formik.handleChange}
+              errors={formik.errors.termsAgree}
+              touched={formik.touched.termsAgree}
             />
             <div className="input-field mt-4">
               <button type="submit" className="w-full btn btn-primary">

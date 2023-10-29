@@ -66,7 +66,7 @@ const SignIn: React.FC = () => {
       <div className="md:w-1/2 bg-white flex flex-col justify-center items-center">
         <div className="form p-4 w-full max-w-md">
           <div className="title flex flex-col gap-4 py-4">
-            <h1 className="text-3xl font-bold">Sign In</h1>
+            <h1>Sign In</h1>
             <p className="text-gray-500">
               Don't have an account yet?{" "}
               <a href="/auth/sign-up" className="text-green-400">
@@ -95,6 +95,27 @@ const SignIn: React.FC = () => {
               errors={formik.errors.password}
               touched={formik.touched.password}
             />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="rememberMe"
+                  name="rememberMe"
+                  type="checkbox"
+                  className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                />
+                <label
+                  htmlFor="rememberMe"
+                  className="ml-2 block text-sm text-gray-900"
+                >
+                  Remember me
+                </label>
+              </div>
+              <div className="text-sm">
+                <a href="/auth/forgot-password" className="font-semibold">
+                  Forgot your password?
+                </a>
+              </div>
+            </div>
             <div className="input-field mt-4">
               <button type="submit" className="w-full btn btn-primary">
                 Sign In
