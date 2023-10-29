@@ -1,22 +1,24 @@
 import { useSignupMutation } from "@/features/auth/authApiSlice";
 import { SignUpPayload } from "@/types/auth";
 import { useFormik } from "formik";
-import React from "react";
 import { useNavigate } from "react-router";
 import * as Yup from "yup";
 import signPages from "@/assets/images/signPages.jpg";
 import InputField from "@/components/InputField";
-import CheckBox from "@/components/CheckBox";
 import useToast from "@/hooks/useToast";
 import { ErrorResponse } from "@/types";
 import Helpers from "@/helpers/app.helpers";
+import { useState } from "react";
 
 const SignUp: React.FC = () => {
   const [signup] = useSignupMutation();
   const navigate = useNavigate();
   const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (values: SignUpPayload) => {
     try {
+      setIsLoading(true);
       const response = await signup(values).unwrap();
       const { message } = Helpers.handleAxiosSuccess(response);
       toast.toastSuccess(message);
@@ -24,6 +26,8 @@ const SignUp: React.FC = () => {
     } catch (e: unknown) {
       const error = e as ErrorResponse;
       toast.toastError(error.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -34,7 +38,6 @@ const SignUp: React.FC = () => {
       email: "",
       mobile: "",
       password: "",
-      termsAgree: false,
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required("Required"),
@@ -49,10 +52,6 @@ const SignUp: React.FC = () => {
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
           "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
         ),
-      termsAgree: Yup.boolean().oneOf(
-        [true],
-        "Must Accept Terms and Conditions"
-      ),
     }),
     onSubmit: (values: SignUpPayload) => {
       handleSubmit(values);
@@ -130,19 +129,12 @@ const SignUp: React.FC = () => {
               errors={formik.errors.password}
               touched={formik.touched.password}
             />
-            <div className="text-sm">
-              <CheckBox
-                id="termsAgree"
-                name="termsAgree"
-                type="checkbox"
-                label="I agree with Privacy Policy and Terms of Use"
-                onChange={formik.handleChange}
-                errors={formik.errors.termsAgree}
-                touched={formik.touched.termsAgree}
-              />
-            </div>
             <div className="input-field mt-4">
-              <button type="submit" className="w-full btn btn-primary">
+              <button
+                disabled={isLoading}
+                type="submit"
+                className="w-full btn btn-primary"
+              >
                 Sign Up
               </button>
             </div>

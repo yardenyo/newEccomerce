@@ -1,6 +1,5 @@
 import { useResetPasswordMutation } from "@/features/auth/authApiSlice";
 import { useFormik } from "formik";
-import React from "react";
 import * as Yup from "yup";
 import InputField from "@/components/InputField";
 import useToast from "@/hooks/useToast";
@@ -8,15 +7,18 @@ import { ErrorResponse } from "@/types";
 import Helpers from "@/helpers/app.helpers";
 import { useNavigate, useParams } from "react-router-dom";
 import { ResetPasswordPayload } from "@/types/auth";
+import { useState } from "react";
 
 const ResetPassword: React.FC = () => {
   const [resetPassword] = useResetPasswordMutation();
   const toast = useToast();
   const navigate = useNavigate();
   const { token } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (values: ResetPasswordPayload) => {
     try {
+      setIsLoading(true);
       const response = await resetPassword({ token, ...values }).unwrap();
       const { message } = Helpers.handleAxiosSuccess(response);
       toast.toastSuccess(message);
@@ -24,6 +26,8 @@ const ResetPassword: React.FC = () => {
     } catch (e: unknown) {
       const error = e as ErrorResponse;
       toast.toastError(error.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -88,7 +92,11 @@ const ResetPassword: React.FC = () => {
               touched={formik.touched.confirmPassword}
             />
             <div className="input-field mt-4">
-              <button type="submit" className="w-full btn btn-primary">
+              <button
+                disabled={isLoading}
+                type="submit"
+                className="w-full btn btn-primary"
+              >
                 Reset Password
               </button>
             </div>

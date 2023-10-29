@@ -6,7 +6,6 @@ export interface SignUpPayload {
   email: string;
   mobile: string;
   password: string;
-  termsAgree: boolean;
 }
 
 export interface SignInPayload {

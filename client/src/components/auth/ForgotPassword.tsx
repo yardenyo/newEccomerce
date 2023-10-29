@@ -6,19 +6,24 @@ import useToast from "@/hooks/useToast";
 import signPages from "@/assets/images/signPages.jpg";
 import { ErrorResponse } from "@/types";
 import Helpers from "@/helpers/app.helpers";
+import { useState } from "react";
 
 const ForgotPassword: React.FC = () => {
   const [forgotPassword] = useForgotPasswordMutation();
   const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (email: string) => {
     try {
+      setIsLoading(true);
       const response = await forgotPassword(email).unwrap();
       const { message } = Helpers.handleAxiosSuccess(response);
       toast.toastSuccess(message);
     } catch (e: unknown) {
       const error = e as ErrorResponse;
       toast.toastError(error.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -66,7 +71,11 @@ const ForgotPassword: React.FC = () => {
               touched={formik.touched.email}
             />
             <div className="input-field mt-4">
-              <button type="submit" className="w-full btn btn-primary">
+              <button
+                disabled={isLoading}
+                type="submit"
+                className="w-full btn btn-primary"
+              >
                 Reset Password
               </button>
             </div>
