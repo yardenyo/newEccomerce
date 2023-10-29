@@ -23,6 +23,7 @@ const Home = () => {
     <section>
       <h1>Home</h1>
       <div className="flex flex-col">
+        <Link to="/auth/sign-in">Sign In</Link>
         <Link to="/admin-dashboard">Admin Dashboard</Link>
         <div onClick={signOut}>Sign Out</div>
       </div>

@@ -14,6 +14,15 @@ export interface SignInPayload {
   password: string;
 }
 
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ResetPasswordPayload {
+  password: string;
+  confirmPassword: string;
+}
+
 export interface AuthState {
   auth: {
     user?: User | null;

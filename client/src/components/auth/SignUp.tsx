@@ -130,15 +130,17 @@ const SignUp: React.FC = () => {
               errors={formik.errors.password}
               touched={formik.touched.password}
             />
-            <CheckBox
-              id="termsAgree"
-              name="termsAgree"
-              type="checkbox"
-              label="I agree with Privacy Policy and Terms of Use"
-              onChange={formik.handleChange}
-              errors={formik.errors.termsAgree}
-              touched={formik.touched.termsAgree}
-            />
+            <div className="text-sm">
+              <CheckBox
+                id="termsAgree"
+                name="termsAgree"
+                type="checkbox"
+                label="I agree with Privacy Policy and Terms of Use"
+                onChange={formik.handleChange}
+                errors={formik.errors.termsAgree}
+                touched={formik.touched.termsAgree}
+              />
+            </div>
             <div className="input-field mt-4">
               <button type="submit" className="w-full btn btn-primary">
                 Sign Up
