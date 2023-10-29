@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply mb-2 text-3xl font-bold;
+  }
+
+  h2 {
+    @apply mb-1 text-xl font-semibold;
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded-lg hover:transition hover:duration-300 hover:opacity-80 disabled:bg-slate-400/30 hover:disabled:opacity-100 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-black  text-white;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 text-black;
+  }
+
+  input[type="checkbox"] {
+    @apply p-5 mr-1 mb-0 hover:cursor-pointer;
+  }
+}

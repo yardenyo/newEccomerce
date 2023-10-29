@@ -1,21 +1,39 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "@/components/Layout";
 import RequireAuth from "@/components/RequireAuth";
-import Home from "@/components/Home";
-import SignUp from "@/components/auth/SignUp";
-import SignIn from "@/components/auth/SignIn";
-import Unauthorized from "@/components/auth/Unauthorized";
-import AdminDashboard from "@/components/AdminDashboard";
+import Home from "@/views/Home";
+import SignUp from "@/views/SignUp";
+import SignIn from "@/views/SignIn";
+import ForgotPassword from "@/views/ForgotPassword";
+import ResetPassword from "@/views/ResetPassword";
+import Unauthorized from "@/views/Unauthorized";
+import AdminDashboard from "@/views/AdminDashboard";
 import { Roles } from "@/enums";
+import { useCookies } from "react-cookie";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/features/auth/authSlice";
 
 function App() {
+  const [cookies] = useCookies(["isAuthenticated"]);
+  const user = useSelector(selectCurrentUser);
+  const isAuthenticated = cookies.isAuthenticated || user;
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
-        <Route path="auth/sign-up" element={<SignUp />} />
-        <Route path="auth/sign-in" element={<SignIn />} />
+        {!isAuthenticated && <Route path="auth/sign-up" element={<SignUp />} />}
+        {!isAuthenticated && <Route path="auth/sign-in" element={<SignIn />} />}
+        {!isAuthenticated && (
+          <Route path="auth/forgot-password" element={<ForgotPassword />} />
+        )}
+        {!isAuthenticated && (
+          <Route
+            path="auth/reset-password/:token"
+            element={<ResetPassword />}
+          />
+        )}
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* User Routes */}

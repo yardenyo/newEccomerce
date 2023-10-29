@@ -31,6 +31,8 @@ const Helpers = {
   handleAxiosSuccess(response: any): any {
     if (response.data && typeof response.data === "object") {
       return { data: response.data, message: response.message };
+    } else if (!response.data && response.message) {
+      return { message: response.message };
     } else {
       throw `Request failed with status ${response.status}: ${response.data}`;
     }
