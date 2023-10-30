@@ -34,6 +34,10 @@
     @apply p-5 mr-1 mb-0 hover:cursor-pointer;
   }
 
+  .link {
+    @apply text-gray-600 hover:cursor-pointer hover:text-gray-800 hover:font-semibold underline;
+  }
+
   .navbar-link {
     @apply text-gray-600 hover:cursor-pointer hover:text-gray-800 hover:font-semibold;
   }
