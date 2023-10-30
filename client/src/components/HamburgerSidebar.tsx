@@ -45,15 +45,23 @@ const HamburgerSidebar = ({ visible, setVisible }: Props) => {
             ))}
           </ul>
           <div className="flex flex-col space-y-4 mt-[40vh]">
-            <div className="navbar-link border-b">
+            <div className="flex justify-between items-center navbar-link border-b">
               <Link to="/cart" onClick={() => setVisible(false)}>
                 Cart
               </Link>
+              <div className="flex space-x-2 shopping-bag">
+                <i className="pi pi-shopping-bag" />
+                <span className="counter">2</span>
+              </div>
             </div>
-            <div className="navbar-link border-b">
+            <div className="flex justify-between items-center navbar-link border-b">
               <Link to="/wishlist" onClick={() => setVisible(false)}>
                 Wishlist
               </Link>
+              <div className="flex space-x-2 wishlist">
+                <i className="pi pi-heart" />
+                <span className="counter">4</span>
+              </div>
             </div>
             <div className="navbar-link border-b">
               <button className="w-full btn btn-primary">

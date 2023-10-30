@@ -38,9 +38,7 @@ const Navbar = () => {
         <div>
           <div className="shopping-bag flex items-center justify-center space-x-2">
             <i className="pi pi-shopping-bag navbar-link" />
-            <span className="badge bg-black text-white rounded-full w-4 h-4 flex items-center justify-center p-2 text-xs">
-              2
-            </span>
+            <span className="counter">2</span>
           </div>
         </div>
       </div>

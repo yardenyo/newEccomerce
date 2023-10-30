@@ -37,4 +37,8 @@
   .navbar-link {
     @apply text-gray-600 hover:cursor-pointer hover:text-gray-800 hover:font-semibold;
   }
+
+  .counter {
+    @apply bg-black text-white rounded-full w-4 h-4 flex items-center justify-center p-2 text-xs;
+  }
 }
