@@ -35,3 +35,9 @@ export interface ErrorResponse {
     message: string;
   };
 }
+
+export interface Image {
+  source: string;
+  alt: string;
+  title?: string;
+}
