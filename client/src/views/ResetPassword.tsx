@@ -8,6 +8,8 @@ import Helpers from "@/helpers/app.helpers";
 import { useNavigate, useParams } from "react-router-dom";
 import { ResetPasswordPayload } from "@/types/auth";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import signPages from "@/assets/images/signPages.jpg";
 
 const ResetPassword: React.FC = () => {
   const [resetPassword] = useResetPasswordMutation();
@@ -57,7 +59,11 @@ const ResetPassword: React.FC = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen">
       <div className="md:w-1/2 bg-gray-100 flex flex-col justify-center items-center">
-        {/* Add your image or content for the left side */}
+        <img
+          src={signPages}
+          alt="Reset Password"
+          className="w-screen md:w-full h-auto md:h-screen"
+        />
       </div>
       <div className="md:w-1/2 bg-white flex flex-col justify-center items-center">
         <div className="form p-4 w-full max-w-md">
@@ -65,9 +71,9 @@ const ResetPassword: React.FC = () => {
             <h1>Reset Password</h1>
             <p className="text-gray-500">
               Remember your password?{" "}
-              <a href="/auth/sign-in" className="text-green-400">
+              <Link to="/auth/sign-in" className="text-green-400">
                 Sign In
-              </a>
+              </Link>
             </p>
           </div>
           <form onSubmit={formik.handleSubmit}>

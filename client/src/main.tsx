@@ -9,6 +9,9 @@ import { CookiesProvider } from "react-cookie";
 import AuthMiddleware from "@/helpers/authMiddleware";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

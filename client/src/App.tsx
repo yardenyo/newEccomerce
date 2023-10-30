@@ -20,20 +20,17 @@ function App() {
 
   return (
     <Routes>
+      {/* Public Routes */}
+      {!isAuthenticated && <Route path="auth/sign-up" element={<SignUp />} />}
+      {!isAuthenticated && <Route path="auth/sign-in" element={<SignIn />} />}
+      {!isAuthenticated && (
+        <Route path="auth/forgot-password" element={<ForgotPassword />} />
+      )}
+      {!isAuthenticated && (
+        <Route path="auth/reset-password/:token" element={<ResetPassword />} />
+      )}
       <Route path="/" element={<Layout />}>
-        {/* Public Routes */}
         <Route path="/" element={<Home />} />
-        {!isAuthenticated && <Route path="auth/sign-up" element={<SignUp />} />}
-        {!isAuthenticated && <Route path="auth/sign-in" element={<SignIn />} />}
-        {!isAuthenticated && (
-          <Route path="auth/forgot-password" element={<ForgotPassword />} />
-        )}
-        {!isAuthenticated && (
-          <Route
-            path="auth/reset-password/:token"
-            element={<ResetPassword />}
-          />
-        )}
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* User Routes */}
