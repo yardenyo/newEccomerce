@@ -12,13 +12,6 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
-    addToCart: builder.mutation({
-      query: (payload) => ({
-        url: `${resource}/cart`,
-        method: "PUT",
-        body: payload,
-      }),
-    }),
     addToWishlist: builder.mutation({
       query: (payload) => ({
         url: `${resource}/wishlist/add`,
@@ -38,7 +31,6 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetAllProductsQuery,
-  useAddToCartMutation,
   useAddToWishlistMutation,
   useRemoveFromWishlistMutation,
 } = productsApiSlice;

@@ -1,9 +1,9 @@
 import {
   useGetAllProductsQuery,
-  useAddToCartMutation,
   useAddToWishlistMutation,
   useRemoveFromWishlistMutation,
 } from "@/features/products/productsApiSlice";
+import { useAddProductToCartMutation } from "@/features/cart/cartApiSlice";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/features/auth/authSlice";
 import NoImage from "@/assets/images/noimage.png";
@@ -11,6 +11,7 @@ import { ErrorResponse, Product } from "@/types";
 import useToast from "@/hooks/useToast";
 import Helpers from "@/helpers/app.helpers";
 import { useState, useEffect } from "react";
+import { Colors } from "@/enums";
 
 const NewArrivals = () => {
   const payload = {
@@ -21,7 +22,8 @@ const NewArrivals = () => {
   const user = useSelector(selectCurrentUser);
   const { data: response } = useGetAllProductsQuery(payload);
   const toast = useToast();
-  const [addToCart, { isLoading: addToCartLoading }] = useAddToCartMutation();
+  const [addToCart, { isLoading: addToCartLoading }] =
+    useAddProductToCartMutation();
   const [addToWishlist, { isLoading: addToWishlistLoading }] =
     useAddToWishlistMutation();
   const [removeFromWishlist, { isLoading: removeFromWishlistLoading }] =
@@ -37,9 +39,11 @@ const NewArrivals = () => {
     }
   }, [user]);
 
-  const handleAddToCart = async (productId: string) => {
+  const handleAddToCart = async (productId: string, color: Colors) => {
     try {
-      const response = await addToCart({ productId }).unwrap();
+      const response = await addToCart({
+        products: [{ productId, color, quantity: 1 }],
+      }).unwrap();
       const { message } = Helpers.handleAxiosSuccess(response);
       toast.toastSuccess(message);
     } catch (e: unknown) {
@@ -53,7 +57,6 @@ const NewArrivals = () => {
       const response = await addToWishlist({ productId }).unwrap();
       const { message } = Helpers.handleAxiosSuccess(response);
       toast.toastSuccess(message);
-
       setWishlistProducts([...wishlistProducts, productId]);
     } catch (e: unknown) {
       const error = e as ErrorResponse;
@@ -66,7 +69,6 @@ const NewArrivals = () => {
       const response = await removeFromWishlist({ productId }).unwrap();
       const { message } = Helpers.handleAxiosSuccess(response);
       toast.toastSuccess(message);
-
       setWishlistProducts(wishlistProducts.filter((id) => id !== productId));
     } catch (e: unknown) {
       const error = e as ErrorResponse;
@@ -97,9 +99,9 @@ const NewArrivals = () => {
   };
 
   return (
-    <div className="container mx-auto py-4">
+    <div className="container mx-auto py-4 flex flex-col space-y-4">
       <div className="title flex justify-between items-center">
-        <h1 className="text-2xl font-bold mb-4">Newest Arrivals</h1>
+        <h1 className="text-2xl font-bold">Newest Arrivals</h1>
         <div className="link">Explore More</div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
@@ -146,7 +148,9 @@ const NewArrivals = () => {
             <button
               className="absolute bottom-1/3 left-1/2 transform -translate-x-1/2 w-3/4 btn btn-primary opacity-0 group-hover:opacity-100"
               disabled={isStateLoading}
-              onClick={() => handleAddToCart(product._id)}
+              onClick={() =>
+                handleAddToCart(product._id, product.color as Colors)
+              }
             >
               Add to Cart
             </button>
