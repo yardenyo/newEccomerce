@@ -11,17 +11,17 @@ const Layout = () => {
   const [showNotice, setShowNotice] = useState(true);
 
   return (
-    <>
+    <main className="font-body">
       <Notice showNotice={showNotice} setShowNotice={setShowNotice} />
-      <main
+      <div
         className={`App${isDarkMode ? " dark" : ""} container mx-auto ${
           showNotice && "pt-10"
         } px-4`}
       >
         <Navbar />
         <Outlet />
-      </main>
-    </>
+      </div>
+    </main>
   );
 };
 
