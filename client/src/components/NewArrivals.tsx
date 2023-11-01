@@ -6,7 +6,6 @@ import {
 import NoImage from "@/assets/images/noimage.png";
 import { ErrorResponse, Product } from "@/types";
 import useToast from "@/hooks/useToast";
-import { useState } from "react";
 
 const NewArrivals = () => {
   const payload = {
@@ -16,32 +15,25 @@ const NewArrivals = () => {
   };
   const { data: response } = useGetAllProductsQuery(payload);
   const toast = useToast();
-  const [addToCart] = useAddToCartMutation();
+  const [addToCart, { isLoading }] = useAddToCartMutation();
   const [addToWishlist] = useAddToWishlistMutation();
-  const [isLoading, setIsLoading] = useState(false);
   const products = response?.data || [];
 
   const handleAddToCart = async (productId: string) => {
     try {
-      setIsLoading(true);
-      await addToCart(productId).unwrap();
+      await addToCart({ productId }).unwrap();
     } catch (e: unknown) {
       const error = e as ErrorResponse;
       toast.toastError(error.data.message);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleAddToWishlist = async (productId: string) => {
     try {
-      setIsLoading(true);
-      await addToWishlist(productId).unwrap();
+      await addToWishlist({ productId }).unwrap();
     } catch (e: unknown) {
       const error = e as ErrorResponse;
       toast.toastError(error.data.message);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -96,15 +88,17 @@ const NewArrivals = () => {
 
             <div className="absolute top-2 left-2 tag tag-primary">New</div>
 
-            <div
+            <button
               className="absolute top-2 right-2 tag-circle tag-primary opacity-0 group-hover:opacity-100"
+              disabled={isLoading}
               onClick={() => handleAddToWishlist(product._id)}
             >
               <i className="pi pi-heart"></i>
-            </div>
+            </button>
 
             <button
               className="absolute bottom-1/3 left-1/2 transform -translate-x-1/2 w-3/4 btn btn-primary opacity-0 group-hover:opacity-100"
+              disabled={isLoading}
               onClick={() => handleAddToCart(product._id)}
             >
               Add to Cart
