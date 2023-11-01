@@ -2,10 +2,15 @@ import {
   useGetAllProductsQuery,
   useAddToCartMutation,
   useAddToWishlistMutation,
+  useRemoveFromWishlistMutation,
 } from "@/features/products/productsApiSlice";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/features/auth/authSlice";
 import NoImage from "@/assets/images/noimage.png";
 import { ErrorResponse, Product } from "@/types";
 import useToast from "@/hooks/useToast";
+import Helpers from "@/helpers/app.helpers";
+import { useState, useEffect } from "react";
 
 const NewArrivals = () => {
   const payload = {
@@ -13,15 +18,30 @@ const NewArrivals = () => {
     sortOrder: 0,
     resultsPerPage: 4,
   };
+  const user = useSelector(selectCurrentUser);
   const { data: response } = useGetAllProductsQuery(payload);
   const toast = useToast();
-  const [addToCart, { isLoading }] = useAddToCartMutation();
-  const [addToWishlist] = useAddToWishlistMutation();
+  const [addToCart, { isLoading: addToCartLoading }] = useAddToCartMutation();
+  const [addToWishlist, { isLoading: addToWishlistLoading }] =
+    useAddToWishlistMutation();
+  const [removeFromWishlist, { isLoading: removeFromWishlistLoading }] =
+    useRemoveFromWishlistMutation();
+  const [wishlistProducts, setWishlistProducts] = useState<string[]>([]);
   const products = response?.data || [];
+  const isStateLoading =
+    addToCartLoading || addToWishlistLoading || removeFromWishlistLoading;
+
+  useEffect(() => {
+    if (user) {
+      setWishlistProducts(user.wishlist);
+    }
+  }, [user]);
 
   const handleAddToCart = async (productId: string) => {
     try {
-      await addToCart({ productId }).unwrap();
+      const response = await addToCart({ productId }).unwrap();
+      const { message } = Helpers.handleAxiosSuccess(response);
+      toast.toastSuccess(message);
     } catch (e: unknown) {
       const error = e as ErrorResponse;
       toast.toastError(error.data.message);
@@ -30,7 +50,24 @@ const NewArrivals = () => {
 
   const handleAddToWishlist = async (productId: string) => {
     try {
-      await addToWishlist({ productId }).unwrap();
+      const response = await addToWishlist({ productId }).unwrap();
+      const { message } = Helpers.handleAxiosSuccess(response);
+      toast.toastSuccess(message);
+
+      setWishlistProducts([...wishlistProducts, productId]);
+    } catch (e: unknown) {
+      const error = e as ErrorResponse;
+      toast.toastError(error.data.message);
+    }
+  };
+
+  const handleRemoveFromWishlist = async (productId: string) => {
+    try {
+      const response = await removeFromWishlist({ productId }).unwrap();
+      const { message } = Helpers.handleAxiosSuccess(response);
+      toast.toastSuccess(message);
+
+      setWishlistProducts(wishlistProducts.filter((id) => id !== productId));
     } catch (e: unknown) {
       const error = e as ErrorResponse;
       toast.toastError(error.data.message);
@@ -90,15 +127,25 @@ const NewArrivals = () => {
 
             <button
               className="absolute top-2 right-2 tag-circle tag-primary opacity-0 group-hover:opacity-100"
-              disabled={isLoading}
-              onClick={() => handleAddToWishlist(product._id)}
+              disabled={isStateLoading}
+              onClick={() =>
+                wishlistProducts.includes(product._id)
+                  ? handleRemoveFromWishlist(product._id)
+                  : handleAddToWishlist(product._id)
+              }
             >
-              <i className="pi pi-heart"></i>
+              <i
+                className={`pi ${
+                  wishlistProducts.includes(product._id)
+                    ? "pi-heart-fill"
+                    : "pi-heart"
+                }`}
+              ></i>
             </button>
 
             <button
               className="absolute bottom-1/3 left-1/2 transform -translate-x-1/2 w-3/4 btn btn-primary opacity-0 group-hover:opacity-100"
-              disabled={isLoading}
+              disabled={isStateLoading}
               onClick={() => handleAddToCart(product._id)}
             >
               Add to Cart
