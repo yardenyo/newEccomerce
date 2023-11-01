@@ -28,6 +28,18 @@
     @apply bg-black  text-white;
   }
 
+  .tag {
+    @apply rounded-lg px-2 py-1 font-semibold pointer-events-none;
+  }
+
+  .tag-circle {
+    @apply rounded-full p-2 font-semibold hover:cursor-pointer flex items-center justify-center;
+  }
+
+  .tag-primary {
+    @apply bg-white text-black;
+  }
+
   .btn-secondary {
     @apply bg-gray-200 text-black;
   }

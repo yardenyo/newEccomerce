@@ -27,6 +27,24 @@ export interface User {
   resetPasswordExpires: Date | undefined;
 }
 
+export interface Product {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  price: number;
+  category: string;
+  brand: string;
+  quantity: number;
+  sold: number;
+  images: string[];
+  color: string;
+  ratings: Rating[];
+  totalRating: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface ErrorResponse {
   status: string;
   data: {
