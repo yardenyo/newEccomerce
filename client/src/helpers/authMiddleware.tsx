@@ -3,6 +3,7 @@ import { useCookies } from "react-cookie";
 import { useGetUserQuery } from "@/features/auth/authApiSlice";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/features/auth/authSlice";
+import Loading from "@/components/Loading";
 
 type Props = {
   children: React.ReactElement;
@@ -17,9 +18,9 @@ const AuthMiddleware = ({ children }: Props) => {
   });
   const loading = isLoading || isFetching;
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading />;
 
-  if (!user && cookies.isAuthenticated) return <div>Loading...</div>;
+  if (!user && cookies.isAuthenticated) return <Loading />;
 
   return <>{children}</>;
 };

@@ -59,4 +59,12 @@
   .counter {
     @apply bg-black text-white rounded-full w-4 h-4 flex items-center justify-center p-2 text-xs;
   }
+
+  .user-dropdown {
+    @apply absolute top-full left-1/2 transform -translate-x-1/2 w-32 bg-white border border-gray-300 rounded-lg py-2 mt-2 shadow-md z-10;
+  }
+
+  .user-dropdown-link {
+    @apply block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left;
+  }
 }
