@@ -4,6 +4,10 @@ enum Colors {
     SILVER = 'silver',
     WHITE = 'white',
     BLUE = 'blue',
+    RED = 'red',
+    PURPLE = 'purple',
+    GOLD = 'gold',
+    YELLOW = 'yellow',
 }
 
 export default Colors;
