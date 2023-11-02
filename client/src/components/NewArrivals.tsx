@@ -17,7 +17,7 @@ const NewArrivals = () => {
   const payload = {
     sortBy: "createdAt",
     sortOrder: 0,
-    resultsPerPage: 4,
+    resultsPerPage: 5,
   };
   const user = useSelector(selectCurrentUser);
   const { data: response } = useGetAllProductsQuery(payload);
@@ -99,12 +99,12 @@ const NewArrivals = () => {
   };
 
   return (
-    <div className="container mx-auto py-4 flex flex-col space-y-4">
+    <div className="container mx-auto py-4 flex flex-col space-y-4 px-8 xl:px-0">
       <div className="title flex justify-between items-center">
         <h1 className="text-2xl font-bold">Newest Arrivals</h1>
         <div className="link">Explore More</div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
         {products.map((product: Product, index: number) => (
           <div key={product._id + index} className="bg-white group relative">
             <img
