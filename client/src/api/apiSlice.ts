@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  BaseQueryApi,
+  BaseQueryFn,
+  FetchBaseQueryError,
   FetchArgs,
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
 import { AuthState } from "@/types/auth";
 import { setAccessToken, logout } from "@/features/auth/authSlice";
+import { Mutex } from "async-mutex";
 
 const baseUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:5000/api";
+const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
   baseUrl,
@@ -23,32 +26,41 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithReAuth = async (
-  args: string | FetchArgs,
-  api: BaseQueryApi,
-  extraOptions: object
-) => {
+const baseQueryWithReauth: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
-
-  if (result?.error?.status === 401) {
-    const refreshResult: any = await baseQuery(
-      "/auth/refresh-token",
-      api,
-      extraOptions
-    );
-    if (refreshResult?.data) {
-      api.dispatch(setAccessToken({ ...refreshResult.data.data }));
-      result = await baseQuery(args, api, extraOptions);
+  if (result.error && result.error.status === 401) {
+    if (!mutex.isLocked()) {
+      const release = await mutex.acquire();
+      try {
+        const refreshResult: any = await baseQuery(
+          "/auth/refresh-token",
+          api,
+          extraOptions
+        );
+        if (refreshResult.data) {
+          api.dispatch(setAccessToken({ ...refreshResult.data.data }));
+          result = await baseQuery(args, api, extraOptions);
+        } else {
+          window.location.href = "/auth/sign-in";
+          api.dispatch(logout());
+        }
+      } finally {
+        release();
+      }
     } else {
-      api.dispatch(logout());
-      window.location.href = "/auth/sign-in";
+      await mutex.waitForUnlock();
+      result = await baseQuery(args, api, extraOptions);
     }
   }
-
   return result;
 };
 
 export const apiSlice = createApi({
-  baseQuery: baseQueryWithReAuth,
+  baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),
 });
