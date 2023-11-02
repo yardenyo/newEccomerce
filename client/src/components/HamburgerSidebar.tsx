@@ -3,6 +3,8 @@ import { InputText } from "primereact/inputtext";
 import NavbarLinks from "@/constants/NavbarLinks";
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/features/auth/authSlice";
 
 type Props = {
   visible: boolean;
@@ -10,6 +12,8 @@ type Props = {
 };
 
 const HamburgerSidebar = ({ visible, setVisible }: Props) => {
+  const user = useSelector(selectCurrentUser);
+
   const customHeader = (
     <Fragment>
       <h2 style={{ marginBottom: 0 }}>E-Commerce</h2>
@@ -30,7 +34,7 @@ const HamburgerSidebar = ({ visible, setVisible }: Props) => {
             className="w-full focus:outline-none focus:shadow-none"
           />
         </span>
-        <div className="wrapper">
+        <div className="wrapper w-full h-[85vh] flex flex-col justify-between">
           <ul className="flex flex-col space-y-4 mt-4">
             {NavbarLinks.map((link) => (
               <li key={link.key} className="border-b">
@@ -44,30 +48,44 @@ const HamburgerSidebar = ({ visible, setVisible }: Props) => {
               </li>
             ))}
           </ul>
-          <div className="flex flex-col space-y-4 mt-[40vh]">
-            <div className="flex justify-between items-center navbar-link border-b">
-              <Link to="/cart" onClick={() => setVisible(false)}>
-                Cart
-              </Link>
-              <div className="flex space-x-2 shopping-bag">
-                <i className="pi pi-shopping-bag" />
-                <span className="counter">2</span>
-              </div>
-            </div>
-            <div className="flex justify-between items-center navbar-link border-b">
-              <Link to="/wishlist" onClick={() => setVisible(false)}>
-                Wishlist
-              </Link>
-              <div className="flex space-x-2 wishlist">
-                <i className="pi pi-heart" />
-                <span className="counter">4</span>
-              </div>
-            </div>
-            <div className="navbar-link border-b">
-              <button className="w-full btn btn-primary">
-                <Link to="/auth/sign-in">Sign In</Link>
-              </button>
-            </div>
+          <div className="flex flex-col space-y-4">
+            {!user ? (
+              <>
+                <div className="navbar-link border-b">
+                  <button className="w-full btn btn-primary">
+                    <Link to="/auth/sign-in">Sign In</Link>
+                  </button>
+                </div>
+                <div className="navbar-link border-b">
+                  <button className="w-full btn btn-secondary">
+                    <Link to="/auth/sign-up">Sign Up</Link>
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex justify-between items-center navbar-link border-b">
+                  <Link to="/cart" onClick={() => setVisible(false)}>
+                    Cart
+                  </Link>
+                  <div className="flex space-x-2 shopping-bag">
+                    <i className="pi pi-shopping-bag" />
+                    <span className="counter">
+                      {user?.cart?.products?.length}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center navbar-link border-b">
+                  <Link to="/wishlist" onClick={() => setVisible(false)}>
+                    Wishlist
+                  </Link>
+                  <div className="flex space-x-2 wishlist">
+                    <i className="pi pi-heart" />
+                    <span className="counter">{user?.wishlist?.length}</span>
+                  </div>
+                </div>
+              </>
+            )}
             <div className="flex social-icons space-x-4">
               <Link
                 to="https://www.linkedin.com/in/yarden-yosef/"

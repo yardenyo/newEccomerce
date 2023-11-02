@@ -1,3 +1,5 @@
+import { Colors } from "@/enums";
+
 export interface PostBody {
   page?: number;
   resultsPerPage?: number;
@@ -15,7 +17,7 @@ export interface User {
   mobile: string;
   role: Roles;
   isBlocked: boolean;
-  cart: string | undefined;
+  cart: Cart;
   wishlist: string[];
   address: string[];
   userSettings: UserSettings;
@@ -43,6 +45,25 @@ export interface Product {
   totalRating: number;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface Cart {
+  _id: string;
+  products: CartProduct[];
+  orderedBy: string;
+  cartTotal: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CartProduct {
+  _id: string;
+  productId: string;
+  name: string;
+  quantity: number;
+  color: Colors;
+  price: number;
+  images: string[];
 }
 
 export interface ErrorResponse {
