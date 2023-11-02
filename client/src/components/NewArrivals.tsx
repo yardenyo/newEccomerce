@@ -107,11 +107,43 @@ const NewArrivals = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
         {products.map((product: Product, index: number) => (
           <div key={product._id + index} className="bg-white group relative">
-            <img
-              src={product.images[0] || NoImage}
-              alt={product.slug}
-              className="object-contain w-full"
-            />
+            <div style={{ position: "relative" }}>
+              <img
+                src={product.images[0] || NoImage}
+                alt={product.slug}
+                className="object-contain w-full"
+              />
+              <div className="absolute top-2 left-2 tag tag-primary">New</div>
+
+              <button
+                className="absolute top-2 right-2 tag-circle tag-primary opacity-0 group-hover:opacity-100"
+                disabled={isStateLoading}
+                onClick={() =>
+                  wishlistProducts.includes(product._id)
+                    ? handleRemoveFromWishlist(product._id)
+                    : handleAddToWishlist(product._id)
+                }
+              >
+                <i
+                  className={`pi ${
+                    wishlistProducts.includes(product._id)
+                      ? "pi-heart-fill"
+                      : "pi-heart"
+                  }`}
+                ></i>
+              </button>
+
+              <button
+                className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-3/4 btn btn-primary opacity-0 group-hover:opacity-100"
+                disabled={isStateLoading}
+                onClick={() =>
+                  handleAddToCart(product._id, product.color as Colors)
+                }
+              >
+                Add to Cart
+              </button>
+            </div>
+
             <div className="py-4">
               <h2 className="text-xl font-bold mb-2 flex items-center space-x-1">
                 {numberOfStars(4)}
@@ -124,36 +156,6 @@ const NewArrivals = () => {
                 ${product.price.toFixed(2)}
               </p>
             </div>
-
-            <div className="absolute top-2 left-2 tag tag-primary">New</div>
-
-            <button
-              className="absolute top-2 right-2 tag-circle tag-primary opacity-0 group-hover:opacity-100"
-              disabled={isStateLoading}
-              onClick={() =>
-                wishlistProducts.includes(product._id)
-                  ? handleRemoveFromWishlist(product._id)
-                  : handleAddToWishlist(product._id)
-              }
-            >
-              <i
-                className={`pi ${
-                  wishlistProducts.includes(product._id)
-                    ? "pi-heart-fill"
-                    : "pi-heart"
-                }`}
-              ></i>
-            </button>
-
-            <button
-              className="absolute bottom-1/3 left-1/2 transform -translate-x-1/2 w-3/4 btn btn-primary opacity-0 group-hover:opacity-100"
-              disabled={isStateLoading}
-              onClick={() =>
-                handleAddToCart(product._id, product.color as Colors)
-              }
-            >
-              Add to Cart
-            </button>
           </div>
         ))}
       </div>

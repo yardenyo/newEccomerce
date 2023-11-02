@@ -84,7 +84,7 @@ const Navbar = () => {
                     onClick={handleSignOut}
                     className="user-dropdown-link"
                   >
-                    Logout
+                    Sign Out
                   </button>
                 </div>
               )}
@@ -97,7 +97,7 @@ const Navbar = () => {
             </div>
           </>
         ) : (
-          <div className="hidden md:flex space-x-4">
+          <div className="hidden md:flex space-x-2">
             <Link to="/auth/sign-in">
               <button className="btn btn-primary">Sign In</button>
             </Link>
