@@ -5,14 +5,13 @@ import {
 } from "@/features/products/productsApiSlice";
 import { useAddProductToCartMutation } from "@/features/cart/cartApiSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentUser } from "@/features/auth/authSlice";
 import NoImage from "@/assets/images/noimage.png";
 import { ErrorResponse, Product } from "@/types";
 import useToast from "@/hooks/useToast";
 import Helpers from "@/helpers/app.helpers";
-import { useState, useEffect } from "react";
 import { Colors } from "@/enums";
 import { setCart } from "@/features/cart/cartSlice";
+import { selectWishlist, setWishlist } from "@/features/wishlist/wishlistSlice";
 
 const NewArrivals = () => {
   const payload = {
@@ -21,7 +20,7 @@ const NewArrivals = () => {
     resultsPerPage: 5,
   };
   const dispatch = useDispatch();
-  const user = useSelector(selectCurrentUser);
+  const wishlist = useSelector(selectWishlist);
   const { data: response } = useGetAllProductsQuery(payload);
   const toast = useToast();
   const [addToCart, { isLoading: addToCartLoading }] =
@@ -30,16 +29,9 @@ const NewArrivals = () => {
     useAddToWishlistMutation();
   const [removeFromWishlist, { isLoading: removeFromWishlistLoading }] =
     useRemoveFromWishlistMutation();
-  const [wishlistProducts, setWishlistProducts] = useState<string[]>([]);
   const products = response?.data || [];
   const isStateLoading =
     addToCartLoading || addToWishlistLoading || removeFromWishlistLoading;
-
-  useEffect(() => {
-    if (user) {
-      setWishlistProducts(user.wishlist);
-    }
-  }, [user]);
 
   const handleAddToCart = async (productId: string, color: Colors) => {
     try {
@@ -58,9 +50,9 @@ const NewArrivals = () => {
   const handleAddToWishlist = async (productId: string) => {
     try {
       const response = await addToWishlist({ productId }).unwrap();
-      const { message } = Helpers.handleAxiosSuccess(response);
+      const { data, message } = Helpers.handleAxiosSuccess(response);
+      dispatch(setWishlist(data));
       toast.toastSuccess(message);
-      setWishlistProducts([...wishlistProducts, productId]);
     } catch (e: unknown) {
       const error = e as ErrorResponse;
       toast.toastError(error.data.message);
@@ -70,9 +62,9 @@ const NewArrivals = () => {
   const handleRemoveFromWishlist = async (productId: string) => {
     try {
       const response = await removeFromWishlist({ productId }).unwrap();
-      const { message } = Helpers.handleAxiosSuccess(response);
+      const { data, message } = Helpers.handleAxiosSuccess(response);
+      dispatch(setWishlist(data));
       toast.toastSuccess(message);
-      setWishlistProducts(wishlistProducts.filter((id) => id !== productId));
     } catch (e: unknown) {
       const error = e as ErrorResponse;
       toast.toastError(error.data.message);
@@ -122,14 +114,14 @@ const NewArrivals = () => {
                 className="absolute top-2 right-2 tag-circle tag-primary opacity-0 group-hover:opacity-100"
                 disabled={isStateLoading}
                 onClick={() =>
-                  wishlistProducts.includes(product._id)
+                  wishlist.includes(product._id)
                     ? handleRemoveFromWishlist(product._id)
                     : handleAddToWishlist(product._id)
                 }
               >
                 <i
                   className={`pi ${
-                    wishlistProducts.includes(product._id)
+                    wishlist.includes(product._id)
                       ? "pi-heart-fill"
                       : "pi-heart"
                   }`}

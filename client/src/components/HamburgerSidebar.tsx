@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/features/auth/authSlice";
 import { selectCart } from "@/features/cart/cartSlice";
+import { Divider } from "primereact/divider";
+import { selectWishlist } from "@/features/wishlist/wishlistSlice";
 
 type Props = {
   visible: boolean;
@@ -15,6 +17,7 @@ type Props = {
 const HamburgerSidebar = ({ visible, setVisible }: Props) => {
   const user = useSelector(selectCurrentUser);
   const cart = useSelector(selectCart);
+  const wishlist = useSelector(selectWishlist);
 
   const customHeader = (
     <Fragment>
@@ -37,9 +40,9 @@ const HamburgerSidebar = ({ visible, setVisible }: Props) => {
           />
         </span>
         <div className="wrapper w-full h-[85vh] flex flex-col justify-between">
-          <ul className="flex flex-col space-y-4 mt-4">
+          <ul className="flex flex-col space-y-2 mt-4">
             {NavbarLinks.map((link) => (
-              <li key={link.key} className="border-b">
+              <li key={link.key}>
                 <Link
                   to={link.path}
                   className="navbar-link"
@@ -47,18 +50,19 @@ const HamburgerSidebar = ({ visible, setVisible }: Props) => {
                 >
                   {link.title}
                 </Link>
+                <Divider />
               </li>
             ))}
           </ul>
           <div className="flex flex-col space-y-4">
             {!user ? (
               <>
-                <div className="navbar-link border-b">
+                <div className="navbar-link">
                   <button className="w-full btn btn-primary">
                     <Link to="/auth/sign-in">Sign In</Link>
                   </button>
                 </div>
-                <div className="navbar-link border-b">
+                <div className="navbar-link">
                   <button className="w-full btn btn-secondary">
                     <Link to="/auth/sign-up">Sign Up</Link>
                   </button>
@@ -66,7 +70,7 @@ const HamburgerSidebar = ({ visible, setVisible }: Props) => {
               </>
             ) : (
               <>
-                <div className="flex justify-between items-center navbar-link border-b">
+                <div className="flex justify-between items-center navbar-link">
                   <Link to="/cart" onClick={() => setVisible(false)}>
                     Cart
                   </Link>
@@ -75,15 +79,17 @@ const HamburgerSidebar = ({ visible, setVisible }: Props) => {
                     <span className="counter">{cart?.products?.length}</span>
                   </div>
                 </div>
-                <div className="flex justify-between items-center navbar-link border-b">
+                <Divider />
+                <div className="flex justify-between items-center navbar-link">
                   <Link to="/wishlist" onClick={() => setVisible(false)}>
                     Wishlist
                   </Link>
                   <div className="flex space-x-2 wishlist items-center">
                     <i className="pi pi-heart" />
-                    <span className="counter">{user?.wishlist?.length}</span>
+                    <span className="counter">{wishlist?.length}</span>
                   </div>
                 </div>
+                <Divider />
               </>
             )}
             <div className="flex social-icons space-x-4">

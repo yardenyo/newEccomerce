@@ -86,3 +86,9 @@ export interface CartState {
     cart: Cart | null;
   };
 }
+
+export interface WishlistState {
+  wishlist: {
+    wishlist: string[];
+  };
+}
