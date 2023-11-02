@@ -57,7 +57,7 @@
   }
 
   .counter {
-    @apply bg-black text-white rounded-full w-4 h-4 flex items-center justify-center p-2 text-xs;
+    @apply bg-gray-200 text-black rounded-full w-8 h-8 flex items-center justify-center p-2;
   }
 
   .user-dropdown {

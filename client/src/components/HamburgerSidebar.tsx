@@ -5,6 +5,7 @@ import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/features/auth/authSlice";
+import { selectCart } from "@/features/cart/cartSlice";
 
 type Props = {
   visible: boolean;
@@ -13,6 +14,7 @@ type Props = {
 
 const HamburgerSidebar = ({ visible, setVisible }: Props) => {
   const user = useSelector(selectCurrentUser);
+  const cart = useSelector(selectCart);
 
   const customHeader = (
     <Fragment>
@@ -68,18 +70,16 @@ const HamburgerSidebar = ({ visible, setVisible }: Props) => {
                   <Link to="/cart" onClick={() => setVisible(false)}>
                     Cart
                   </Link>
-                  <div className="flex space-x-2 shopping-bag">
+                  <div className="flex space-x-2 shopping-bag items-center">
                     <i className="pi pi-shopping-bag" />
-                    <span className="counter">
-                      {user?.cart?.products?.length}
-                    </span>
+                    <span className="counter">{cart?.products?.length}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center navbar-link border-b">
                   <Link to="/wishlist" onClick={() => setVisible(false)}>
                     Wishlist
                   </Link>
-                  <div className="flex space-x-2 wishlist">
+                  <div className="flex space-x-2 wishlist items-center">
                     <i className="pi pi-heart" />
                     <span className="counter">{user?.wishlist?.length}</span>
                   </div>
@@ -91,22 +91,13 @@ const HamburgerSidebar = ({ visible, setVisible }: Props) => {
                 to="https://www.linkedin.com/in/yarden-yosef/"
                 target="_blank"
               >
-                <i
-                  className="pi pi-linkedin navbar-link"
-                  style={{ fontSize: "1.2rem" }}
-                ></i>
+                <i className="pi pi-linkedin navbar-link text-xl"></i>
               </Link>
               <Link to="https://github.com/yardenyo" target="_blank">
-                <i
-                  className="pi pi-github navbar-link"
-                  style={{ fontSize: "1.2rem" }}
-                ></i>
+                <i className="pi pi-github navbar-link text-xl"></i>
               </Link>
               <Link to="mailto:yardenjobs@gmail.com" target="_blank">
-                <i
-                  className="pi pi-envelope navbar-link"
-                  style={{ fontSize: "1.2rem" }}
-                ></i>
+                <i className="pi pi-envelope navbar-link text-xl"></i>
               </Link>
             </div>
           </div>

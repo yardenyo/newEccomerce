@@ -67,7 +67,7 @@ const Navbar = () => {
         {user ? (
           <>
             <div className="hidden md:flex">
-              <i className="pi pi-search navbar-link" />
+              <i className="pi pi-search navbar-link text-xl" />
             </div>
             <div
               className="relative hidden md:flex group"
@@ -76,6 +76,7 @@ const Navbar = () => {
               <Avatar
                 label={userAvatar()}
                 className="user-avatar rounded-full"
+                style={{ color: "#fff", backgroundColor: "#000" }}
               />
               {showUserDropdown && (
                 <div className="user-dropdown">
@@ -93,7 +94,7 @@ const Navbar = () => {
             </div>
             <div>
               <div className="shopping-bag flex items-center justify-center space-x-2">
-                <i className="pi pi-shopping-bag navbar-link" />
+                <i className="pi pi-shopping-bag navbar-link text-xl" />
                 <span className="counter">{cart?.products?.length}</span>
               </div>
             </div>
