@@ -6,9 +6,11 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/features/auth/authSlice";
 import { useSignoutMutation } from "@/features/auth/authApiSlice";
 import { Avatar } from "primereact/avatar";
+import { selectCart } from "@/features/cart/cartSlice";
 
 const Navbar = () => {
   const user = useSelector(selectCurrentUser);
+  const cart = useSelector(selectCart);
   const [visible, setVisible] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [signout] = useSignoutMutation();
@@ -92,7 +94,7 @@ const Navbar = () => {
             <div>
               <div className="shopping-bag flex items-center justify-center space-x-2">
                 <i className="pi pi-shopping-bag navbar-link" />
-                <span className="counter">2</span>
+                <span className="counter">{cart?.products?.length}</span>
               </div>
             </div>
           </>

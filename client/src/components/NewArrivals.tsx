@@ -4,7 +4,7 @@ import {
   useRemoveFromWishlistMutation,
 } from "@/features/products/productsApiSlice";
 import { useAddProductToCartMutation } from "@/features/cart/cartApiSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "@/features/auth/authSlice";
 import NoImage from "@/assets/images/noimage.png";
 import { ErrorResponse, Product } from "@/types";
@@ -12,6 +12,7 @@ import useToast from "@/hooks/useToast";
 import Helpers from "@/helpers/app.helpers";
 import { useState, useEffect } from "react";
 import { Colors } from "@/enums";
+import { setCart } from "@/features/cart/cartSlice";
 
 const NewArrivals = () => {
   const payload = {
@@ -19,6 +20,7 @@ const NewArrivals = () => {
     sortOrder: 0,
     resultsPerPage: 5,
   };
+  const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
   const { data: response } = useGetAllProductsQuery(payload);
   const toast = useToast();
@@ -44,7 +46,8 @@ const NewArrivals = () => {
       const response = await addToCart({
         products: [{ productId, color, quantity: 1 }],
       }).unwrap();
-      const { message } = Helpers.handleAxiosSuccess(response);
+      const { data, message } = Helpers.handleAxiosSuccess(response);
+      dispatch(setCart(data));
       toast.toastSuccess(message);
     } catch (e: unknown) {
       const error = e as ErrorResponse;

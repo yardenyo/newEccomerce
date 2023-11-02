@@ -80,3 +80,9 @@ export interface Image {
   alt: string;
   title?: string;
 }
+
+export interface CartState {
+  cart: {
+    cart: Cart | null;
+  };
+}
