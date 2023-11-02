@@ -1,11 +1,11 @@
-import HeroGalleria from "@/components/HeroGalleria";
+import HeroSection from "@/components/HeroSection";
 import NewArrivals from "@/components/NewArrivals";
 // import Brands from "@/components/Brands";
 
 const Home = () => {
   return (
     <main>
-      <HeroGalleria />
+      <HeroSection />
       <NewArrivals />
       {/* <Brands /> */}
     </main>

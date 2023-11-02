@@ -10,6 +10,9 @@ export default {
       fontFamily: {
         body: ["Roboto", "sans-serif"],
       },
+      backgroundImage: {
+        gradient: "linear-gradient(to right, #f9b434, #ffcb5d)",
+      },
     },
   },
   plugins: [],

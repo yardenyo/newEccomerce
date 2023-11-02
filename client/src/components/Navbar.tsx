@@ -38,7 +38,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className="py-4 flex items-center justify-between"
+      className="relative z-20 container mx-auto py-4 flex items-center justify-between"
       onMouseLeave={closeUserDropdown}
     >
       <div className="title flex items-center space-x-4">
