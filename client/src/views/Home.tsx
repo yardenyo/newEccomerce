@@ -2,6 +2,7 @@ import HeroSection from "@/components/HeroSection";
 import ProductContent from "@/components/ProductContent";
 import Categories from "@/components/Categories";
 import Promotion from "@/components/Promotion";
+import Features from "@/components/Features";
 
 const Home = () => {
   const newArrivals = {
@@ -31,6 +32,7 @@ const Home = () => {
       <Categories />
       <ProductContent {...bestSellers} />
       <Promotion />
+      <Features />
     </main>
   );
 };

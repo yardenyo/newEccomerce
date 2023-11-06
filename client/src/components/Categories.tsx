@@ -23,7 +23,7 @@ const Categories = () => {
         {categories.map((category: Category) => (
           <div
             key={category._id}
-            className="relative bg-[#f3f5f7] rounded-lg shadow-lg hover:transform hover:scale-105 transition duration-300 ease-in-out w-full flex flex-col justify-center items-center"
+            className="relative bg-container rounded-lg shadow-lg hover:transform hover:scale-105 transition duration-300 ease-in-out w-full flex flex-col justify-center items-center"
           >
             <div className="flex flex-col justify-center items-center">
               <img

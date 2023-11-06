@@ -50,7 +50,7 @@ const Promotion = () => {
     <section className="flex flex-col-reverse md:flex-row py-4">
       <Tooltip
         ref={promotionTooltipRef}
-        target=".custom-tooltip"
+        target=".promotion-tooltip"
         position="bottom"
       >
         <span data-pr-tooltip="Copy to clipboard">
@@ -68,7 +68,7 @@ const Promotion = () => {
         <div className="flex flex-col justify-center h-full space-y-4 p-4 md:px-20">
           <p className="text-lg">
             Promotion code -{" "}
-            <span className="link custom-tooltip" onClick={handleCopy}>
+            <span className="link promotion-tooltip" onClick={handleCopy}>
               SUMMER30
             </span>
           </p>

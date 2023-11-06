@@ -25,7 +25,7 @@ const Notice = ({ showNotice, setShowNotice }: Props) => {
     <>
       <Tooltip
         ref={noticeTooltipRef}
-        target=".custom-tooltip"
+        target=".notice-tooltip"
         position="bottom"
       >
         <span data-pr-tooltip="Copy to clipboard">
@@ -54,7 +54,7 @@ const Notice = ({ showNotice, setShowNotice }: Props) => {
             </div>
             <div className="code-wrapper flex items-center space-x-2">
               <span className="hidden md:inline-block">Use code: </span>
-              <span className="navbar-link custom-tooltip" onClick={handleCopy}>
+              <span className="navbar-link notice-tooltip" onClick={handleCopy}>
                 SUMMER30
               </span>
             </div>
