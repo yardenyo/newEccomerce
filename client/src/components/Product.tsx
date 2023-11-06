@@ -6,6 +6,7 @@ import NoImage from "@/assets/images/noimage.png";
 interface ProductProps {
   product: Product;
   wishlist: string[];
+  tag: string;
   isStateLoading: boolean;
   handleAddToCart: (productId: string, color: Colors) => void;
   handleAddToWishlist: (productId: string) => void;
@@ -16,6 +17,7 @@ interface ProductProps {
 const Product: React.FC<ProductProps> = ({
   product,
   wishlist,
+  tag,
   isStateLoading,
   handleAddToCart,
   handleAddToWishlist,
@@ -30,7 +32,7 @@ const Product: React.FC<ProductProps> = ({
           alt={product.slug}
           className="object-contain w-full"
         />
-        <div className="absolute top-2 left-2 tag tag-primary">New</div>
+        <div className="absolute top-2 left-2 tag tag-primary">{tag}</div>
 
         <button
           className="absolute top-2 right-2 tag-circle tag-primary opacity-0 group-hover:opacity-100"

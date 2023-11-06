@@ -6,6 +6,7 @@ import Product from "@/components/Product";
 interface ProductListProps {
   products: Product[];
   wishlist: string[];
+  tag: string;
   isStateLoading: boolean;
   handleAddToCart: (productId: string, color: Colors) => void;
   handleAddToWishlist: (productId: string) => void;
@@ -15,6 +16,7 @@ interface ProductListProps {
 const ProductList: React.FC<ProductListProps> = ({
   products,
   wishlist,
+  tag,
   isStateLoading,
   handleAddToCart,
   handleAddToWishlist,
@@ -49,6 +51,7 @@ const ProductList: React.FC<ProductListProps> = ({
           key={product._id + index}
           product={product}
           wishlist={wishlist}
+          tag={tag}
           isStateLoading={isStateLoading}
           handleAddToCart={handleAddToCart}
           handleAddToWishlist={handleAddToWishlist}
