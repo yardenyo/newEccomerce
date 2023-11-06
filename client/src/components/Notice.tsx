@@ -8,7 +8,7 @@ type Props = {
 
 const Notice = ({ showNotice, setShowNotice }: Props) => {
   const [copied, setCopied] = useState(false);
-  const tooltipRef = useRef(null);
+  const noticeTooltipRef = useRef(null);
 
   const handleCopy = () => {
     navigator.clipboard.writeText("SUMMER30");
@@ -23,7 +23,11 @@ const Notice = ({ showNotice, setShowNotice }: Props) => {
 
   return (
     <>
-      <Tooltip ref={tooltipRef} target=".custom-tooltip" position="bottom">
+      <Tooltip
+        ref={noticeTooltipRef}
+        target=".custom-tooltip"
+        position="bottom"
+      >
         <span data-pr-tooltip="Copy to clipboard">
           {copied ? "Copied!" : "Click to copy"}
         </span>
