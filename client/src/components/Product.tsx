@@ -25,12 +25,12 @@ const Product: React.FC<ProductProps> = ({
   numberOfStars,
 }) => {
   return (
-    <div className="bg-white group relative shadow-lg rounded-lg p-4 hover:transform hover:scale-105 transition duration-300 ease-in-out">
+    <div className="bg-white group relative shadow-lg rounded-lg p-4 hover:transform hover:scale-105 transition duration-300 ease-in-out w-full">
       <div className="relative">
         <img
           src={product.images[0] || NoImage}
           alt={product.slug}
-          className="object-contain w-full h-64"
+          className="object-contain w-full"
         />
         <div className="absolute top-2 left-2 tag tag-primary">{tag}</div>
 

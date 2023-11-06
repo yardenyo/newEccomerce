@@ -9,7 +9,7 @@ const Home = () => {
     payload: {
       sortBy: "createdAt",
       sortOrder: 0,
-      resultsPerPage: 5,
+      resultsPerPage: 4,
     },
     tag: "New",
   };
@@ -19,7 +19,7 @@ const Home = () => {
     payload: {
       sortBy: "sold",
       sortOrder: 0,
-      resultsPerPage: 10,
+      resultsPerPage: 8,
     },
     tag: "Hot",
   };
