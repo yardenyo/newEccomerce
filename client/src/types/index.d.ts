@@ -47,6 +47,14 @@ export interface Product {
   updatedAt: Date;
 }
 
+export interface Category {
+  _id: string;
+  name: string;
+  image: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Cart {
   _id: string;
   products: CartProduct[];
