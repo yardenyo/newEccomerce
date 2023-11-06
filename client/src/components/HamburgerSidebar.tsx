@@ -8,6 +8,7 @@ import { selectCurrentUser } from "@/features/auth/authSlice";
 import { selectCart } from "@/features/cart/cartSlice";
 import { Divider } from "primereact/divider";
 import { selectWishlist } from "@/features/wishlist/wishlistSlice";
+import socialLinks from "@/constants/SocialLinks";
 
 type Props = {
   visible: boolean;
@@ -93,18 +94,11 @@ const HamburgerSidebar = ({ visible, setVisible }: Props) => {
               </>
             )}
             <div className="flex social-icons space-x-4">
-              <Link
-                to="https://www.linkedin.com/in/yarden-yosef/"
-                target="_blank"
-              >
-                <i className="pi pi-linkedin navbar-link text-xl"></i>
-              </Link>
-              <Link to="https://github.com/yardenyo" target="_blank">
-                <i className="pi pi-github navbar-link text-xl"></i>
-              </Link>
-              <Link to="mailto:yardenjobs@gmail.com" target="_blank">
-                <i className="pi pi-envelope navbar-link text-xl"></i>
-              </Link>
+              {socialLinks.map((icon, index) => (
+                <Link key={index} to={icon.link} target="_blank">
+                  <i className={icon.iconClass}></i>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
