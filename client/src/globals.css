@@ -85,6 +85,6 @@
   }
 
   .feature {
-    @apply flex items-center px-10 w-full h-64 bg-container;
+    @apply flex flex-col justify-center px-10 w-full h-64 bg-container;
   }
 }
