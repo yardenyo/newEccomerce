@@ -67,4 +67,20 @@
   .user-dropdown-link {
     @apply block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left;
   }
+
+  .countdown {
+    @apply flex gap-4;
+  }
+
+  .countdown-box {
+    @apply flex flex-col;
+  }
+
+  .countdown-number {
+    @apply bg-white shadow-md p-4 flex items-center justify-center w-16 h-16 text-2xl font-semibold;
+  }
+
+  .countdown-label {
+    @apply text-center text-sm font-semibold;
+  }
 }

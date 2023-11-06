@@ -1,7 +1,7 @@
 import HeroSection from "@/components/HeroSection";
 import ProductContent from "@/components/ProductContent";
 import Categories from "@/components/Categories";
-// import Brands from "@/components/Brands";
+import Promotion from "@/components/Promotion";
 
 const Home = () => {
   const newArrivals = {
@@ -29,8 +29,8 @@ const Home = () => {
       <HeroSection />
       <ProductContent {...newArrivals} />
       <Categories />
-      {/* <Brands /> */}
       <ProductContent {...bestSellers} />
+      <Promotion />
     </main>
   );
 };

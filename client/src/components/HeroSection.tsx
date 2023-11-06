@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "@/components/Navbar";
 import HeroSectionImg from "@/assets/images/herosection.png";
 
