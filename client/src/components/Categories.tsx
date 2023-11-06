@@ -1,8 +1,9 @@
 import { useGetAllCategoriesQuery } from "@/features/categories/categoriesApiSlice";
-import NoImage from "@/assets/images/noimage.png";
-import { ErrorResponse } from "@/types";
+import { Category } from "@/types";
 
 const Categories = () => {
+  const noImageSrc =
+    "https://res.cloudinary.com/dweltcoxk/image/upload/v1699290993/assets/zb3phjr1bvhgns50gird.png";
   const payload = {
     sortBy: "createdAt",
     sortOrder: 0,
@@ -15,18 +16,21 @@ const Categories = () => {
   };
 
   return (
-    <div className="container mx-auto flex flex-col space-y-4">
+    <div className="container mx-auto flex flex-col space-y-4 px-8 md:px-0">
       <div className="title">
         <h1 className="text-2xl font-bold">Shop Collection</h1>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
-        {categories.map((category) => (
-          <div key={category._id} className="relative bg-[#f3f5f7]">
-            <div className="flex flex-col justify-center items-center h-96">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-8">
+        {categories.map((category: Category) => (
+          <div
+            key={category._id}
+            className="relative bg-container rounded-lg shadow-lg hover:transform hover:scale-105 transition duration-300 ease-in-out w-full flex flex-col justify-center items-center"
+          >
+            <div className="flex flex-col justify-center items-center">
               <img
-                src={category.image || NoImage}
+                src={category.image || noImageSrc}
                 alt={category.name}
-                className="object-contain w-3/4"
+                className="object-contain w-3/4 h-96"
               />
             </div>
             <div className="text-wrapper absolute bottom-4 left-4 flex flex-col">
@@ -34,7 +38,8 @@ const Categories = () => {
                 {capitalizeFirstLetter(category.name)}
               </div>
               <div className="link">
-                Collection <i className="pi pi-arrow-right"></i>
+                Collection{" "}
+                <i className="pi pi-arrow-right text-xs underline"></i>
               </div>
             </div>
           </div>

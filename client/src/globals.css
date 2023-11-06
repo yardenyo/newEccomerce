@@ -56,6 +56,10 @@
     @apply text-gray-600 hover:cursor-pointer hover:text-gray-800 hover:font-semibold;
   }
 
+  .footer-link {
+    @apply text-white hover:cursor-pointer hover:text-gray-200 hover:font-semibold;
+  }
+
   .counter {
     @apply bg-gray-200 text-black rounded-full w-8 h-8 flex items-center justify-center p-2;
   }
@@ -66,5 +70,25 @@
 
   .user-dropdown-link {
     @apply block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left;
+  }
+
+  .countdown {
+    @apply flex gap-4;
+  }
+
+  .countdown-box {
+    @apply flex flex-col;
+  }
+
+  .countdown-number {
+    @apply bg-white shadow-md p-4 flex items-center justify-center w-16 h-16 text-2xl font-semibold;
+  }
+
+  .countdown-label {
+    @apply text-center text-sm font-semibold;
+  }
+
+  .feature {
+    @apply flex flex-col justify-center px-10 w-full h-64 bg-container;
   }
 }

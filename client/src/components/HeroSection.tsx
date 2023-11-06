@@ -1,6 +1,4 @@
-import React from "react";
 import Navbar from "@/components/Navbar";
-import HeroSectionImg from "@/assets/images/herosection.png";
 
 function HeroTitle() {
   return (
@@ -17,6 +15,8 @@ function HeroDescription() {
 }
 
 function HeroSection() {
+  const HeroSectionImg =
+    "https://res.cloudinary.com/dweltcoxk/image/upload/v1699291080/assets/of8xqnqetsob4xanfssu.png";
   return (
     <div className="relative bg-gradient overflow-hidden px-4 flex flex-col">
       <Navbar />

@@ -13,6 +13,9 @@ export default {
       backgroundImage: {
         gradient: "linear-gradient(to right, #f9b434, #ffcb5d)",
       },
+      colors: {
+        container: "#f3f5f7",
+      },
     },
   },
   plugins: [],

@@ -80,7 +80,6 @@ const ProductContent = ({ title, payload, tag }: ProductContentProps) => {
     <div className="container mx-auto py-4 flex flex-col space-y-4 px-8 xl:px-0">
       <div className="title flex justify-between items-center">
         <h1 className="text-2xl font-bold">{title}</h1>
-        <div className="link">Explore More</div>
       </div>
       <ProductList
         products={products}
