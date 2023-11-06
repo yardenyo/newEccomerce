@@ -47,7 +47,7 @@ const ProductList: React.FC<ProductListProps> = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-8">
       {products.map((product: ProductType, index: number) => (
-        <div className="flex justify-center">
+        <div key={product._id} className="flex justify-center">
           <Product
             key={product._id + index}
             product={product}

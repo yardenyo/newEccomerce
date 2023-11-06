@@ -1,8 +1,9 @@
 import { useGetAllCategoriesQuery } from "@/features/categories/categoriesApiSlice";
-import NoImage from "@/assets/images/noimage.png";
 import { Category } from "@/types";
 
 const Categories = () => {
+  const noImageSrc =
+    "https://res.cloudinary.com/dweltcoxk/image/upload/v1699290993/assets/zb3phjr1bvhgns50gird.png";
   const payload = {
     sortBy: "createdAt",
     sortOrder: 0,
@@ -27,7 +28,7 @@ const Categories = () => {
           >
             <div className="flex flex-col justify-center items-center">
               <img
-                src={category.image || NoImage}
+                src={category.image || noImageSrc}
                 alt={category.name}
                 className="object-contain w-3/4 h-96"
               />

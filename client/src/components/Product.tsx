@@ -1,7 +1,6 @@
 import React from "react";
 import { Colors } from "@/enums";
 import { Product } from "@/types";
-import NoImage from "@/assets/images/noimage.png";
 
 interface ProductProps {
   product: Product;
@@ -24,11 +23,13 @@ const Product: React.FC<ProductProps> = ({
   handleRemoveFromWishlist,
   numberOfStars,
 }) => {
+  const noImageSrc =
+    "https://res.cloudinary.com/dweltcoxk/image/upload/v1699290993/assets/zb3phjr1bvhgns50gird.png";
   return (
     <div className="bg-white group relative shadow-lg rounded-lg p-4 hover:transform hover:scale-105 transition duration-300 ease-in-out w-full">
       <div className="relative">
         <img
-          src={product.images[0] || NoImage}
+          src={product.images[0] || noImageSrc}
           alt={product.slug}
           className="object-contain w-full"
         />

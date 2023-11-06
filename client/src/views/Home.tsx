@@ -3,6 +3,7 @@ import ProductContent from "@/components/ProductContent";
 import Categories from "@/components/Categories";
 import Promotion from "@/components/Promotion";
 import Features from "@/components/Features";
+import Subscribe from "@/components/Subscribe";
 
 const Home = () => {
   const newArrivals = {
@@ -33,6 +34,7 @@ const Home = () => {
       <ProductContent {...bestSellers} />
       <Promotion />
       <Features />
+      <Subscribe />
     </main>
   );
 };

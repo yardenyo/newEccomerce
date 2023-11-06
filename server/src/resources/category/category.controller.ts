@@ -28,7 +28,7 @@ class CategoryController implements Controller {
             creatorMiddleware,
             this.createCategory,
         );
-        this.router.post(`${this.path}`, authMiddleware, this.getAllCategories);
+        this.router.post(`${this.path}`, this.getAllCategories);
         this.router.get(
             `${this.path}/:id`,
             authMiddleware,
