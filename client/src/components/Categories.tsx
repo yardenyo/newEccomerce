@@ -21,7 +21,10 @@ const Categories = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
         {categories.map((category: Category) => (
-          <div key={category._id} className="relative bg-[#f3f5f7] rounded-lg">
+          <div
+            key={category._id}
+            className="relative bg-[#f3f5f7] rounded-lg shadow-lg hover:transform hover:scale-105 transition duration-300 ease-in-out"
+          >
             <div className="flex flex-col justify-center items-center h-96">
               <img
                 src={category.image || NoImage}
