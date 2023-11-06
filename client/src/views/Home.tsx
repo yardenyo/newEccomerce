@@ -1,5 +1,6 @@
 import HeroSection from "@/components/HeroSection";
 import ProductContent from "@/components/ProductContent";
+import Categories from "@/components/Categories";
 // import Brands from "@/components/Brands";
 
 const Home = () => {
@@ -24,9 +25,10 @@ const Home = () => {
   };
 
   return (
-    <main>
+    <main className="flex flex-col space-y-8">
       <HeroSection />
       <ProductContent {...newArrivals} />
+      <Categories />
       {/* <Brands /> */}
       <ProductContent {...bestSellers} />
     </main>
