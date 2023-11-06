@@ -1,6 +1,8 @@
 import { apiSlice } from "@/api/apiSlice";
 import { User } from "@/types";
 import { setUser } from "@/features/auth/authSlice";
+import { initCart } from "@/features/cart/cartSlice";
+import { setWishlist } from "@/features/wishlist/wishlistSlice";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -53,6 +55,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           dispatch(setUser({ user: data }));
+          dispatch(initCart({ cart: data.cart }));
+          dispatch(setWishlist({ wishlist: data.wishlist }));
         } catch (err) {
           console.log({ err });
         }

@@ -83,7 +83,7 @@ const imageResizeMiddleware =
                             .jpeg({ quality: 90 })
                             .toFile(destinationPath);
 
-                        fs.unlinkSync(file.path);
+                        // fs.unlinkSync(file.path);
                     },
                 ),
             );

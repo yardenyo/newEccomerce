@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
 @layer tailwind-base, primereact, tailwind-utilities;
 
 @layer tailwind-base {
@@ -26,6 +28,18 @@
     @apply bg-black  text-white;
   }
 
+  .tag {
+    @apply rounded-lg px-2 py-1 font-semibold pointer-events-none disabled:bg-slate-400/30 hover:disabled:opacity-100 disabled:cursor-not-allowed;
+  }
+
+  .tag-circle {
+    @apply rounded-full p-2 font-semibold hover:cursor-pointer flex items-center justify-center disabled:bg-slate-400/30 hover:disabled:opacity-100 disabled:cursor-not-allowed;
+  }
+
+  .tag-primary {
+    @apply bg-white text-black;
+  }
+
   .btn-secondary {
     @apply bg-gray-200 text-black;
   }
@@ -43,6 +57,14 @@
   }
 
   .counter {
-    @apply bg-black text-white rounded-full w-4 h-4 flex items-center justify-center p-2 text-xs;
+    @apply bg-gray-200 text-black rounded-full w-8 h-8 flex items-center justify-center p-2;
+  }
+
+  .user-dropdown {
+    @apply absolute top-full left-1/2 transform -translate-x-1/2 w-32 bg-white border border-gray-300 rounded-lg py-2 mt-2 shadow-md z-10;
+  }
+
+  .user-dropdown-link {
+    @apply block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left;
   }
 }

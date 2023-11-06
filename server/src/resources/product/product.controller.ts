@@ -32,7 +32,7 @@ class ProductController implements Controller {
             creatorMiddleware,
             this.createProduct,
         );
-        this.router.post(`${this.path}`, authMiddleware, this.getAllProducts);
+        this.router.post(`${this.path}`, this.getAllProducts);
         this.router.get(
             `${this.path}/:id`,
             authMiddleware,

@@ -43,10 +43,13 @@ const Notice = ({ showNotice, setShowNotice }: Props) => {
           <div className="wrapper flex justify-center items-center space-x-2">
             <div className="message-wrapper flex items-center space-x-2">
               <i className="pi pi-tags"></i>
-              <span>30% off storewide — Limited time! </span>
+              <span>
+                30% off storewide —{" "}
+                <span className="hidden md:inline-block"> Limited time!</span>{" "}
+              </span>
             </div>
             <div className="code-wrapper flex items-center space-x-2">
-              <span>Use code: </span>
+              <span className="hidden md:inline-block">Use code: </span>
               <span className="navbar-link custom-tooltip" onClick={handleCopy}>
                 SUMMER30
               </span>

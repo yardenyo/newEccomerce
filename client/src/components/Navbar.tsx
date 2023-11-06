@@ -2,12 +2,47 @@ import HamburgerSidebar from "@/components/HamburgerSidebar";
 import NavbarLinks from "@/constants/NavbarLinks";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/features/auth/authSlice";
+import { useSignoutMutation } from "@/features/auth/authApiSlice";
+import { Avatar } from "primereact/avatar";
+import { selectCart } from "@/features/cart/cartSlice";
 
 const Navbar = () => {
+  const user = useSelector(selectCurrentUser);
+  const cart = useSelector(selectCart);
   const [visible, setVisible] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [signout] = useSignoutMutation();
+
+  const handleSignOut = async () => {
+    await signout({});
+    window.location.href = "/";
+  };
+
+  const openUserDropdown = () => {
+    setShowUserDropdown(true);
+  };
+
+  const closeUserDropdown = () => {
+    setShowUserDropdown(false);
+  };
+
+  const getFirstLetter = (name: string) => {
+    return name.charAt(0).toUpperCase();
+  };
+
+  const userAvatar = () => {
+    const firstNameInitial = getFirstLetter(user?.firstName || "");
+    const lastNameInitial = getFirstLetter(user?.lastName || "");
+    return `${firstNameInitial}${lastNameInitial}`;
+  };
 
   return (
-    <nav className="py-4 flex items-center justify-between">
+    <nav
+      className="relative z-20 container mx-auto py-4 flex items-center justify-between"
+      onMouseLeave={closeUserDropdown}
+    >
       <div className="title flex items-center space-x-4">
         <div className="flex md:hidden">
           <i
@@ -29,18 +64,51 @@ const Navbar = () => {
         ))}
       </ul>
       <div className="flex space-x-4 items-center">
-        <div className="hidden md:flex">
-          <i className="pi pi-search navbar-link" />
-        </div>
-        <div className="hidden md:flex">
-          <i className="pi pi-user navbar-link" />
-        </div>
-        <div>
-          <div className="shopping-bag flex items-center justify-center space-x-2">
-            <i className="pi pi-shopping-bag navbar-link" />
-            <span className="counter">2</span>
+        {user ? (
+          <>
+            <div className="hidden md:flex">
+              <i className="pi pi-search navbar-link text-xl" />
+            </div>
+            <div
+              className="relative hidden md:flex group"
+              onMouseEnter={openUserDropdown}
+            >
+              <Avatar
+                label={userAvatar()}
+                className="user-avatar rounded-full"
+                style={{ color: "#fff", backgroundColor: "#000" }}
+              />
+              {showUserDropdown && (
+                <div className="user-dropdown">
+                  <Link to="/dashboard" className="user-dropdown-link">
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="user-dropdown-link"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+            <div>
+              <div className="shopping-bag flex items-center justify-center space-x-2">
+                <i className="pi pi-shopping-bag navbar-link text-xl" />
+                <span className="counter">{cart?.products?.length}</span>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="hidden md:flex space-x-2">
+            <Link to="/auth/sign-in">
+              <button className="btn btn-primary">Sign In</button>
+            </Link>
+            <Link to="/auth/sign-up">
+              <button className="btn btn-secondary">Sign Up</button>
+            </Link>
           </div>
-        </div>
+        )}
       </div>
       <HamburgerSidebar visible={visible} setVisible={setVisible} />
     </nav>

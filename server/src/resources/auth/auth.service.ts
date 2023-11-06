@@ -3,6 +3,8 @@ import roleModel from '@/resources/role/role.model';
 import UserSettings from '@/resources/setting/setting.interface';
 import settingsModel from '@/resources/setting/setting.model';
 import User from '@/resources/user/user.interface';
+import Cart from '@/resources/cart/cart.interface';
+import cartModel from '@/resources/cart/cart.model';
 import userModel from '@/resources/user/user.model';
 import redisClient from '@/utils/config/redisConfig';
 import sendEmail from '@/utils/helpers/sendEmail';
@@ -171,9 +173,12 @@ class AuthService {
         }
     }
 
-    public async getUser(
-        id: string,
-    ): Promise<{ user: User; role: Role; userSettings: UserSettings }> {
+    public async getUser(id: string): Promise<{
+        user: User;
+        role: Role;
+        cart: Cart;
+        userSettings: UserSettings;
+    }> {
         try {
             if (!id) throw new Error();
             const user = await this.user.findById(id);
@@ -182,7 +187,9 @@ class AuthService {
             if (!role) throw new Error();
             const userSettings = await this.setting.findById(user.userSettings);
             if (!userSettings) throw new Error();
-            return { user, role, userSettings };
+            const cart = await cartModel.findOne({ orderedBy: user._id });
+            if (!cart) throw new Error();
+            return { user, role, cart, userSettings };
         } catch (error) {
             throw new Error('Error getting user');
         }

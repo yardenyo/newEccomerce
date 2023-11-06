@@ -1,3 +1,5 @@
+import { Colors } from "@/enums";
+
 export interface PostBody {
   page?: number;
   resultsPerPage?: number;
@@ -15,7 +17,7 @@ export interface User {
   mobile: string;
   role: Roles;
   isBlocked: boolean;
-  cart: string | undefined;
+  cart: Cart;
   wishlist: string[];
   address: string[];
   userSettings: UserSettings;
@@ -25,6 +27,43 @@ export interface User {
   passwordChangedAt: Date;
   resetPasswordToken: string | undefined;
   resetPasswordExpires: Date | undefined;
+}
+
+export interface Product {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  price: number;
+  category: string;
+  brand: string;
+  quantity: number;
+  sold: number;
+  images: string[];
+  color: string;
+  ratings: Rating[];
+  totalRating: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Cart {
+  _id: string;
+  products: CartProduct[];
+  orderedBy: string;
+  cartTotal: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CartProduct {
+  _id: string;
+  productId: string;
+  name: string;
+  quantity: number;
+  color: Colors;
+  price: number;
+  images: string[];
 }
 
 export interface ErrorResponse {
@@ -40,4 +79,16 @@ export interface Image {
   source: string;
   alt: string;
   title?: string;
+}
+
+export interface CartState {
+  cart: {
+    cart: Cart | null;
+  };
+}
+
+export interface WishlistState {
+  wishlist: {
+    wishlist: string[];
+  };
 }

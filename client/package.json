@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
+    "async-mutex": "^0.4.0",
     "axios": "^1.5.1",
     "formik": "^2.4.5",
     "lodash": "^4.17.21",

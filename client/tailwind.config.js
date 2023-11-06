@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: "class",
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -9,7 +8,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        body: ["Roboto", "sans-serif"],
+      },
+      backgroundImage: {
+        gradient: "linear-gradient(to right, #f9b434, #ffcb5d)",
       },
     },
   },
