@@ -1,4 +1,5 @@
 import HamburgerSidebar from "@/components/HamburgerSidebar";
+import CartSidebar from "@/components/CartSidebar";
 import NavbarLinks from "@/constants/NavbarLinks";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -11,7 +12,8 @@ import { selectCart } from "@/features/cart/cartSlice";
 const Navbar = () => {
   const user = useSelector(selectCurrentUser);
   const cart = useSelector(selectCart);
-  const [visible, setVisible] = useState(false);
+  const [hamburgerVisible, setHamburgerVisible] = useState(false);
+  const [flyoutCartVisible, setFlyoutCartVisible] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [signout] = useSignoutMutation();
 
@@ -47,7 +49,7 @@ const Navbar = () => {
         <div className="flex md:hidden">
           <i
             className="pi pi-bars navbar-link"
-            onClick={() => setVisible(true)}
+            onClick={() => setHamburgerVisible(true)}
           />
         </div>
         <Link to="/">
@@ -94,7 +96,10 @@ const Navbar = () => {
             </div>
             <div>
               <div className="shopping-bag flex items-center justify-center space-x-2">
-                <i className="pi pi-shopping-bag navbar-link text-xl" />
+                <i
+                  className="pi pi-shopping-bag navbar-link text-xl"
+                  onClick={() => setFlyoutCartVisible(true)}
+                />
                 <span className="counter">{cart?.products?.length}</span>
               </div>
             </div>
@@ -110,7 +115,14 @@ const Navbar = () => {
           </div>
         )}
       </div>
-      <HamburgerSidebar visible={visible} setVisible={setVisible} />
+      <HamburgerSidebar
+        visible={hamburgerVisible}
+        setVisible={setHamburgerVisible}
+      />
+      <CartSidebar
+        visible={flyoutCartVisible}
+        setVisible={setFlyoutCartVisible}
+      />
     </nav>
   );
 };
