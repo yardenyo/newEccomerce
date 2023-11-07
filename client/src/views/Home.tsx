@@ -3,7 +3,6 @@ import ProductContent from "@/components/ProductContent";
 import Categories from "@/components/Categories";
 import Promotion from "@/components/Promotion";
 import Features from "@/components/Features";
-import Subscribe from "@/components/Subscribe";
 
 const Home = () => {
   const newArrivals = {
@@ -27,14 +26,13 @@ const Home = () => {
   };
 
   return (
-    <main className="flex flex-col space-y-8">
+    <main className="flex flex-col space-y-8 mb-8">
       <HeroSection />
       <ProductContent {...newArrivals} />
       <Categories />
       <ProductContent {...bestSellers} />
       <Promotion />
       <Features />
-      <Subscribe />
     </main>
   );
 };

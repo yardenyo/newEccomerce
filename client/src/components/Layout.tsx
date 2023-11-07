@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Notice from "@/components/Notice";
+import Subscribe from "@/components/Subscribe";
 import Footer from "@/components/Footer";
 import { useState } from "react";
 
@@ -12,6 +13,7 @@ const Layout = () => {
       <div className={`App ${showNotice && "pt-10"}`}>
         <Outlet />
       </div>
+      <Subscribe />
       <Footer />
     </main>
   );
