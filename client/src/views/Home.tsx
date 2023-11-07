@@ -1,8 +1,8 @@
-import HeroSection from "@/components/HeroSection";
-import ProductContent from "@/components/ProductContent";
-import Categories from "@/components/Categories";
-import Promotion from "@/components/Promotion";
-import Features from "@/components/Features";
+import HeroSection from "@/components/Layout/HeroSection";
+import ProductContent from "@/components/Products/ProductContent";
+import Categories from "@/components/Categories/Categories";
+import Promotion from "@/components/Layout/Promotion";
+import Features from "@/components/Features/Features";
 
 const Home = () => {
   const newArrivals = {

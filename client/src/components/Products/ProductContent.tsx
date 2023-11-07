@@ -11,7 +11,7 @@ import Helpers from "@/helpers/app.helpers";
 import { Colors } from "@/enums";
 import { setCart } from "@/features/cart/cartSlice";
 import { selectWishlist, setWishlist } from "@/features/wishlist/wishlistSlice";
-import ProductList from "@/components/ProductList";
+import ProductList from "@/components/Products/ProductList";
 
 type ProductContentProps = {
   title: string;

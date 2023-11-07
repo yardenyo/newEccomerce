@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router";
 import * as Yup from "yup";
 import signPages from "@/assets/images/signPages.jpg";
-import InputField from "@/components/InputField";
+import InputField from "@/components/Global/InputField";
 import useToast from "@/hooks/useToast";
 import { ErrorResponse } from "@/types";
 import Helpers from "@/helpers/app.helpers";

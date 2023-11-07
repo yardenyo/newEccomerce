@@ -1,7 +1,7 @@
 import React from "react";
 import { Colors } from "@/enums";
 import { Product as ProductType } from "@/types";
-import Product from "@/components/Product";
+import Product from "@/components/Products/Product";
 
 interface ProductListProps {
   products: Product[];

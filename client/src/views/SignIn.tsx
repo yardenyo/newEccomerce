@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import InputField from "@/components/InputField";
+import InputField from "@/components/Global/InputField";
 import signPages from "@/assets/images/signPages.jpg";
 import { ErrorResponse } from "@/types";
 import useToast from "@/hooks/useToast";

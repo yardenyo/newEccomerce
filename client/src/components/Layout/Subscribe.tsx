@@ -1,4 +1,4 @@
-import InputField from "@/components/InputField";
+import InputField from "@/components/Global/InputField";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 

@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
-import Notice from "@/components/Notice";
-import Subscribe from "@/components/Subscribe";
-import Footer from "@/components/Footer";
+import Notice from "@/components/Layout/Notice";
+import Subscribe from "@/components/Layout/Subscribe";
+import Footer from "@/components/Layout/Footer";
 import { useState } from "react";
 
 const Layout = () => {
