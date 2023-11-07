@@ -3,7 +3,10 @@ import { Sidebar } from "primereact/sidebar";
 import { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Divider } from "primereact/divider";
-import { useRemoveProductFromCartMutation } from "@/features/cart/cartApiSlice";
+import {
+  useRemoveProductFromCartMutation,
+  useAddProductToCartMutation,
+} from "@/features/cart/cartApiSlice";
 import useToast from "@/hooks/useToast";
 import Helpers from "@/helpers/app.helpers";
 import { ErrorResponse } from "@/types";
@@ -18,7 +21,11 @@ const CartSidebar = ({ visible, setVisible }: Props) => {
   const dispatch = useDispatch();
   const toast = useToast();
   const cart = useSelector(selectCart);
-  const [removeFromCart, { isLoading }] = useRemoveProductFromCartMutation();
+  const [removeFromCart, { isLoading: removeFromCartLoading }] =
+    useRemoveProductFromCartMutation();
+  const [addToCart, { isLoading: addToCartLoading }] =
+    useAddProductToCartMutation();
+  const isLoading = removeFromCartLoading || addToCartLoading;
 
   const customHeader = (
     <Fragment>
@@ -38,6 +45,20 @@ const CartSidebar = ({ visible, setVisible }: Props) => {
     try {
       const response = await removeFromCart({
         products: [{ productId, color, quantity }],
+      }).unwrap();
+      const { data, message } = Helpers.handleAxiosSuccess(response);
+      dispatch(setCart(data));
+      toast.toastSuccess(message);
+    } catch (e: unknown) {
+      const error = e as ErrorResponse;
+      toast.toastError(error.data.message);
+    }
+  };
+
+  const handleAddToCart = async (productId: string, color: string) => {
+    try {
+      const response = await addToCart({
+        products: [{ productId, color, quantity: 1 }],
       }).unwrap();
       const { data, message } = Helpers.handleAxiosSuccess(response);
       dispatch(setCart(data));
@@ -92,7 +113,27 @@ const CartSidebar = ({ visible, setVisible }: Props) => {
                           }
                         ></i>
                       </div>
-                      <span>Quantity: {item.quantity}</span>
+                      <div className="quantity-wrapper flex flex-row space-x-4 border border-gray-300 rounded-md w-fit px-2 py-0.5 items-center">
+                        <div
+                          className="minus text-lg cursor-pointer hover:font-semibold"
+                          onClick={() =>
+                            handleRemoveFromCart(item.productId, item.color, 1)
+                          }
+                        >
+                          -
+                        </div>
+                        <div className="quantity font-semibold">
+                          {item.quantity}
+                        </div>
+                        <div
+                          className="plus text-lg cursor-pointer hover:font-semibold"
+                          onClick={() =>
+                            handleAddToCart(item.productId, item.color)
+                          }
+                        >
+                          +
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <Divider />
