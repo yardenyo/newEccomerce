@@ -100,3 +100,9 @@ export interface WishlistState {
     wishlist: string[];
   };
 }
+
+export interface ShopFiltersState {
+  shopFilters: {
+    filters: ShopFilters;
+  };
+}

@@ -1,47 +1,18 @@
 import { useGetAllCategoriesQuery } from "@/features/categories/categoriesApiSlice";
+import {
+  pushCategory,
+  removeCategory,
+  togglePriceCheckbox,
+  toggleRatingCheckbox,
+  selectFilters,
+} from "@/features/shopFilters/shopFiltersSlice";
+import { useSelector, useDispatch } from "react-redux";
 import { Checkbox } from "primereact/checkbox";
 import { Category } from "@/types";
-import { useState } from "react";
 
 const ShopFilters = () => {
-  const defaultCategories = ["all"];
-  const [activeCategories, setActiveCategories] = useState(defaultCategories);
-  const defaultPriceRange = [0, 999999];
-  const [priceCheckedState, setPriceCheckedState] = useState(
-    new Array(5).fill(false)
-  );
-  const [priceRange, setPriceRange] = useState(defaultPriceRange);
-  const defaultRatingRange = [0, 5];
-  const [ratingCheckedState, setRatingCheckedState] = useState(
-    new Array(4).fill(false)
-  );
-  const [ratingRange, setRatingRange] = useState(defaultRatingRange);
-
-  const handlePriceCheckbox = (position: number, priceRange: number[]) => {
-    const updatedCheckedState = priceCheckedState.map((item, index) =>
-      index === position ? !item : false
-    );
-
-    setPriceCheckedState(updatedCheckedState);
-    if (updatedCheckedState[position]) {
-      setPriceRange(priceRange);
-    } else {
-      setPriceRange(defaultPriceRange);
-    }
-  };
-
-  const handleRatingCheckbox = (position: number, ratingRange: number[]) => {
-    const updatedCheckedState = ratingCheckedState.map((item, index) =>
-      index === position ? !item : false
-    );
-
-    setRatingCheckedState(updatedCheckedState);
-    if (updatedCheckedState[position]) {
-      setRatingRange(ratingRange);
-    } else {
-      setRatingRange(defaultRatingRange);
-    }
-  };
+  const filters = useSelector(selectFilters);
+  const dispatch = useDispatch();
 
   const payload = {
     sortBy: "createdAt",
@@ -72,15 +43,15 @@ const ShopFilters = () => {
           <span>Filters</span>
         </h1>
       </div>
-      {/* {activeCategories.map((category: string) => (
+      {filters.categories.map((category: string) => (
         <div key={category}>{category}</div>
       ))}
-      {priceRange.map((price: number) => (
+      {filters.price.map((price: number) => (
         <div key={price}>{price}</div>
       ))}
-      {ratingRange.map((rating: number) => (
+      {filters.rating.map((rating: number) => (
         <div key={rating}>{rating}</div>
-      ))} */}
+      ))}
       <div className="grid grid-cols-1 gap-4">
         <div className="flex flex-col space-y-2">
           <div className="text-lg font-semibold">Categories</div>
@@ -89,17 +60,15 @@ const ShopFilters = () => {
               <div
                 key={category._id}
                 className={`flex items-center justify-between cursor-pointer ${
-                  activeCategories.includes(category._id)
+                  filters.categories.includes(category._id)
                     ? "underline font-semibold"
                     : ""
                 }`}
                 onClick={() => {
-                  if (activeCategories.includes(category._id)) {
-                    setActiveCategories(
-                      activeCategories.filter((item) => item !== category._id)
-                    );
+                  if (filters.categories.includes(category._id)) {
+                    dispatch(removeCategory(category._id));
                   } else {
-                    setActiveCategories([...activeCategories, category._id]);
+                    dispatch(pushCategory(category._id));
                   }
                 }}
               >
@@ -114,36 +83,54 @@ const ShopFilters = () => {
             <div className="flex items-center justify-between">
               <span>Less than $25</span>
               <Checkbox
-                checked={priceCheckedState[0]}
-                onChange={() => handlePriceCheckbox(0, [0, 25])}
+                checked={filters.priceCheckedState[0]}
+                onChange={() =>
+                  dispatch(togglePriceCheckbox({ position: 0, price: [0, 25] }))
+                }
               />
             </div>
             <div className="flex items-center justify-between">
               <span>$25 - $50</span>
               <Checkbox
-                checked={priceCheckedState[1]}
-                onChange={() => handlePriceCheckbox(1, [25, 50])}
+                checked={filters.priceCheckedState[1]}
+                onChange={() =>
+                  dispatch(
+                    togglePriceCheckbox({ position: 1, price: [25, 50] })
+                  )
+                }
               />
             </div>
             <div className="flex items-center justify-between">
               <span>$50 - $100</span>
               <Checkbox
-                checked={priceCheckedState[2]}
-                onChange={() => handlePriceCheckbox(2, [50, 100])}
+                checked={filters.priceCheckedState[2]}
+                onChange={() =>
+                  dispatch(
+                    togglePriceCheckbox({ position: 2, price: [50, 100] })
+                  )
+                }
               />
             </div>
             <div className="flex items-center justify-between">
               <span>$100 - $200</span>
               <Checkbox
-                checked={priceCheckedState[3]}
-                onChange={() => handlePriceCheckbox(3, [100, 200])}
+                checked={filters.priceCheckedState[3]}
+                onChange={() =>
+                  dispatch(
+                    togglePriceCheckbox({ position: 3, price: [100, 200] })
+                  )
+                }
               />
             </div>
             <div className="flex items-center justify-between">
               <span>$200 and above</span>
               <Checkbox
-                checked={priceCheckedState[4]}
-                onChange={() => handlePriceCheckbox(4, [200, 999999])}
+                checked={filters.priceCheckedState[4]}
+                onChange={() =>
+                  dispatch(
+                    togglePriceCheckbox({ position: 4, price: [200, 999999] })
+                  )
+                }
               />
             </div>
           </div>
@@ -154,36 +141,44 @@ const ShopFilters = () => {
             <div className="flex items-center justify-between">
               <span>4+ Stars</span>
               <Checkbox
-                checked={ratingCheckedState[0]}
+                checked={filters.ratingCheckedState[0]}
                 onChange={() => {
-                  handleRatingCheckbox(0, [4, 5]);
+                  dispatch(
+                    toggleRatingCheckbox({ position: 0, rating: [4, 5] })
+                  );
                 }}
               />
             </div>
             <div className="flex items-center justify-between">
               <span>3+ Stars</span>
               <Checkbox
-                checked={ratingCheckedState[1]}
+                checked={filters.ratingCheckedState[1]}
                 onChange={() => {
-                  handleRatingCheckbox(1, [3, 5]);
+                  dispatch(
+                    toggleRatingCheckbox({ position: 1, rating: [3, 5] })
+                  );
                 }}
               />
             </div>
             <div className="flex items-center justify-between">
               <span>2+ Stars</span>
               <Checkbox
-                checked={ratingCheckedState[2]}
+                checked={filters.ratingCheckedState[2]}
                 onChange={() => {
-                  handleRatingCheckbox(2, [2, 5]);
+                  dispatch(
+                    toggleRatingCheckbox({ position: 2, rating: [2, 5] })
+                  );
                 }}
               />
             </div>
             <div className="flex items-center justify-between">
               <span>1+ Stars</span>
               <Checkbox
-                checked={ratingCheckedState[3]}
+                checked={filters.ratingCheckedState[3]}
                 onChange={() => {
-                  handleRatingCheckbox(3, [1, 5]);
+                  dispatch(
+                    toggleRatingCheckbox({ position: 3, rating: [1, 5] })
+                  );
                 }}
               />
             </div>
