@@ -106,3 +106,10 @@ export interface ShopFiltersState {
     filters: ShopFilters;
   };
 }
+
+export interface ShopProductsState {
+  shopProducts: {
+    products: Product[];
+    loading: boolean;
+  };
+}

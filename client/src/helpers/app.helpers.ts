@@ -113,10 +113,8 @@ const Helpers = {
       verify.toString().includes("/")
     );
   },
-  isValidLoginPassword(password: string): boolean {
-    return /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#/.,$?`|'-_*/%^&*[\]~_,()]{8,}$/.test(
-      password
-    );
+  capitalizeFirstLetter: (str: string): string => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   },
 };
 

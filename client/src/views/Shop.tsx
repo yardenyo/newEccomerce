@@ -1,5 +1,6 @@
 import Navbar from "@/components/Layout/Navbar";
 import ShopFilters from "@/components/ShopFilters/ShopFilters";
+import ShopProducts from "@/components/ShopProducts/ShopProducts";
 
 const Shop = () => {
   const shopHeroSectionImage =
@@ -22,11 +23,13 @@ const Shop = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
         <div className="col-span-1 md:col-span-2">
           <ShopFilters />
         </div>
-        <div className="col-span-1 md:col-span-10">Products</div>
+        <div className="col-span-1 md:col-span-10">
+          <ShopProducts />
+        </div>
       </div>
     </section>
   );

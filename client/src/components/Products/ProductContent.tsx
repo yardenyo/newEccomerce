@@ -14,13 +14,13 @@ import { selectWishlist, setWishlist } from "@/features/wishlist/wishlistSlice";
 import ProductList from "@/components/Products/ProductList";
 
 type ProductContentProps = {
-  title: string;
-  payload: {
+  title?: string;
+  payload?: {
     sortBy: string;
     sortOrder: number;
     resultsPerPage: number;
   };
-  tag: string;
+  tag?: string;
 };
 
 const ProductContent = ({ title, payload, tag }: ProductContentProps) => {
@@ -84,7 +84,7 @@ const ProductContent = ({ title, payload, tag }: ProductContentProps) => {
       <ProductList
         products={products}
         wishlist={wishlist}
-        tag={tag}
+        tag={tag || ""}
         isStateLoading={isStateLoading}
         handleAddToCart={handleAddToCart}
         handleAddToWishlist={handleAddToWishlist}

@@ -9,6 +9,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { Category } from "@/types";
 import Filter from "@/components/ShopFilters/Filter";
+import Helpers from "@/helpers/app.helpers";
 
 const ShopFilters = () => {
   const filters = useSelector(selectFilters);
@@ -29,10 +30,6 @@ const ShopFilters = () => {
 
   const newData = [allCategories, ...categories];
 
-  const capitalizeFirstLetter = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
-
   return (
     <div className="flex flex-col space-y-4">
       <div className="title">
@@ -51,19 +48,21 @@ const ShopFilters = () => {
               <div
                 key={category._id}
                 className={`flex items-center justify-between cursor-pointer ${
-                  filters.category === category._id
+                  filters.category._id === category._id
                     ? "underline font-semibold"
                     : ""
                 }`}
                 onClick={() => {
-                  if (filters.category === category._id) {
-                    dispatch(setCategory("all"));
+                  if (filters.category._id === category._id) {
+                    dispatch(setCategory(allCategories));
                   } else {
-                    dispatch(setCategory(category._id));
+                    dispatch(
+                      setCategory({ _id: category._id, name: category.name })
+                    );
                   }
                 }}
               >
-                {capitalizeFirstLetter(category.name)}
+                {Helpers.capitalizeFirstLetter(category.name)}
               </div>
             ))}
           </div>

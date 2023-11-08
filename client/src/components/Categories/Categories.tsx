@@ -1,4 +1,5 @@
 import { useGetAllCategoriesQuery } from "@/features/categories/categoriesApiSlice";
+import Helpers from "@/helpers/app.helpers";
 import { Category } from "@/types";
 
 const Categories = () => {
@@ -10,10 +11,6 @@ const Categories = () => {
   };
   const { data: response } = useGetAllCategoriesQuery(payload);
   const categories = response?.data || [];
-
-  const capitalizeFirstLetter = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
 
   return (
     <div className="container mx-auto flex flex-col space-y-4 px-8 md:px-0">
@@ -35,7 +32,7 @@ const Categories = () => {
             </div>
             <div className="text-wrapper absolute bottom-4 left-4 flex flex-col">
               <div className="text-2xl font-bold">
-                {capitalizeFirstLetter(category.name)}
+                {Helpers.capitalizeFirstLetter(category.name)}
               </div>
               <div className="link">
                 Collection{" "}

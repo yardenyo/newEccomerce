@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ShopFiltersState } from "@/types";
 
 const defaultState = {
-  category: "all",
+  category: { _id: "all", name: "All Categories" },
   price: [0, 999999],
   rating: [0, 5],
   priceCheckedState: new Array(5).fill(false),
