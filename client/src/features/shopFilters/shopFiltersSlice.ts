@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ShopFiltersState } from "@/types";
 
 const defaultState = {
-  categories: ["all"],
+  category: "all",
   price: [0, 999999],
   rating: [0, 5],
   priceCheckedState: new Array(5).fill(false),
@@ -13,7 +13,7 @@ const shopFiltersSlice = createSlice({
   name: "shopFilters",
   initialState: {
     filters: {
-      categories: defaultState.categories,
+      category: defaultState.category,
       price: defaultState.price,
       rating: defaultState.rating,
       priceCheckedState: defaultState.priceCheckedState,
@@ -21,13 +21,8 @@ const shopFiltersSlice = createSlice({
     },
   },
   reducers: {
-    pushCategory: (state, action) => {
-      state.filters.categories.push(action.payload);
-    },
-    removeCategory: (state, action) => {
-      state.filters.categories = state.filters.categories.filter(
-        (category) => category !== action.payload
-      );
+    setCategory: (state, action) => {
+      state.filters.category = action.payload;
     },
     togglePriceCheckbox: (state, action) => {
       const { position, price } = action.payload;
@@ -56,12 +51,8 @@ const shopFiltersSlice = createSlice({
   },
 });
 
-export const {
-  pushCategory,
-  removeCategory,
-  togglePriceCheckbox,
-  toggleRatingCheckbox,
-} = shopFiltersSlice.actions;
+export const { setCategory, togglePriceCheckbox, toggleRatingCheckbox } =
+  shopFiltersSlice.actions;
 
 export default shopFiltersSlice.reducer;
 

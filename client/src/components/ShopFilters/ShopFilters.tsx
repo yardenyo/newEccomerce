@@ -1,8 +1,7 @@
 import { useGetAllCategoriesQuery } from "@/features/categories/categoriesApiSlice";
 import { ShopPriceFilters, shopRatingFilters } from "@/constants/ShopFilters";
 import {
-  pushCategory,
-  removeCategory,
+  setCategory,
   togglePriceCheckbox,
   toggleRatingCheckbox,
   selectFilters,
@@ -52,15 +51,15 @@ const ShopFilters = () => {
               <div
                 key={category._id}
                 className={`flex items-center justify-between cursor-pointer ${
-                  filters.categories.includes(category._id)
+                  filters.category === category._id
                     ? "underline font-semibold"
                     : ""
                 }`}
                 onClick={() => {
-                  if (filters.categories.includes(category._id)) {
-                    dispatch(removeCategory(category._id));
+                  if (filters.category === category._id) {
+                    dispatch(setCategory("all"));
                   } else {
-                    dispatch(pushCategory(category._id));
+                    dispatch(setCategory(category._id));
                   }
                 }}
               >
