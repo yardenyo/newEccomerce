@@ -16,6 +16,7 @@ const Categories = () => {
 
   const handleCollectionClicked = (id: string) => {
     Navigate(`/shop/${id}`, { replace: true });
+    window.scrollTo(0, 0);
   };
 
   return (
