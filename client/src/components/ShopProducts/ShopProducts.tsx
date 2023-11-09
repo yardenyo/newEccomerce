@@ -2,16 +2,34 @@ import ProductContent from "@/components/Products/ProductContent";
 import { selectFilters } from "@/features/shopFilters/shopFiltersSlice";
 import Helpers from "@/helpers/app.helpers";
 import { useSelector } from "react-redux";
+import LoadingSpinner from "@/components/Layout/Loading";
+import { useGetAllProductsQuery } from "@/features/products/productsApiSlice";
+import { Product } from "@/types";
 
 const ShopProducts = () => {
   const filters = useSelector(selectFilters);
 
+  const payload = {
+    sortBy: "createdAt",
+    sortOrder: 0,
+    resultsPerPage: 10,
+  };
+
+  const {
+    data: response,
+    isLoading,
+    isFetching,
+  } = useGetAllProductsQuery({
+    ...payload,
+    filters,
+  });
+
+  const loading = isLoading || isFetching;
+
+  const products: Product[] = response?.data || [];
+
   const data = {
-    payload: {
-      sortBy: "createdAt",
-      sortOrder: 0,
-      resultsPerPage: 10,
-    },
+    products,
   };
 
   return (
@@ -30,7 +48,7 @@ const ShopProducts = () => {
           <div>Rectangle</div>
         </div>
       </div>
-      <ProductContent {...data} />
+      {loading ? <LoadingSpinner /> : <ProductContent {...data} />}
     </section>
   );
 };
