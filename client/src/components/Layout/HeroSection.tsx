@@ -1,4 +1,5 @@
 import Navbar from "@/components/Layout/Navbar";
+import { useNavigate } from "react-router-dom";
 
 function HeroTitle() {
   return (
@@ -15,8 +16,15 @@ function HeroDescription() {
 }
 
 function HeroSection() {
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+    navigate("/shop", { replace: true });
+    window.scrollTo(0, 0);
+  };
+
   const HeroSectionImg =
     "https://res.cloudinary.com/dweltcoxk/image/upload/v1699291080/assets/of8xqnqetsob4xanfssu.png";
+
   return (
     <div className="relative bg-gradient overflow-hidden px-4 flex flex-col">
       <Navbar />
@@ -29,7 +37,12 @@ function HeroSection() {
         <div className="flex flex-col space-y-4 items-center justify-center md:items-start md:justify-start">
           <HeroTitle />
           <HeroDescription />
-          <button className="btn btn-primary w-1/2 md:w-1/3">Shop Now</button>
+          <button
+            className="btn btn-primary w-1/2 md:w-1/3"
+            onClick={handleNavigate}
+          >
+            Shop Now
+          </button>
         </div>
       </div>
     </div>

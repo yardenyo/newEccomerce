@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { Tooltip } from "primereact/tooltip";
+import { useNavigate } from "react-router-dom";
 
 const Promotion = () => {
   const [copied, setCopied] = useState(false);
   const promotionTooltipRef = useRef(null);
+  const navigate = useNavigate();
 
   const calculateTimeLeft = () => {
     const endDate = new Date("2025-11-06 15:45:00").getTime();
@@ -34,6 +36,11 @@ const Promotion = () => {
     setTimeout(() => {
       setCopied(false);
     }, 3000);
+  };
+
+  const handleNavigate = () => {
+    navigate("/shop");
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
@@ -99,7 +106,12 @@ const Promotion = () => {
               </div>
             </div>
           )}
-          <button className="btn btn-primary w-1/2 md:w-1/3">Shop Now</button>
+          <button
+            className="btn btn-primary w-1/2 md:w-1/3"
+            onClick={handleNavigate}
+          >
+            Shop Now
+          </button>
         </div>
       </div>
     </section>
