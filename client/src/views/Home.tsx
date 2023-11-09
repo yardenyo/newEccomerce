@@ -1,40 +1,66 @@
-import HeroSection from "@/components/HeroSection";
-import ProductContent from "@/components/ProductContent";
-import Categories from "@/components/Categories";
-import Promotion from "@/components/Promotion";
-import Features from "@/components/Features";
-import Subscribe from "@/components/Subscribe";
+import HeroSection from "@/components/Layout/HeroSection";
+import ProductContent from "@/components/Products/ProductContent";
+import Categories from "@/components/Categories/Categories";
+import Promotion from "@/components/Layout/Promotion";
+import Features from "@/components/Features/Features";
+import { useGetAllProductsQuery } from "@/features/products/productsApiSlice";
+import Loading from "@/components/Layout/Loading";
 
 const Home = () => {
+  const newArrivalsPayload = {
+    sortBy: "createdAt",
+    sortOrder: 0,
+    resultsPerPage: 5,
+  };
+
+  const {
+    data: newArrivalsResponse,
+    isLoading: newArrivalsLoading,
+    isFetching: newArrivalsFetching,
+  } = useGetAllProductsQuery(newArrivalsPayload);
+
+  const bestSellersPayload = {
+    sortBy: "sold",
+    sortOrder: 0,
+    resultsPerPage: 10,
+  };
+
+  const {
+    data: bestSellersResponse,
+    isLoading: bestSellersLoading,
+    isFetching: bestSellersFetching,
+  } = useGetAllProductsQuery(bestSellersPayload);
+
+  const loading =
+    newArrivalsLoading ||
+    bestSellersLoading ||
+    bestSellersFetching ||
+    newArrivalsFetching;
+
+  const newArrivalsProducts = newArrivalsResponse?.data || [];
+
+  const bestSellersProducts = bestSellersResponse?.data || [];
+
   const newArrivals = {
     title: "New Arrivals",
-    payload: {
-      sortBy: "createdAt",
-      sortOrder: 0,
-      resultsPerPage: 5,
-    },
     tag: "New",
+    products: newArrivalsProducts,
   };
 
   const bestSellers = {
     title: "Best Sellers",
-    payload: {
-      sortBy: "sold",
-      sortOrder: 0,
-      resultsPerPage: 10,
-    },
     tag: "Hot",
+    products: bestSellersProducts,
   };
 
   return (
-    <main className="flex flex-col space-y-8">
+    <main className="flex flex-col space-y-8 mb-8">
       <HeroSection />
-      <ProductContent {...newArrivals} />
+      {loading ? <Loading /> : <ProductContent {...newArrivals} />}
       <Categories />
-      <ProductContent {...bestSellers} />
+      {loading ? <Loading /> : <ProductContent {...bestSellers} />}
       <Promotion />
       <Features />
-      <Subscribe />
     </main>
   );
 };

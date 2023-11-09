@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import Layout from "@/components/Layout";
-import RequireAuth from "@/components/RequireAuth";
+import Layout from "@/components/Layout/Layout";
+import RequireAuth from "@/components/Layout/RequireAuth";
 import Home from "@/views/Home";
+import Shop from "@/views/Shop";
 import SignUp from "@/views/SignUp";
 import SignIn from "@/views/SignIn";
 import ForgotPassword from "@/views/ForgotPassword";
@@ -31,6 +32,7 @@ function App() {
       )}
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/shop" element={<Shop />} />
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* User Routes */}

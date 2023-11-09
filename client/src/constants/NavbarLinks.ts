@@ -1,5 +1,10 @@
 const NavbarLinks = [
   {
+    key: "home",
+    title: "Home",
+    path: "/",
+  },
+  {
     key: "shop",
     title: "Shop",
     path: "/shop",

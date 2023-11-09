@@ -1,5 +1,5 @@
-import HamburgerSidebar from "@/components/HamburgerSidebar";
-import CartSidebar from "@/components/CartSidebar";
+import HamburgerSidebar from "@/components/Sidebars/HamburgerSidebar";
+import CartSidebar from "@/components/Sidebars/CartSidebar";
 import NavbarLinks from "@/constants/NavbarLinks";
 import { useState } from "react";
 import { Link } from "react-router-dom";

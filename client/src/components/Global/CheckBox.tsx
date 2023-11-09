@@ -11,7 +11,7 @@ type Props = {
 const CheckBox = ({
   id,
   name,
-  type,
+  type = "checkbox",
   label,
   onChange,
   errors,

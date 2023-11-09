@@ -1,7 +1,7 @@
 import { useForgotPasswordMutation } from "@/features/auth/authApiSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import InputField from "@/components/InputField";
+import InputField from "@/components/Global/InputField";
 import useToast from "@/hooks/useToast";
 import signPages from "@/assets/images/signPages.jpg";
 import { ErrorResponse } from "@/types";

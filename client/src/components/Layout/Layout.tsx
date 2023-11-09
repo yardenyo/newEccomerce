@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
-import Notice from "@/components/Notice";
-import Footer from "@/components/Footer";
+import Notice from "@/components/Layout/Notice";
+import Subscribe from "@/components/Layout/Subscribe";
+import Footer from "@/components/Layout/Footer";
 import { useState } from "react";
 
 const Layout = () => {
@@ -12,6 +13,7 @@ const Layout = () => {
       <div className={`App ${showNotice && "pt-10"}`}>
         <Outlet />
       </div>
+      <Subscribe />
       <Footer />
     </main>
   );

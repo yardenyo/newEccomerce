@@ -37,6 +37,13 @@ class ProductService {
                 await ConvertResponse(body);
 
             const products = await this.product
+                .find({
+                    category: body.filters?.category || { $ne: null },
+                    price: {
+                        $gte: body.filters?.price[0] || 0,
+                        $lte: body.filters?.price[1] || 999999,
+                    },
+                })
                 .find(searchFilter)
                 .sort(sort)
                 .skip(skip)

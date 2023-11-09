@@ -1,4 +1,4 @@
-import FeatureItem from "@/components/FeatureItem";
+import FeatureItem from "@/components/Features/FeatureItem";
 
 const Features = () => {
   return (

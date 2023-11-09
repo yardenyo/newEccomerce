@@ -5,7 +5,7 @@ import { Product } from "@/types";
 interface ProductProps {
   product: Product;
   wishlist: string[];
-  tag: string;
+  tag?: string;
   isStateLoading: boolean;
   handleAddToCart: (productId: string, color: Colors) => void;
   handleAddToWishlist: (productId: string) => void;
@@ -33,7 +33,9 @@ const Product: React.FC<ProductProps> = ({
           alt={product.slug}
           className="object-contain w-full"
         />
-        <div className="absolute top-2 left-2 tag tag-primary">{tag}</div>
+        {tag && (
+          <div className="absolute top-2 left-2 tag tag-primary">{tag}</div>
+        )}
 
         <button
           className="absolute top-2 right-2 tag-circle tag-primary opacity-0 group-hover:opacity-100"

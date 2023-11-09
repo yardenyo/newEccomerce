@@ -1,4 +1,5 @@
 import { useGetAllCategoriesQuery } from "@/features/categories/categoriesApiSlice";
+import Helpers from "@/helpers/app.helpers";
 import { Category } from "@/types";
 
 const Categories = () => {
@@ -11,16 +12,12 @@ const Categories = () => {
   const { data: response } = useGetAllCategoriesQuery(payload);
   const categories = response?.data || [];
 
-  const capitalizeFirstLetter = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
-
   return (
     <div className="container mx-auto flex flex-col space-y-4 px-8 md:px-0">
       <div className="title">
         <h1 className="text-2xl font-bold">Shop Collection</h1>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-8">
         {categories.map((category: Category) => (
           <div
             key={category._id}
@@ -35,7 +32,7 @@ const Categories = () => {
             </div>
             <div className="text-wrapper absolute bottom-4 left-4 flex flex-col">
               <div className="text-2xl font-bold">
-                {capitalizeFirstLetter(category.name)}
+                {Helpers.capitalizeFirstLetter(category.name)}
               </div>
               <div className="link">
                 Collection{" "}

@@ -1,32 +1,26 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
-  useGetAllProductsQuery,
   useAddToWishlistMutation,
   useRemoveFromWishlistMutation,
 } from "@/features/products/productsApiSlice";
 import { useAddProductToCartMutation } from "@/features/cart/cartApiSlice";
-import { ErrorResponse } from "@/types";
+import { ErrorResponse, Product } from "@/types";
 import useToast from "@/hooks/useToast";
 import Helpers from "@/helpers/app.helpers";
 import { Colors } from "@/enums";
 import { setCart } from "@/features/cart/cartSlice";
 import { selectWishlist, setWishlist } from "@/features/wishlist/wishlistSlice";
-import ProductList from "@/components/ProductList";
+import ProductList from "@/components/Products/ProductList";
 
 type ProductContentProps = {
-  title: string;
-  payload: {
-    sortBy: string;
-    sortOrder: number;
-    resultsPerPage: number;
-  };
-  tag: string;
+  title?: string;
+  tag?: string;
+  products: Product[];
 };
 
-const ProductContent = ({ title, payload, tag }: ProductContentProps) => {
+const ProductContent = ({ title, tag, products }: ProductContentProps) => {
   const dispatch = useDispatch();
   const wishlist = useSelector(selectWishlist);
-  const { data: response } = useGetAllProductsQuery(payload);
   const toast = useToast();
   const [addToCart, { isLoading: addToCartLoading }] =
     useAddProductToCartMutation();
@@ -34,7 +28,6 @@ const ProductContent = ({ title, payload, tag }: ProductContentProps) => {
     useAddToWishlistMutation();
   const [removeFromWishlist, { isLoading: removeFromWishlistLoading }] =
     useRemoveFromWishlistMutation();
-  const products = response?.data || [];
   const isStateLoading =
     addToCartLoading || addToWishlistLoading || removeFromWishlistLoading;
 
@@ -84,7 +77,7 @@ const ProductContent = ({ title, payload, tag }: ProductContentProps) => {
       <ProductList
         products={products}
         wishlist={wishlist}
-        tag={tag}
+        tag={tag || ""}
         isStateLoading={isStateLoading}
         handleAddToCart={handleAddToCart}
         handleAddToWishlist={handleAddToWishlist}
