@@ -24,10 +24,10 @@ const Shop = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-        <div className="col-span-1 md:col-span-2">
+        <div className="col-span-1 xl:col-span-2 lg:col-span-3 md:col-span-4">
           <ShopFilters />
         </div>
-        <div className="col-span-1 md:col-span-10">
+        <div className="col-span-1 xl:col-span-10 lg:col-span-9 md:col-span-8">
           <ShopProducts />
         </div>
       </div>

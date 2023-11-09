@@ -5,9 +5,20 @@ import { useSelector } from "react-redux";
 import LoadingSpinner from "@/components/Layout/Loading";
 import { useGetAllProductsQuery } from "@/features/products/productsApiSlice";
 import { Product } from "@/types";
+import { useMemo } from "react";
 
 const ShopProducts = () => {
   const filters = useSelector(selectFilters);
+
+  const selectPayloadFilters = useMemo(() => {
+    const payload = {
+      category: filters.category._id === "all" ? "" : filters.category._id,
+      price: filters.price,
+      rating: filters.rating,
+    };
+
+    return payload;
+  }, [filters]);
 
   const payload = {
     sortBy: "createdAt",
@@ -21,7 +32,7 @@ const ShopProducts = () => {
     isFetching,
   } = useGetAllProductsQuery({
     ...payload,
-    filters,
+    filters: selectPayloadFilters,
   });
 
   const loading = isLoading || isFetching;
@@ -34,7 +45,7 @@ const ShopProducts = () => {
 
   return (
     <section className="flex flex-col">
-      <div className="flex justify-between items-center ">
+      <div className="flex justify-between items-center">
         <div className="text-xl font-bold">
           {Helpers.capitalizeFirstLetter(filters.category.name)}
         </div>
@@ -45,7 +56,6 @@ const ShopProducts = () => {
               <i className=""></i>
             </span>
           </div>
-          <div>Rectangle</div>
         </div>
       </div>
       {loading ? <LoadingSpinner /> : <ProductContent {...data} />}
