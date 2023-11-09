@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Layout from "@/components/Layout/Layout";
 import RequireAuth from "@/components/Layout/RequireAuth";
 import Home from "@/views/Home";
@@ -13,17 +13,11 @@ import { Roles } from "@/enums";
 import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/features/auth/authSlice";
-import { useEffect } from "react";
 
 function App() {
   const [cookies] = useCookies(["isAuthenticated"]);
   const user = useSelector(selectCurrentUser);
   const isAuthenticated = cookies.isAuthenticated || user;
-  const location = useLocation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
 
   return (
     <Routes>
