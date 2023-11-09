@@ -49,8 +49,12 @@ const ShopFilters = (props: Props) => {
       if (category) {
         dispatch(setCategory(category));
       }
+    } else {
+      if (filters.category._id !== "all") {
+        navigate(`/shop/${filters.category._id}`, { replace: true });
+      }
     }
-  }, [props.category, newData, dispatch]);
+  }, [props.category, newData, dispatch, filters.category._id, navigate]);
 
   const handleSetCategory = (category: { _id: string; name: string }) => {
     dispatch(setCategory(category));
