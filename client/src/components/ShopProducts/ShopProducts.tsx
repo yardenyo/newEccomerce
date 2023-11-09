@@ -3,6 +3,7 @@ import { selectFilters } from "@/features/shopFilters/shopFiltersSlice";
 import Helpers from "@/helpers/app.helpers";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "@/components/Layout/Loading";
+import NoProducts from "@/components/Layout/NoProducts";
 import { useGetAllProductsQuery } from "@/features/products/productsApiSlice";
 import { Product } from "@/types";
 import { useMemo } from "react";
@@ -58,7 +59,13 @@ const ShopProducts = () => {
           </div>
         </div>
       </div>
-      {loading ? <LoadingSpinner /> : <ProductContent {...data} />}
+      {loading ? (
+        <LoadingSpinner />
+      ) : data.products.length > 0 ? (
+        <ProductContent {...data} />
+      ) : (
+        <NoProducts />
+      )}
     </section>
   );
 };
