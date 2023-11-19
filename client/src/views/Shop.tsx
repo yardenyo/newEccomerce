@@ -1,10 +1,13 @@
 import Navbar from "@/components/Layout/Navbar";
 import ShopFilters from "@/components/ShopFilters/ShopFilters";
 import ShopProducts from "@/components/ShopProducts/ShopProducts";
+import { useParams } from "react-router-dom";
 
 const Shop = () => {
   const shopHeroSectionImage =
     "https://res.cloudinary.com/dweltcoxk/image/upload/v1699447608/assets/vqtp2l6m0dfzqa9jxhxo.jpg";
+
+  const { category } = useParams();
 
   return (
     <section className="flex flex-col mb-8 container mx-auto px-4">
@@ -25,7 +28,7 @@ const Shop = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
         <div className="col-span-1 xl:col-span-2 lg:col-span-3 md:col-span-4">
-          <ShopFilters />
+          <ShopFilters category={category} />
         </div>
         <div className="col-span-1 xl:col-span-10 lg:col-span-9 md:col-span-8">
           <ShopProducts />

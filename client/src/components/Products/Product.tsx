@@ -26,12 +26,12 @@ const Product: React.FC<ProductProps> = ({
   const noImageSrc =
     "https://res.cloudinary.com/dweltcoxk/image/upload/v1699290993/assets/zb3phjr1bvhgns50gird.png";
   return (
-    <div className="bg-white group relative shadow-lg rounded-lg p-4 hover:transform hover:scale-105 transition duration-300 ease-in-out w-full">
+    <div className="bg-white group relative p-4 hover:transform hover:scale-105 transition duration-300 ease-in-out w-full">
       <div className="relative">
         <img
           src={product.images[0] || noImageSrc}
           alt={product.slug}
-          className="object-contain w-full"
+          className="border"
         />
         {tag && (
           <div className="absolute top-2 left-2 tag tag-primary">{tag}</div>
@@ -62,11 +62,11 @@ const Product: React.FC<ProductProps> = ({
         </button>
       </div>
 
-      <div className="py-4">
-        <h2 className="text-xl font-bold mb-2 flex items-center space-x-1">
+      <div className="flex flex-col py-2">
+        <h2 className="text-base font-bold flex items-center space-x-1">
           {numberOfStars(4)}
         </h2>
-        <h2 className="text-xl font-bold mb-2">{product.title}</h2>
+        <h2 className="text-base font-bold">{product.title}</h2>
         <p className="text-gray-700 font-semibold text-base">
           {product.description}
         </p>

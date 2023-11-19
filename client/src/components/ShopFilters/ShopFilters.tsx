@@ -10,10 +10,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { Category } from "@/types";
 import Filter from "@/components/ShopFilters/Filter";
 import Helpers from "@/helpers/app.helpers";
+import { Divider } from "primereact/divider";
+import { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
-const ShopFilters = () => {
+type Props = {
+  category?: string;
+};
+
+const ShopFilters = (props: Props) => {
   const filters = useSelector(selectFilters);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [showFilters, setShowFilters] = useState(false);
 
   const payload = {
     sortBy: "createdAt",
@@ -21,18 +30,44 @@ const ShopFilters = () => {
   };
 
   const { data: response } = useGetAllCategoriesQuery(payload);
-  const categories = response?.data || [];
 
-  const allCategories = {
-    _id: "all",
-    name: "All Categories",
+  const newData = useMemo(() => {
+    const categories = response?.data || [];
+
+    const allCategories = {
+      _id: "all",
+      name: "All Categories",
+    };
+    return [allCategories, ...categories];
+  }, [response?.data]);
+
+  useEffect(() => {
+    if (props.category) {
+      const category = newData.find(
+        (category) => category._id === props.category
+      );
+      if (category) {
+        dispatch(setCategory(category));
+      }
+    } else {
+      if (filters.category._id !== "all") {
+        navigate(`/shop/${filters.category._id}`, { replace: true });
+      }
+    }
+  }, [props.category, newData, dispatch, filters.category._id, navigate]);
+
+  const handleSetCategory = (category: { _id: string; name: string }) => {
+    dispatch(setCategory(category));
+    navigate(`/shop/${category._id}`, { replace: true });
   };
-
-  const newData = [allCategories, ...categories];
 
   return (
     <div className="flex flex-col space-y-4">
-      <div className="title">
+      <Divider className="block md:hidden" />
+      <div
+        className="title cursor-pointer md:cursor-auto"
+        onClick={() => setShowFilters(!showFilters)}
+      >
         <h1 className="text-xl font-bold flex space-x-2 items-center">
           <span>
             <i className="pi pi-sliders-h"></i>
@@ -40,7 +75,12 @@ const ShopFilters = () => {
           <span>Filters</span>
         </h1>
       </div>
-      <div className="grid grid-cols-1 gap-4">
+      <Divider className="block md:hidden" />
+      <div
+        className={`md:grid md:grid-cols-1 gap-4 ${
+          showFilters ? "block" : "hidden"
+        }`}
+      >
         <div className="flex flex-col space-y-2">
           <div className="text-lg font-semibold">Categories</div>
           <div className="flex flex-col space-y-2">
@@ -54,11 +94,9 @@ const ShopFilters = () => {
                 }`}
                 onClick={() => {
                   if (filters.category._id === category._id) {
-                    dispatch(setCategory(allCategories));
+                    handleSetCategory({ _id: "all", name: "All Categories" });
                   } else {
-                    dispatch(
-                      setCategory({ _id: category._id, name: category.name })
-                    );
+                    handleSetCategory(category);
                   }
                 }}
               >

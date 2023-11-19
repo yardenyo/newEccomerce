@@ -1,6 +1,7 @@
 import { useGetAllCategoriesQuery } from "@/features/categories/categoriesApiSlice";
 import Helpers from "@/helpers/app.helpers";
 import { Category } from "@/types";
+import { useNavigate } from "react-router-dom";
 
 const Categories = () => {
   const noImageSrc =
@@ -11,6 +12,12 @@ const Categories = () => {
   };
   const { data: response } = useGetAllCategoriesQuery(payload);
   const categories = response?.data || [];
+  const Navigate = useNavigate();
+
+  const handleCollectionClicked = (id: string) => {
+    Navigate(`/shop/${id}`, { replace: true });
+    window.scrollTo(0, 0);
+  };
 
   return (
     <div className="container mx-auto flex flex-col space-y-4 px-8 md:px-0">
@@ -30,7 +37,10 @@ const Categories = () => {
                 className="object-contain w-3/4 h-96"
               />
             </div>
-            <div className="text-wrapper absolute bottom-4 left-4 flex flex-col">
+            <div
+              className="text-wrapper absolute bottom-4 left-4 flex flex-col"
+              onClick={() => handleCollectionClicked(category._id)}
+            >
               <div className="text-2xl font-bold">
                 {Helpers.capitalizeFirstLetter(category.name)}
               </div>
